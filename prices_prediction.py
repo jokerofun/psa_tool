@@ -8,8 +8,30 @@ import json
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 
-# Data Retrieval Function (Example: DK1 Spot Prices API)
-def fetch_data(start_date, end_date):
+API_KEY = 'YOUR_DMI_API_KEY'
+STATION_ID = '06030'  # Aalborg weather station
+
+# DMI Data Retrieval Function
+def fetch_data(url, start_date, end_date, parameter):
+    params = {
+        'datetime': f'{start_date.strftime('%Y-%m-%dT%H:%M:%SZ')}/{end_date.strftime('%Y-%m-%dT%H:%M:%SZ')}',
+        'parameterId': parameter,
+        'stationId': STATION_ID
+    }
+    headers = {'X-Gravitee-Api-Key': API_KEY}
+    response = requests.get(url, params=params, headers=headers)
+    data = response.json()['features']
+    df = pd.DataFrame([obs['properties'] for obs in data])
+    df['observed'] = pd.to_datetime(df['observed'])
+
+    # Resample data to hourly frequency
+    df.set_index('observed', inplace=True)
+    numeric_columns = df.select_dtypes(include=['number']).columns
+    df_numeric = df[numeric_columns]
+    return df_numeric.resample('h').mean().reset_index()
+
+# Spot Price Data Retrieval Function
+def fetch_spot_prices(start_date, end_date):
     url = "https://api.energidataservice.dk/dataset/Elspotprices"
     params = {
         'start': start_date.strftime('%Y-%m-%dT%H:%M'),
@@ -23,38 +45,8 @@ def fetch_data(start_date, end_date):
     df['HourDK'] = pd.to_datetime(df['HourDK'])
     return df
 
-# Fetch Wind Speed Data from DMI
-def fetch_wind_data(start_date, end_date):
-    url = "https://dmigw.govcloud.dk/v2/metObs/collections/observation/items"
-    params = {
-        'datetime': '{}/{}'.format(start_date.strftime('%Y-%m-%dT%H:%M:%SZ'), end_date.strftime('%Y-%m-%dT%H:%M:%SZ')),
-        'parameterId': 'wind_speed',
-        'stationId': '06030' # Aalborg weather station
-    }
-    headers = {
-        'X-Gravitee-Api-Key': 'YOUR_DMI_API_KEY'
-    }
-    response = requests.get(url, params=params, headers=headers)
-    data = response.json()['features']
-    wind_data = pd.DataFrame([obs['properties'] for obs in data])
-
-    # Convert 'observed' column to datetime
-    wind_data['observed'] = pd.to_datetime(wind_data['observed'])
-
-    # Set 'observed' as the index
-    wind_data.set_index('observed', inplace=True)
-
-    # Select only numeric columns for resampling
-    numeric_columns = wind_data.select_dtypes(include=['number']).columns
-    wind_data_numeric = wind_data[numeric_columns]
-
-    # Resample to hourly intervals by averaging
-    wind_data_resampled = wind_data_numeric.resample('h').mean().reset_index()
-
-    return wind_data_resampled
-
 # Feature Engineering
-def preprocess_data(df, wind_data):
+def preprocess_data(df, wind_data, temp_data):
     df['hour'] = df['HourDK'].dt.hour
     df['day'] = df['HourDK'].dt.day
     df['month'] = df['HourDK'].dt.month
@@ -64,16 +56,20 @@ def preprocess_data(df, wind_data):
     # Ensure both datetime columns are in the same timezone
     df['HourDK'] = pd.to_datetime(df['HourDK']).dt.tz_localize(None)
     wind_data['observed'] = pd.to_datetime(wind_data['observed']).dt.tz_localize(None)
+    temp_data['observed'] = pd.to_datetime(temp_data['observed']).dt.tz_localize(None)
+
+    wind_data.rename(columns={'observed': 'HourDK', 'value': 'wind_speed'}, inplace=True)
+    temp_data.rename(columns={'observed': 'HourDK', 'value': 'temperature'}, inplace=True)
 
     # Merge wind data with electricity prices
-    wind_data.rename(columns={'observed': 'HourDK'}, inplace=True)
     df = pd.merge_asof(df.sort_values('HourDK'), wind_data.sort_values('HourDK'), on='HourDK')
+    df = pd.merge_asof(df.sort_values('HourDK'), temp_data.sort_values('HourDK'), on='HourDK')
     df.dropna(inplace=True)
     return df
 
 # Train-Test Split
 def split_data(df):
-    features = ['hour', 'day', 'month', 'weekday', 'value']  # 'value' is wind speed
+    features = ['hour', 'day', 'month', 'weekday', 'wind_speed', 'temperature']
     target = 'PriceEUR'
     X = df[features]
     y = df[target]
@@ -111,20 +107,24 @@ def predict_future(model, asof):
         'weekday': [d.weekday() for d in future_dates]
     })
 
-    # Fetch real wind speed measurements
     start_date = asof - timedelta(hours=1)
     end_date = start_date + timedelta(days=7)
-    wind_data = fetch_wind_data(start_date, end_date)
+    wind_data = fetch_data("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items", start_date, end_date, 'wind_speed')
+    temp_data = fetch_data("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items", start_date, end_date, 'temp_dry')
 
     future_df['HourDK'] = future_dates
 
     # Ensure both datetime columns are in the same timezone
     future_df['HourDK'] = pd.to_datetime(future_df['HourDK']).dt.tz_localize(None)
     wind_data['observed'] = pd.to_datetime(wind_data['observed']).dt.tz_localize(None)
+    temp_data['observed'] = pd.to_datetime(temp_data['observed']).dt.tz_localize(None)
     
+    wind_data.rename(columns={'observed': 'HourDK', 'value': 'wind_speed'}, inplace=True)
+    temp_data.rename(columns={'observed': 'HourDK', 'value': 'temperature'}, inplace=True)
+
     # Merge wind data with future dates
-    wind_data.rename(columns={'observed': 'HourDK'}, inplace=True)
     future_df = pd.merge_asof(future_df.sort_values('HourDK'), wind_data.sort_values('HourDK'), on='HourDK')
+    future_df = pd.merge_asof(future_df.sort_values('HourDK'), temp_data.sort_values('HourDK'), on='HourDK')
     future_df.dropna(inplace=True)
 
     # Drop the 'HourDK' column before making predictions
@@ -143,9 +143,13 @@ def predict_future(model, asof):
 # Main Execution
 if __name__ == "__main__":
     asof = datetime(2024, 12, 1)
-    df = fetch_data(datetime(2020, 1, 1), asof)
-    wind_data = fetch_wind_data(datetime(2020, 1, 1), asof)
-    df = preprocess_data(df, wind_data)
+    start_date = datetime(2020, 1, 1)
+
+    df = fetch_spot_prices(start_date, asof)
+    wind_data = fetch_data("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items", start_date, asof, 'wind_speed')
+    temp_data = fetch_data("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items", start_date, asof, 'temp_dry')
+
+    df = preprocess_data(df, wind_data, temp_data)
     X_train, X_test, y_train, y_test = split_data(df)
     model = train_model(X_train, y_train)
     evaluate_model(model, X_test, y_test)
