@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from duckdb import connect
 from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
 from sklearn.metrics import mean_absolute_error
@@ -10,6 +11,7 @@ from datetime import datetime, timedelta, time
 
 API_KEY = 'YOUR_DMI_API_KEY'
 STATION_ID = '06030'  # Aalborg weather station
+LAT, LON = 57.048, 9.9187 # Coordinates for Aalborg
 
 # DMI Data Retrieval Function
 def fetch_data(url, start_date, end_date, parameter):
@@ -129,8 +131,7 @@ def predict_future(model, asof):
     })
 
     # Fetch forecast data for the next 7 days
-    lat, lon = 57.048, 9.921  # Coordinates for Aalborg
-    forecast_df = fetch_forecast_data(lat, lon)
+    forecast_df = fetch_forecast_data(LAT, LON)
 
     # Merge forecast data with future dates
     forecast_df['HourDK'] = forecast_df['HourDK'].dt.tz_localize(None)
@@ -174,3 +175,21 @@ if __name__ == "__main__":
     future_df, future_predictions = predict_future(model, asof)
 
     print(future_df)
+
+    # Save future predictions to DB using DuckDB including the index (DuckDB does not include the index by default)
+    future_df.reset_index(inplace=True)
+
+    con = connect('spot_prices.db')
+    con.register('future_prices_virtual', future_df)
+
+    # If table exists already, drop it and insert new data
+    result = con.execute('SELECT * FROM information_schema.tables WHERE table_name = \'spot_prices\'')
+    table_exists = len(result.fetchdf()) > 0
+
+    if table_exists:
+        con.execute('DELETE FROM future_prices')
+        con.execute('INSERT INTO future_prices SELECT * FROM future_prices_virtual')
+    else:
+        con.execute('CREATE TABLE future_prices AS SELECT * FROM future_prices_virtual')
+
+    con.close()
