@@ -48,10 +48,8 @@ def fetch_spot_prices(start_date, end_date):
 # Feature Engineering
 def preprocess_data(df, wind_data, temp_data):
     df['hour'] = df['HourDK'].dt.hour
-    df['day'] = df['HourDK'].dt.day
-    df['month'] = df['HourDK'].dt.month
     df['weekday'] = df['HourDK'].dt.weekday
-    df['PriceEUR'] = df['SpotPriceDKK'] / 7.44  # Conversion to EUR
+    df['PriceEUR'] = df['SpotPriceEUR']
 
     # Ensure both datetime columns are in the same timezone
     df['HourDK'] = pd.to_datetime(df['HourDK']).dt.tz_localize(None)
@@ -69,7 +67,7 @@ def preprocess_data(df, wind_data, temp_data):
 
 # Train-Test Split
 def split_data(df):
-    features = ['hour', 'day', 'month', 'weekday', 'wind_speed', 'temperature']
+    features = ['hour', 'weekday', 'wind_speed', 'temperature']
     target = 'PriceEUR'
     X = df[features]
     y = df[target]
@@ -102,8 +100,6 @@ def predict_future(model, asof):
     future_dates = [asof + timedelta(hours=i) for i in range(24*7)]
     future_df = pd.DataFrame({
         'hour': [d.hour for d in future_dates],
-        'day': [d.day for d in future_dates],
-        'month': [d.month for d in future_dates],
         'weekday': [d.weekday() for d in future_dates]
     })
 
@@ -153,4 +149,13 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = split_data(df)
     model = train_model(X_train, y_train)
     evaluate_model(model, X_test, y_test)
-    predict_future(model, asof)
+    future_df, future_predictions = predict_future(model, asof)
+
+    # Attach hours to future predictions
+    future_df['PriceEUR'] = future_predictions
+    future_df['HourDK'] = asof
+    future_df['HourDK'] = future_df['HourDK'] + pd.to_timedelta(future_df['hour'], unit='h')
+    future_df.set_index('HourDK', inplace=True)
+    future_df.drop(columns=['hour'], inplace=True)
+
+    print(future_df)
