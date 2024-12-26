@@ -10,6 +10,13 @@ import requests
 import json
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta, time
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+from keras.src.legacy.saving import legacy_h5_format
+
+# Import mse from keras metrics
+# from tensorflow.keras.metrics import MeanSquaredError
 
 API_KEY = 'YOUR_DMI_API_KEY'
 STATION_ID = '06030'  # Aalborg weather station
@@ -141,11 +148,31 @@ def split_data(df):
     X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
     return X_train, X_val, X_test, y_train, y_val, y_test
 
-# Model Training and Prediction
-def train_model(X_train, y_train):
-    model = XGBRegressor(n_estimators=500, learning_rate=0.05, max_depth=6)
-    model.fit(X_train, y_train)
+# Reshape Data for LSTM
+def reshape_data(X_train, X_val, X_test):
+    X_train = X_train.values.reshape((X_train.shape[0], 1, X_train.shape[1]))
+    X_val = X_val.values.reshape((X_val.shape[0], 1, X_val.shape[1]))
+    X_test = X_test.values.reshape((X_test.shape[0], 1, X_test.shape[1]))
+    return X_train, X_val, X_test
+
+# Build LSTM Model
+def build_lstm_model(input_shape):
+    model = Sequential()
+    model.add(LSTM(50, activation='relu', input_shape=input_shape))
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mse')
     return model
+
+# Train LSTM Model
+def train_lstm_model(X_train, y_train, X_val, y_val):
+    model = build_lstm_model((X_train.shape[1], X_train.shape[2]))
+    history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_val, y_val), verbose=2, shuffle=False)
+    model.save('lstm_model.h5')  # Save the model
+    return model, history
+
+# Load the model
+def load_model():
+    return legacy_h5_format.load_model_from_hdf5('lstm_model.h5', custom_objects={'mse': 'mse'})
 
 # Evaluate Model
 def evaluate_model(model, X_test, y_test):
@@ -191,38 +218,25 @@ def predict_future(model, asof):
     # Drop the 'HourDK' column before making predictions
     future_df = future_df.drop(columns=['HourDK'])
 
+    # Reshape future_df for LSTM
+    future_df = future_df.values.reshape((future_df.shape[0], 1, future_df.shape[1]))
+
+    # Make predictions
     future_predictions = model.predict(future_df)
 
-    # Reattach HourDK to predictions
-    future_df['PriceEUR'] = future_predictions
-    future_df['HourDK'] = future_dates
+    # Convert predictions to DataFrame and reattach HourDK
+    future_predictions_df = pd.DataFrame(future_predictions, columns=['PriceEUR'])
+    future_predictions_df['HourDK'] = future_dates
 
-    # Set datetime as index for easier visualization
-    future_df.set_index('HourDK', inplace=True)
-
+    # Plotting Future Predictions
     plt.figure(figsize=(10, 6))
-    plt.plot(future_dates, future_predictions, label='Future Predictions', color='green')
+    plt.plot(future_predictions_df['HourDK'], future_predictions_df['PriceEUR'], label='Future Predictions', color='green')
     plt.title('Predicted Spot Prices for the Next 7 Days (DK1)')
     plt.xlabel('Date')
     plt.ylabel('Price (EUR)')
     plt.legend()
     plt.show()
     return future_df, future_predictions
-
-# Normalize Data
-def normalize_data(X_train, X_val, X_test, y_train, y_val, y_test):
-    scaler_X = MinMaxScaler()
-    scaler_y = MinMaxScaler()
-
-    X_train = scaler_X.fit_transform(X_train)
-    X_val = scaler_X.transform(X_val)
-    X_test = scaler_X.transform(X_test)
-
-    y_train = scaler_y.fit_transform(y_train.values.reshape(-1, 1))
-    y_val = scaler_y.transform(y_val.values.reshape(-1, 1))
-    y_test = scaler_y.transform(y_test.values.reshape(-1, 1))
-
-    return X_train, X_val, X_test, y_train, y_val, y_test, scaler_y
 
 # Create histograms for train and test data
 def plot_histograms(y_train, y_test):
@@ -243,41 +257,6 @@ def plot_histograms(y_train, y_test):
     plt.tight_layout()
     plt.show()
 
-# Hyperparameter Space for XGBoost
-space={'max_depth': hp.quniform("max_depth", 3, 18, 1),
-        'gamma': hp.uniform ('gamma', 1,9),
-        'reg_alpha' : hp.quniform('reg_alpha', 40,180,1),
-        'reg_lambda' : hp.uniform('reg_lambda', 0,1),
-        'colsample_bytree' : hp.uniform('colsample_bytree', 0.5,1),
-        'subsample' : hp.uniform('subsample', 0.5, 1),
-        'max_delta_step' : hp.quniform('max_delta_step', 0, 10, 1),
-        'learning_rate' : hp.uniform('learning_rate', 0.01, 0.3),
-        'min_child_weight' : hp.quniform('min_child_weight', 0, 10, 1),
-        'n_estimators': hp.quniform("n_estimators", 100, 1000, 50),
-        # 'seed': 0
-    }
-
-# Objective Function for Hyperparameter Optimization
-def objective(params):
-    model = XGBRegressor(
-        max_depth=int(params['max_depth']),
-        gamma=params['gamma'],
-        reg_alpha=int(params['reg_alpha']),
-        reg_lambda=params['reg_lambda'],
-        colsample_bytree=params['colsample_bytree'],
-        min_child_weight=int(params['min_child_weight']),
-        n_estimators=int(params['n_estimators']),
-        subsample=params['subsample'],
-        max_delta_step=int(params['max_delta_step']),
-        learning_rate=params['learning_rate'],
-        early_stopping_rounds=10,
-        # seed=int(params['seed'])
-    )
-    model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
-    predictions = model.predict(X_val)
-    mae = mean_absolute_error(y_val, predictions)
-    return mae
-
 # Main Execution
 if __name__ == "__main__":
     asof = datetime.combine(datetime.now(), time.min)
@@ -290,91 +269,20 @@ if __name__ == "__main__":
     df = preprocess_data(df, wind_data, temp_data)
     X_train, X_val, X_test, y_train, y_val, y_test = split_data(df)
 
-    # Normalize data
-    # X_train, X_val, X_test, y_train, y_val, y_test, scaler_y = normalize_data(X_train, X_val, X_test, y_train, y_val, y_test)
-
     # Plot histograms
     plot_histograms(y_train, y_test)
 
-    # # Hyperparameter Optimization
-    # trials = Trials()
+    # Reshape data for LSTM
+    X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
 
-    # best_params = fmin(
-    #     fn=objective,
-    #     space=space,
-    #     algo=tpe.suggest,
-    #     max_evals=100,
-    #     trials=trials
-    # )
+    # # Train LSTM model
+    # model, history = train_lstm_model(X_train, y_train, X_val, y_val)
 
-    # print("Best Hyperparameters:", best_params)
+    # # model.fit(X_train, y_train)
+    # evaluate_model(model, X_test, y_test)
 
-    # # Train model with best hyperparameters
-    # optimized_model = XGBRegressor(
-    #     max_depth=int(best_params['max_depth']),
-    #     gamma=best_params['gamma'],
-    #     reg_alpha=int(best_params['reg_alpha']),
-    #     reg_lambda=best_params['reg_lambda'],
-    #     colsample_bytree=best_params['colsample_bytree'],
-    #     min_child_weight=int(best_params['min_child_weight']),
-    #     n_estimators=int(best_params['n_estimators']),
-    #     subsample=best_params['subsample'],
-    #     max_delta_step=int(best_params['max_delta_step']),
-    #     learning_rate=best_params['learning_rate'],
-    #     # seed=int(best_params['seed'])
-    # )
-
-    # optimized_model = XGBRegressor(
-    #     max_depth=18,
-    #     gamma=4.631882543711501,
-    #     reg_alpha=46,
-    #     reg_lambda=0.8233384474408272,
-    #     colsample_bytree=0.9468464912765524,
-    #     min_child_weight=10,
-    #     n_estimators=1000,
-    #     subsample=0.5557340216529043,
-    #     max_delta_step=4,
-    #     learning_rate=0.20017834553594877,
-    # )
-
-    optimized_model = XGBRegressor(
-        max_depth=12,
-        gamma=1.3306308847945991,
-        reg_alpha=142,
-        reg_lambda=0.3981270988816685,
-        colsample_bytree=0.9269009296607986,
-        min_child_weight=3,
-        n_estimators=150,
-        subsample=0.8522180029456405,
-        max_delta_step=0.0,
-        learning_rate=0.07535437517076035,
-    )
-
-    optimized_model.fit(X_train, y_train)
-    evaluate_model(optimized_model, X_test, y_test)
-
-    future_df, future_predictions = predict_future(optimized_model, asof)
-
-    # # Inverse transform the predictions to get the original scale
-    # future_df['PriceEUR'] = scaler_y.inverse_transform(future_df[['PriceEUR']])
-    # future_predictions = scaler_y.inverse_transform(future_predictions.reshape(-1, 1))
-
+    # Load the model for future predictions
+    model = load_model()
+    future_df, predictions = predict_future(model, asof)
+    print(predictions)
     print(future_df)
-
-    # # Save future predictions to DB using DuckDB including the index (DuckDB does not include the index by default)
-    # future_df.reset_index(inplace=True)
-
-    # con = connect('spot_prices.db')
-    # con.register('future_prices_virtual', future_df)
-
-    # # If table exists already, drop it and insert new data
-    # result = con.execute('SELECT * FROM information_schema.tables WHERE table_name = \'spot_prices\'')
-    # table_exists = len(result.fetchdf()) > 0
-
-    # if table_exists:
-    #     con.execute('DELETE FROM future_prices')
-    #     con.execute('INSERT INTO future_prices SELECT * FROM future_prices_virtual')
-    # else:
-    #     con.execute('CREATE TABLE future_prices AS SELECT * FROM future_prices_virtual')
-
-    # con.close()
