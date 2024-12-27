@@ -11,9 +11,9 @@ import json
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta, time
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense
-from keras.src.legacy.saving import legacy_h5_format
+import keras
+from keras.src.models import Sequential
+from keras.src.layers import LSTM, Dense
 
 # Import mse from keras metrics
 # from tensorflow.keras.metrics import MeanSquaredError
@@ -112,7 +112,7 @@ def preprocess_data(df, wind_data, temp_data):
     df['PriceEUR_lag24'] = df['PriceEUR'].shift(24)
     df['PriceEUR_rolling_mean'] = df['PriceEUR'].rolling(24).mean()
 
-    df = df.drop(columns=['hour', 'weekday'])
+    df = df.drop(columns=['hour', 'weekday', 'HourUTC', 'SpotPriceDKK', 'PriceArea', 'SpotPriceEUR'])
 
     # Ensure both datetime columns are in the same timezone
     df['HourDK'] = pd.to_datetime(df['HourDK']).dt.tz_localize(None)
@@ -128,13 +128,13 @@ def preprocess_data(df, wind_data, temp_data):
     df['wind_temp_interaction'] = df['wind_speed'] * df['temperature']
     df.dropna(inplace=True)
 
-    # Remove outliers using IQR
-    Q1 = df['PriceEUR'].quantile(0.25)
-    Q3 = df['PriceEUR'].quantile(0.75)
-    IQR = Q3 - Q1
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
-    df = df[(df['PriceEUR'] >= lower_bound) & (df['PriceEUR'] <= upper_bound)]
+    # # Remove outliers using IQR
+    # Q1 = df['PriceEUR'].quantile(0.25)
+    # Q3 = df['PriceEUR'].quantile(0.75)
+    # IQR = Q3 - Q1
+    # lower_bound = Q1 - 1.5 * IQR
+    # upper_bound = Q3 + 1.5 * IQR
+    # df = df[(df['PriceEUR'] >= lower_bound) & (df['PriceEUR'] <= upper_bound)]
 
     return df
 
@@ -150,10 +150,18 @@ def split_data(df):
 
 # Reshape Data for LSTM
 def reshape_data(X_train, X_val, X_test):
-    X_train = X_train.values.reshape((X_train.shape[0], 1, X_train.shape[1]))
-    X_val = X_val.values.reshape((X_val.shape[0], 1, X_val.shape[1]))
-    X_test = X_test.values.reshape((X_test.shape[0], 1, X_test.shape[1]))
+    X_train = X_train.values.reshape((X_train.shape[0], 24, X_train.shape[1]))
+    X_val = X_val.values.reshape((X_val.shape[0], 24, X_val.shape[1]))
+    X_test = X_test.values.reshape((X_test.shape[0], 24, X_test.shape[1]))
     return X_train, X_val, X_test
+
+timesteps = 24  # Or 168 for a week
+
+def reshape_data2(X, y, timesteps):
+    samples = X.shape[0] - timesteps
+    reshaped_X = np.array([X[i:i + timesteps] for i in range(samples)])
+    reshaped_y = y[timesteps:]  # Align y to match reshaped X
+    return reshaped_X, reshaped_y
 
 # Build LSTM Model
 def build_lstm_model(input_shape):
@@ -167,12 +175,12 @@ def build_lstm_model(input_shape):
 def train_lstm_model(X_train, y_train, X_val, y_val):
     model = build_lstm_model((X_train.shape[1], X_train.shape[2]))
     history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_val, y_val), verbose=2, shuffle=False)
-    model.save('lstm_model.h5')  # Save the model
+    model.save('lstm_model.keras')  # Save the model
     return model, history
 
 # Load the model
 def load_model():
-    return legacy_h5_format.load_model_from_hdf5('lstm_model.h5', custom_objects={'mse': 'mse'})
+    return keras.models.load_model('lstm_model.keras', custom_objects={'mse': 'mse'})
 
 # Evaluate Model
 def evaluate_model(model, X_test, y_test):
@@ -218,8 +226,13 @@ def predict_future(model, asof):
     # Drop the 'HourDK' column before making predictions
     future_df = future_df.drop(columns=['HourDK'])
 
+    print(future_df.shape)
+
     # Reshape future_df for LSTM
+    # future_df = future_df.values.reshape((future_df.shape[0], 1, future_df.shape[1]))
     future_df = future_df.values.reshape((future_df.shape[0], 1, future_df.shape[1]))
+
+    print(future_df.shape)
 
     # Make predictions
     future_predictions = model.predict(future_df)
@@ -257,6 +270,21 @@ def plot_histograms(y_train, y_test):
     plt.tight_layout()
     plt.show()
 
+# Normalize Data
+def normalize_data(X_train, X_val, X_test, y_train, y_val, y_test):
+    scaler_X = MinMaxScaler()
+    scaler_y = MinMaxScaler()
+
+    X_train = scaler_X.fit_transform(X_train)
+    X_val = scaler_X.transform(X_val)
+    X_test = scaler_X.transform(X_test)
+
+    y_train = scaler_y.fit_transform(y_train.values.reshape(-1, 1))
+    y_val = scaler_y.transform(y_val.values.reshape(-1, 1))
+    y_test = scaler_y.transform(y_test.values.reshape(-1, 1))
+
+    return X_train, X_val, X_test, y_train, y_val, y_test, scaler_y
+
 # Main Execution
 if __name__ == "__main__":
     asof = datetime.combine(datetime.now(), time.min)
@@ -269,11 +297,25 @@ if __name__ == "__main__":
     df = preprocess_data(df, wind_data, temp_data)
     X_train, X_val, X_test, y_train, y_val, y_test = split_data(df)
 
+    # Normalize data
+    X_train, X_val, X_test, y_train, y_val, y_test, scaler_y = normalize_data(X_train, X_val, X_test, y_train, y_val, y_test)
+
+    print(df.head())
+
     # Plot histograms
-    plot_histograms(y_train, y_test)
+    # plot_histograms(y_train, y_test)
+
+    print(X_train.shape, X_val.shape, X_test.shape)
+    print(y_train.shape, y_val.shape, y_test.shape)
 
     # Reshape data for LSTM
-    X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
+    # X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
+    X_train, y_train = reshape_data2(X_train, y_train, timesteps)
+    X_val, y_val = reshape_data2(X_val, y_val, timesteps)
+    X_test, y_test = reshape_data2(X_test, y_test, timesteps)
+
+    print(X_train.shape, X_val.shape, X_test.shape)
+    print(y_train.shape, y_val.shape, y_test.shape)
 
     # # Train LSTM model
     # model, history = train_lstm_model(X_train, y_train, X_val, y_val)
@@ -284,5 +326,9 @@ if __name__ == "__main__":
     # Load the model for future predictions
     model = load_model()
     future_df, predictions = predict_future(model, asof)
-    print(predictions)
-    print(future_df)
+
+    # # Inverse transform the predictions to get the original scale
+    future_df['PriceEUR'] = scaler_y.inverse_transform(future_df[['PriceEUR']])
+    predictions = scaler_y.inverse_transform(predictions.reshape(-1, 1))
+    # print(predictions)
+    # print(future_df)
