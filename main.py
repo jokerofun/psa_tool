@@ -113,5 +113,5 @@ plt.title('Battery Arbitrage Strategy')
 plt.xlabel('Date')
 plt.ylabel('Energy (MWh)')
 plt.show()
-
+plt.savefig('battery_arbitrage.png')
 con.close()
