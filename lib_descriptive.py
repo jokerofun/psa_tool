@@ -40,6 +40,18 @@ def plot_future_predictions(future_predictions_df):
     plt.legend()
     plt.show()
 
+# Function for plotting battery arbitrage strategy
+def plot_battery_arbitrage(future_df, soc, charge, discharge):
+    plt.figure(figsize=(12, 6))
+    plt.plot(future_df.index, soc, label='State of Charge (MWh)', color='blue')
+    plt.bar(future_df.index, charge, width=0.02, label='Charge (MW)', color='green')
+    plt.bar(future_df.index, -discharge, width=0.02, label='Discharge (MW)', color='red')
+    plt.legend()
+    plt.title('Battery Arbitrage Strategy')
+    plt.xlabel('Date')
+    plt.ylabel('Energy (MWh)')
+    plt.show()
+
 # # Function to plot the feature importances
 # def plot_feature_importances(model, features):
 #     importances = model.feature_importances_
