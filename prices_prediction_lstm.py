@@ -13,7 +13,7 @@ from datetime import datetime, timedelta, time
 import tensorflow as tf
 import keras
 from keras.src.models import Sequential
-from keras.src.layers import LSTM, Dense
+from keras.src.layers import LSTM, Dense, Dropout
 
 # Import mse from keras metrics
 # from tensorflow.keras.metrics import MeanSquaredError
@@ -166,7 +166,8 @@ def reshape_data2(X, y, timesteps):
 # Build LSTM Model
 def build_lstm_model(input_shape):
     model = Sequential()
-    model.add(LSTM(50, activation='relu', input_shape=input_shape))
+    model.add(LSTM(100, activation='relu', input_shape=input_shape, dropout=0.2))
+    model.add(Dropout(0.2))
     model.add(Dense(1))
     model.compile(optimizer='adam', loss='mse')
     return model
@@ -298,7 +299,7 @@ if __name__ == "__main__":
     X_train, X_val, X_test, y_train, y_val, y_test = split_data(df)
 
     # Normalize data
-    X_train, X_val, X_test, y_train, y_val, y_test, scaler_y = normalize_data(X_train, X_val, X_test, y_train, y_val, y_test)
+    #X_train, X_val, X_test, y_train, y_val, y_test, scaler_y = normalize_data(X_train, X_val, X_test, y_train, y_val, y_test)
 
     print(df.head())
 
@@ -318,13 +319,13 @@ if __name__ == "__main__":
     print(y_train.shape, y_val.shape, y_test.shape)
 
     # # Train LSTM model
-    # model, history = train_lstm_model(X_train, y_train, X_val, y_val)
+    model, history = train_lstm_model(X_train, y_train, X_val, y_val)
 
     # # model.fit(X_train, y_train)
-    # evaluate_model(model, X_test, y_test)
+    evaluate_model(model, X_test, y_test)
 
     # Load the model for future predictions
-    model = load_model()
+    # model = load_model()
     future_df, predictions = predict_future(model, asof)
 
     # # Inverse transform the predictions to get the original scale
