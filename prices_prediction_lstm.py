@@ -34,7 +34,7 @@ def fetch_data(url, start_date, end_date, parameter, historical=False):
             pass
     else:
         params = {
-            'datetime': f"{start_date.strftime('%Y-%m-%dT%H:%M:%SZ')}/{end_date.strftime('%Y-%m-%dT%H:%M:%SZ')}",
+            'datetime': f"{start_date.strftime("%Y-%m-%dT%H:%M:%SZ")}/{end_date.strftime("%Y-%m-%dT%H:%M:%SZ")}",
             'parameterId': parameter,
             'stationId': STATION_ID,
             'limit': 300000

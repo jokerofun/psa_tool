@@ -22,6 +22,7 @@ def plot_histograms(y_train, y_test):
 # Function plotting Actual vs Prediction
 def plot_predictions(y_test, predictions):
     plt.figure(figsize=(10, 6))
+    
     plt.plot(y_test, label='Actual Prices', color='blue')
     plt.plot(predictions, label='Predicted Prices', color='red')
     plt.legend()

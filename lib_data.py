@@ -2,6 +2,8 @@ import pandas as pd
 import requests
 import json
 
+import os
+
 # Function to fetch spot prices from Energinet API
 def fetch_spot_prices(start_date, end_date):
     # Read data from csv file if it exists
@@ -54,10 +56,15 @@ def fetch_data(url, start_date, end_date, parameter, station_id, api_key, histor
     if historical:
         # Read data from csv file if it exists
         try:
-            df = pd.read_csv(f'data\{parameter}_test.csv')
+            # if os is linux
+            if os.name == 'posix':
+                df = pd.read_csv(f'data/{parameter}_test.csv')
+            else:
+                df = pd.read_csv(f'data\{parameter}_test.csv')
             df['observed'] = pd.to_datetime(df['observed'])
             return df
         except FileNotFoundError:
+            print("File not found: " +  f'data\{parameter}_test.csv')
             pass
     else:
         params = {
@@ -77,3 +84,4 @@ def fetch_data(url, start_date, end_date, parameter, station_id, api_key, histor
         numeric_columns = df.select_dtypes(include=['number']).columns
         df_numeric = df[numeric_columns]
         return df_numeric.resample('h').mean().reset_index()
+    

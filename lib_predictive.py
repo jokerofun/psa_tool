@@ -4,9 +4,11 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_absolute_error
-from datetime import timedelta
+from datetime import time, timedelta
 from keras.src.models import Sequential
-from keras.src.layers import LSTM, Dense
+from keras.src.layers import LSTM, Dense, Dropout
+
+import datetime
 
 from lib_data import fetch_data
 from lib_descriptive import plot_future_predictions, plot_predictions
@@ -14,16 +16,17 @@ from lib_descriptive import plot_future_predictions, plot_predictions
 # Function to train an LSTM model
 def train_lstm_model(X_train, y_train, X_val, y_val):
     model = build_lstm_model((X_train.shape[1], X_train.shape[2]))
-    history = model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_val, y_val), verbose=2, shuffle=False)
+    history = model.fit(X_train, y_train, epochs=20, batch_size=128, validation_data=(X_val, y_val), verbose=2, shuffle=False)
     model.save('lstm_model.keras')  # Save the model
     return model, history
 
 # Function to build an LSTM model
 def build_lstm_model(input_shape):
     model = Sequential()
-    model.add(LSTM(50, activation='relu', input_shape=input_shape))
+    model.add(LSTM(50, activation='relu', input_shape=input_shape, dropout=0.2))
+    model.add(Dropout(0.2))
     model.add(Dense(1))
-    model.compile(optimizer='adam', loss='mse')
+    model.compile(optimizer='adam', loss='huber')
     return model
 
 # Function to evaluate a model
@@ -31,19 +34,22 @@ def evaluate_model(model, X_test, y_test):
     predictions = model.predict(X_test)
     mae = mean_absolute_error(y_test, predictions)
     print(f"Mean Absolute Error: {mae:.2f} EUR")
-    plot_predictions(y_test, predictions)
+    return predictions
 
 # Function to preprocess data
 def preprocess_data(df, wind_data, temp_data):
     df['hour'] = df['HourDK'].dt.hour
+    df['epoch'] = df['HourDK'].astype(np.int64) 
     df['weekday'] = df['HourDK'].dt.weekday
+    df['day_of_year'] = df['HourDK'].dt.dayofyear
     df['hour_sin'] = np.sin(2 * np.pi * df['hour']/24)
     df['hour_cos'] = np.cos(2 * np.pi * df['hour']/24)
     df['weekday_sin'] = np.sin(2 * np.pi * df['weekday']/7)
     df['weekday_cos'] = np.cos(2 * np.pi * df['weekday']/7)
     df['PriceEUR'] = df['SpotPriceEUR']
 
-    df = df.drop(columns=['hour', 'weekday', 'HourUTC', 'SpotPriceDKK', 'PriceArea', 'SpotPriceEUR'])
+    df = df.drop(columns=[ 'HourUTC', 'SpotPriceDKK', 'PriceArea', 'SpotPriceEUR'])
+    #df = df.drop(columns=['hour', 'weekday', 'HourUTC', 'SpotPriceDKK', 'PriceArea', 'SpotPriceEUR'])
 
     # Ensure both datetime columns are in the same timezone
     df['HourDK'] = pd.to_datetime(df['HourDK']).dt.tz_localize(None)
@@ -76,7 +82,7 @@ def normalize_data(X_train, X_val, X_test, y_train, y_val, y_test):
     X_val = scaler_X.transform(X_val)
     X_test = scaler_X.transform(X_test)
 
-    y_train = scaler_y.transform(y_train.values.reshape(-1, 1))
+    y_train = scaler_y.fit_transform(y_train.values.reshape(-1, 1))
     y_val = scaler_y.transform(y_val.values.reshape(-1, 1))
     y_test = scaler_y.transform(y_test.values.reshape(-1, 1))
 
@@ -94,9 +100,15 @@ def split_data(df, features, target):
 
 # Function to reshape data for LSTM
 def reshape_data_LSTM(X_train, X_val, X_test):
-    X_train = X_train.values.reshape((X_train.shape[0], 1, X_train.shape[1]))
-    X_val = X_val.values.reshape((X_val.shape[0], 1, X_val.shape[1]))
-    X_test = X_test.values.reshape((X_test.shape[0], 1, X_test.shape[1]))
+    # if x_train has attribute value 
+    if hasattr(X_train, 'values'):
+        X_train = X_train.values.reshape((X_train.shape[0], 1, X_train.shape[1]))
+        X_val = X_val.values.reshape((X_val.shape[0], 1, X_val.shape[1]))
+        X_test = X_test.values.reshape((X_test.shape[0], 1, X_test.shape[1]))
+    else:
+        X_train = X_train.reshape((X_train.shape[0], 1, X_train.shape[1]))
+        X_val = X_val.reshape((X_val.shape[0], 1, X_val.shape[1]))
+        X_test = X_test.reshape((X_test.shape[0], 1, X_test.shape[1]))
     return X_train, X_val, X_test
 
 # Function to predict future prices
@@ -116,20 +128,20 @@ def predict_future(model, asof):
 
     # Fetch forecast data for the next 7 days
     # forecast_df = fetch_forecast_data(LAT, LON)
-    wind_dataa = pd.read_csv('data/wind_speed_1201_1208.csv')
-    temp_dataa = pd.read_csv('data/temp_dry_1201_1208.csv')
+    wind_data = pd.read_csv('data/wind_speed_1201_1208.csv')
+    temp_data = pd.read_csv('data/temp_dry_1201_1208.csv')
 
     # Ensure both datetime columns are in the same timezone
-    wind_dataa['observed'] = pd.to_datetime(wind_dataa['observed']).dt.tz_localize(None)
-    temp_dataa['observed'] = pd.to_datetime(temp_dataa['observed']).dt.tz_localize(None)
+    wind_data['observed'] = pd.to_datetime(wind_data['observed']).dt.tz_localize(None)
+    temp_data['observed'] = pd.to_datetime(temp_data['observed']).dt.tz_localize(None)
 
-    wind_dataa.rename(columns={'observed': 'HourDK', 'value': 'wind_speed'}, inplace=True)
-    temp_dataa.rename(columns={'observed': 'HourDK', 'value': 'temperature'}, inplace=True)
+    wind_data.rename(columns={'observed': 'HourDK', 'value': 'wind_speed'}, inplace=True)
+    temp_data.rename(columns={'observed': 'HourDK', 'value': 'temperature'}, inplace=True)
 
     # Merge forecast data with future dates
     future_df['HourDK'] = future_dates
-    future_df = pd.merge_asof(future_df.sort_values('HourDK'), wind_dataa.sort_values('HourDK'), on='HourDK')
-    future_df = pd.merge_asof(future_df.sort_values('HourDK'), temp_dataa.sort_values('HourDK'), on='HourDK')
+    future_df = pd.merge_asof(future_df.sort_values('HourDK'), wind_data.sort_values('HourDK'), on='HourDK')
+    future_df = pd.merge_asof(future_df.sort_values('HourDK'), temp_data.sort_values('HourDK'), on='HourDK')
     # future_df = pd.merge_asof(future_df.sort_values('HourDK'), forecast_df.sort_values('HourDK'), on='HourDK')
 
     # Drop the 'HourDK' column before making predictions
@@ -152,3 +164,46 @@ def predict_future(model, asof):
 
 def load_model(model_path):
     return keras.models.load_model(model_path, custom_objects={'mse': 'mse'})
+
+
+# example usage
+if __name__ == '__main__':
+    asof = datetime.combine(datetime.now(), time.min)
+    start_date = datetime(2020, 1, 1)
+
+    df = fetch_spot_prices(start_date, asof)
+    wind_data = fetch_data("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items", start_date, asof, 'wind_speed', historical=True)
+    temp_data = fetch_data("https://dmigw.govcloud.dk/v2/metObs/collections/observation/items", start_date, asof, 'temp_dry', historical=True)
+
+    df = preprocess_data(df, wind_data, temp_data)
+    X_train, X_val, X_test, y_train, y_val, y_test = split_data(df)
+
+    # Normalize data
+    #X_train, X_val, X_test, y_train, y_val, y_test, scaler_y = normalize_data(X_train, X_val, X_test, y_train, y_val, y_test)
+
+    print(df.head())
+
+    # Plot histograms
+    # plot_histograms(y_train, y_test)
+
+    print(X_train.shape, X_val.shape, X_test.shape)
+    print(y_train.shape, y_val.shape, y_test.shape)
+
+    # Reshape data for LSTM
+    # X_train, X_val, X_test = reshape_data(X_train, X_val, X_test)
+    X_train, y_train = reshape_data2(X_train, y_train, timesteps)
+    X_val, y_val = reshape_data2(X_val, y_val, timesteps)
+    X_test, y_test = reshape_data2(X_test, y_test, timesteps)
+
+    print(X_train.shape, X_val.shape, X_test.shape)
+    print(y_train.shape, y_val.shape, y_test.shape)
+
+    # # Train LSTM model
+    model, history = train_lstm_model(X_train, y_train, X_val, y_val)
+
+    # # model.fit(X_train, y_train)
+    evaluate_model(model, X_test, y_test)
+
+    # Load the model for future predictions
+    # model = load_model()
+    future_df, predictions = predict_future(model, asof)
