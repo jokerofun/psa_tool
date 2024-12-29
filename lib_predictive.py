@@ -63,6 +63,10 @@ def preprocess_data(df, wind_data, temp_data):
     df = pd.merge_asof(df.sort_values('HourDK'), wind_data.sort_values('HourDK'), on='HourDK')
     df = pd.merge_asof(df.sort_values('HourDK'), temp_data.sort_values('HourDK'), on='HourDK')
     df.dropna(inplace=True)
+    
+    # Remove outliers with prices above 300 Eur, replace with 300 Eur
+    #df = df[df['PriceEUR'] < 300]
+    df.loc[df['PriceEUR'] > 300, 'PriceEUR'] = 300
 
     # # Remove outliers using IQR
     # Q1 = df['PriceEUR'].quantile(0.25)
@@ -94,8 +98,8 @@ def split_data(df, features, target):
     # target = 'PriceEUR'
     X = df[features]
     y = df[target]
-    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42, shuffle=False)
-    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42, shuffle=False)
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42069, shuffle=False)
+    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42069, shuffle=False)
     return X_train, X_val, X_test, y_train, y_val, y_test
 
 # Function to reshape data for LSTM
@@ -115,12 +119,14 @@ def reshape_data_LSTM(X_train, X_val, X_test):
 def predict_future(model, asof):
     future_dates = [asof + timedelta(hours=i) for i in range(24*7)]
     future_df = pd.DataFrame({
-        'hour': [d.hour for d in future_dates],
+        'day_of_year': [d.timetuple().tm_yday for d in future_dates],
         'weekday': [d.weekday() for d in future_dates],
+        'hour': [d.hour for d in future_dates],
         'hour_sin': np.sin(2 * np.pi * np.array([d.hour for d in future_dates])/24),
         'hour_cos': np.cos(2 * np.pi * np.array([d.hour for d in future_dates])/24),
         'weekday_sin': np.sin(2 * np.pi * np.array([d.weekday() for d in future_dates])/7),
         'weekday_cos': np.cos(2 * np.pi * np.array([d.weekday() for d in future_dates])/7),
+        'epoch' : [int(d.timestamp()) for d in future_dates],
     })
 
     future_df = future_df.drop(columns=['hour', 'weekday'])
@@ -148,10 +154,10 @@ def predict_future(model, asof):
     future_df = future_df.drop(columns=['HourDK'])
 
     # Reshape future_df for LSTM
-    future_df = future_df.values.reshape((future_df.shape[0], 1, future_df.shape[1]))
+    future_data = future_df.values.reshape((future_df.shape[0], 1, future_df.shape[1]))
 
     # Make predictions
-    future_predictions = model.predict(future_df)
+    future_predictions = model.predict(future_data)
 
     # Convert predictions to DataFrame and reattach HourDK
     future_predictions_df = pd.DataFrame(future_predictions, columns=['PriceEUR'])
@@ -160,7 +166,7 @@ def predict_future(model, asof):
     # Plotting Future Predictions
     plot_future_predictions(future_predictions_df)
 
-    return future_df, future_predictions
+    return future_predictions_df
 
 def load_model(model_path):
     return keras.models.load_model(model_path, custom_objects={'mse': 'mse'})
