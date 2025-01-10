@@ -65,3 +65,21 @@ def plot_battery_arbitrage(future_df, soc, charge, discharge):
 #     plt.xlabel('Features')
 #     plt.ylabel('Importance')
 #     plt.show()
+
+# Function to plot execution time of different phases of analytics
+def plot_exec_time(DA_exec_time, PDA_create_model_exec_time, PDA_predict_exec_time, PSA_exec_time):
+    categories = ['Data Processing', 'Predictions', 'Prescriptions']
+
+    PDA_exec_time = PDA_create_model_exec_time + PDA_predict_exec_time
+    times = [DA_exec_time, PDA_exec_time, PSA_exec_time]
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    bars = ax.bar(categories, times, color=['blue', 'orange', 'green'], edgecolor='black')
+    ax.bar('Predictions', PDA_create_model_exec_time, color='yellow', edgecolor='black', label='Create Model')
+    ax.bar('Predictions', PDA_predict_exec_time, bottom=PDA_create_model_exec_time, color='red', edgecolor='black', label='Forecast')
+    ax.set_ylabel('Time (seconds)', fontsize=12)
+    ax.set_title('Execution Time', fontsize=14)
+    ax.legend(loc='upper right')
+
+    plt.tight_layout()
+    plt.show()
