@@ -23,7 +23,8 @@ def train_lstm_model(X_train, y_train, X_val, y_val):
 # Function to build an LSTM model
 def build_lstm_model(input_shape):
     model = Sequential()
-    model.add(LSTM(50, activation='relu', input_shape=input_shape, dropout=0.2))
+    model.add(LSTM(50, activation='relu', return_sequences=True, dropout=0.2))
+    model.add(LSTM(50, activation='relu', dropout=0.2))
     model.add(Dropout(0.2))
     model.add(Dense(1))
     model.compile(optimizer='adam', loss='huber')
