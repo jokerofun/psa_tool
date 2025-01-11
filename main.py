@@ -39,10 +39,11 @@ result = con.execute('SELECT * FROM future_prices')
 future_df = result.fetchdf()
 future_df['HourDK'] = pd.to_datetime(future_df['HourDK'])
 future_df.set_index('HourDK', inplace=True)
-
+print(future_df.head())
+print(future_df.tail())
 # Run the battery arbitrage strategy
 future_prices = future_df['SpotPriceEUR'].values
-optimal_profit, optimal_schedule, soc_schedule = battery_arbitrage_multiple(future_prices, num_batteries=3)
+optimal_profit, optimal_schedule, soc_schedule = battery_arbitrage_multiple(future_prices, num_days=7, num_batteries=3)
 
 # Plot the battery arbitrage strategy
 plot_battery_arbitrage_multiple(future_prices, soc_schedule, optimal_schedule, num_batteries=3)

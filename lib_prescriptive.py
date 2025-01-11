@@ -55,12 +55,13 @@ def battery_arbitrage(prices, battery_capacity, charging_power, discharging_powe
 
 
 
-def battery_arbitrage_multiple(prices, num_batteries = 3, battery_capacities = [20, 60, 300], max_charging_powers= [20, 20, 10], max_discharging_powers= [20, 20, 10], efficiencies = [0.9, 0.7, 0.45]):
+def battery_arbitrage_multiple(prices, num_days = 7 ,num_batteries = 3, battery_capacities = [20, 60, 300], max_charging_powers= [20, 20, 10], max_discharging_powers= [20, 20, 10], efficiencies = [0.9, 0.7, 0.45]):
     """
     Solves the battery arbitrage problem for a specified number of batteries.
 
     Parameters:
         prices (list): Electricity prices for each time period (length T).
+        num_days (int): Number of days to consider in the optimization.
         num_batteries (int): Number of batteries to use (1, 2, or 3).
         battery_capacities (list): List of capacities for each battery (MWh).
         max_charging_powers (list): List of max charging power for each battery (MW).
@@ -70,6 +71,7 @@ def battery_arbitrage_multiple(prices, num_batteries = 3, battery_capacities = [
     Returns:
         tuple: Optimal profit, optimal charging/discharging schedules, and SOC schedules.
     """
+    prices = prices[:24*num_days]  # Limit to the first num_days days
     T = len(prices)  # Number of time periods
 
     # Square root the efficiency to account for both charging and discharging
