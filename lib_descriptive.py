@@ -56,16 +56,67 @@ def plot_battery_arbitrage(future_df, soc, charge, discharge):
     plt.show()
 
 
-def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries):
+# def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries):
+#     """
+#     Plots the battery arbitrage strategy for the selected batteries.
+
+#     Parameters:
+#         prices (list): Electricity prices over the time periods.
+#         soc (ndarray): State of charge for each battery over the time periods (T x num_batteries).
+#         schedule (ndarray): Charging/discharging schedule for each battery (T x num_batteries).
+#         num_batteries (int): Number of batteries used in the optimization.
+#     """
+#     T = len(prices)
+#     time_index = np.arange(T)
+
+#     # Create a DataFrame for convenience
+#     data = {
+#         "Prices (EUR/MWh)": prices,
+#     }
+#     for i in range(num_batteries):
+#         data[f"Battery {i+1} SOC (MWh)"] = soc[:, i]
+#         data[f"Battery {i+1} Charge (MW)"] = np.maximum(0, schedule[:, i])  # Positive values are charging
+#         data[f"Battery {i+1} Discharge (MW)"] = -np.minimum(0, schedule[:, i])  # Negative values are discharging
+
+#     df = pd.DataFrame(data, index=time_index)
+
+#     # Plot electricity prices
+#     plt.figure(figsize=(14, 8))
+#     plt.plot(df.index, df["Prices (EUR/MWh)"], label="Electricity Prices", color="black", linestyle="--", linewidth=1.5)
+
+#     # Plot SOC, charging, and discharging for each battery
+#     for i in range(num_batteries):
+#         plt.plot(df.index, df[f"Battery {i+1} SOC (MWh)"], label=f"Battery {i+1} SOC", linewidth=2)
+#         plt.bar(df.index, df[f"Battery {i+1} Charge (MW)"], width=0.4, label=f"Battery {i+1} Charge", color="green", alpha=0.6)
+#         plt.bar(df.index, -df[f"Battery {i+1} Discharge (MW)"], width=0.4, label=f"Battery {i+1} Discharge", color="red", alpha=0.6)
+
+#     # Add titles and labels
+#     plt.title("Battery Arbitrage Strategy", fontsize=16)
+#     plt.xlabel("Time Periods", fontsize=14)
+#     plt.ylabel("Energy (MWh) / Power (MW)", fontsize=14)
+#     plt.legend(loc="upper left", fontsize=10)
+#     plt.grid(True, linestyle="--", alpha=0.7)
+
+#     # Show the plot
+#     plt.show()
+
+import os
+
+def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries, output_dir="figures"):
     """
-    Plots the battery arbitrage strategy for the selected batteries.
+    Plots the battery arbitrage strategy for the selected batteries in a 2x2 grid
+    and saves each subplot as a PNG file, including electricity prices.
 
     Parameters:
         prices (list): Electricity prices over the time periods.
         soc (ndarray): State of charge for each battery over the time periods (T x num_batteries).
         schedule (ndarray): Charging/discharging schedule for each battery (T x num_batteries).
         num_batteries (int): Number of batteries used in the optimization.
+        output_dir (str): Directory to save the plots as PNG files.
     """
+    # Ensure the output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
     T = len(prices)
     time_index = np.arange(T)
 
@@ -80,26 +131,68 @@ def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries):
 
     df = pd.DataFrame(data, index=time_index)
 
-    # Plot electricity prices
-    plt.figure(figsize=(14, 8))
-    plt.plot(df.index, df["Prices (EUR/MWh)"], label="Electricity Prices", color="black", linestyle="--", linewidth=1.5)
+    # Prepare the 2x2 grid of subplots
+    fig, axes = plt.subplots(2, 2, figsize=(16, 10))
 
-    # Plot SOC, charging, and discharging for each battery
+    # Loop through each battery and create a subplot
     for i in range(num_batteries):
-        plt.plot(df.index, df[f"Battery {i+1} SOC (MWh)"], label=f"Battery {i+1} SOC", linewidth=2)
-        plt.bar(df.index, df[f"Battery {i+1} Charge (MW)"], width=0.4, label=f"Battery {i+1} Charge", color="green", alpha=0.6)
-        plt.bar(df.index, -df[f"Battery {i+1} Discharge (MW)"], width=0.4, label=f"Battery {i+1} Discharge", color="red", alpha=0.6)
+        ax = axes[i // 2, i % 2]
+        ax.plot(df.index, df[f"Battery {i+1} SOC (MWh)"], label=f"Battery {i+1} SOC", linewidth=2)
+        ax.bar(df.index, df[f"Battery {i+1} Charge (MW)"], width=0.4, label=f"Battery {i+1} Charge", color="green", alpha=0.6)
+        ax.bar(df.index, -df[f"Battery {i+1} Discharge (MW)"], width=0.4, label=f"Battery {i+1} Discharge", color="red", alpha=0.6)
+        ax.plot(df.index, df["Prices (EUR/MWh)"], label="Electricity Prices", color="black", linestyle="--", linewidth=1.5)
 
-    # Add titles and labels
-    plt.title("Battery Arbitrage Strategy", fontsize=16)
-    plt.xlabel("Time Periods", fontsize=14)
-    plt.ylabel("Energy (MWh) / Power (MW)", fontsize=14)
-    plt.legend(loc="upper left", fontsize=10)
-    plt.grid(True, linestyle="--", alpha=0.7)
+        ax.set_title(f"Battery {i+1} Strategy", fontsize=14)
+        ax.set_xlabel("Time Periods")
+        ax.set_ylabel("Energy (MWh) / Power (MW)")
+        ax.legend(loc="upper left", fontsize=9)
+        ax.grid(True, linestyle="--", alpha=0.7)
 
-    # Show the plot
+        # Save only the current subplot as a PNG file
+        individual_fig = plt.figure(figsize=(8, 5))
+        individual_ax = individual_fig.add_subplot(111)
+        individual_ax.plot(df.index, df[f"Battery {i+1} SOC (MWh)"], label=f"Battery {i+1} SOC", linewidth=2)
+        individual_ax.bar(df.index, df[f"Battery {i+1} Charge (MW)"], width=0.4, label=f"Battery {i+1} Charge", color="green", alpha=0.6)
+        individual_ax.bar(df.index, -df[f"Battery {i+1} Discharge (MW)"], width=0.4, label=f"Battery {i+1} Discharge", color="red", alpha=0.6)
+        individual_ax.plot(df.index, df["Prices (EUR/MWh)"], label="Electricity Prices", color="black", linestyle="--", linewidth=1.5)
+
+        individual_ax.set_title(f"Battery {i+1} Strategy", fontsize=14)
+        individual_ax.set_xlabel("Time Periods")
+        individual_ax.set_ylabel("Energy (MWh) / Power (MW)")
+        individual_ax.legend(loc="upper left", fontsize=9)
+        individual_ax.grid(True, linestyle="--", alpha=0.7)
+
+        subplot_filename = os.path.join(output_dir, f"battery_{i+1}_strategy.png")
+        individual_fig.savefig(subplot_filename, bbox_inches="tight")
+        plt.close(individual_fig)  # Close the individual plot to save memory
+        print(f"Saved: {subplot_filename}")
+
+    # Create the summary plot in the bottom-right corner
+    ax_summary = axes[1, 1]
+    ax_summary.plot(df.index, df["Prices (EUR/MWh)"], label="Electricity Prices", color="black", linestyle="--", linewidth=1.5)
+
+    # Aggregate SOC, charging, and discharging for all batteries
+    total_soc = soc.sum(axis=1)
+    total_charge = np.maximum(0, schedule).sum(axis=1)
+    total_discharge = -np.minimum(0, schedule).sum(axis=1)
+
+    ax_summary.plot(df.index, total_soc, label="Total SOC (MWh)", linewidth=2)
+    ax_summary.bar(df.index, total_charge, width=0.4, label="Total Charge (MW)", color="green", alpha=0.6)
+    ax_summary.bar(df.index, -total_discharge, width=0.4, label="Total Discharge (MW)", color="red", alpha=0.6)
+
+    ax_summary.set_title("Summary Plot", fontsize=14)
+    ax_summary.set_xlabel("Time Periods")
+    ax_summary.set_ylabel("Energy (MWh) / Power (MW)")
+    ax_summary.legend(loc="upper left", fontsize=9)
+    ax_summary.grid(True, linestyle="--", alpha=0.7)
+
+    # Hide any unused subplots if num_batteries < 4
+    for j in range(num_batteries, 4):
+        fig.delaxes(axes[j // 2, j % 2])
+
+    # Adjust layout and show the 2x2 grid
+    plt.tight_layout()
     plt.show()
-
 
 # # Function to plot the feature importances
 # def plot_feature_importances(model, features):

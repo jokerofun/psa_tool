@@ -97,8 +97,8 @@ def battery_arbitrage_multiple(prices, num_days = 7 ,num_batteries = 3, battery_
 
     for i in range(num_batteries):
         # Initial and final state of charge
-        constraints += [soc[0, i] == 0, soc[-1, i] == 0]
-
+        # constraints += [soc[0, i] == 0, soc[-1, i] == 0]
+        constraints += [soc[0, i] == 0]
         for t in range(T):
             if t == 0:
                 # SOC dynamics for the first time period
