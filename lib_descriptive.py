@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
 
 # Function to plot histograms of the training and test data
 def plot_histograms(y_train, y_test):
@@ -52,6 +54,52 @@ def plot_battery_arbitrage(future_df, soc, charge, discharge):
     plt.xlabel('Date')
     plt.ylabel('Energy (MWh)')
     plt.show()
+
+
+def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries):
+    """
+    Plots the battery arbitrage strategy for the selected batteries.
+
+    Parameters:
+        prices (list): Electricity prices over the time periods.
+        soc (ndarray): State of charge for each battery over the time periods (T x num_batteries).
+        schedule (ndarray): Charging/discharging schedule for each battery (T x num_batteries).
+        num_batteries (int): Number of batteries used in the optimization.
+    """
+    T = len(prices)
+    time_index = np.arange(T)
+
+    # Create a DataFrame for convenience
+    data = {
+        "Prices (EUR/MWh)": prices,
+    }
+    for i in range(num_batteries):
+        data[f"Battery {i+1} SOC (MWh)"] = soc[:, i]
+        data[f"Battery {i+1} Charge (MW)"] = np.maximum(0, schedule[:, i])  # Positive values are charging
+        data[f"Battery {i+1} Discharge (MW)"] = -np.minimum(0, schedule[:, i])  # Negative values are discharging
+
+    df = pd.DataFrame(data, index=time_index)
+
+    # Plot electricity prices
+    plt.figure(figsize=(14, 8))
+    plt.plot(df.index, df["Prices (EUR/MWh)"], label="Electricity Prices", color="black", linestyle="--", linewidth=1.5)
+
+    # Plot SOC, charging, and discharging for each battery
+    for i in range(num_batteries):
+        plt.plot(df.index, df[f"Battery {i+1} SOC (MWh)"], label=f"Battery {i+1} SOC", linewidth=2)
+        plt.bar(df.index, df[f"Battery {i+1} Charge (MW)"], width=0.4, label=f"Battery {i+1} Charge", color="green", alpha=0.6)
+        plt.bar(df.index, -df[f"Battery {i+1} Discharge (MW)"], width=0.4, label=f"Battery {i+1} Discharge", color="red", alpha=0.6)
+
+    # Add titles and labels
+    plt.title("Battery Arbitrage Strategy", fontsize=16)
+    plt.xlabel("Time Periods", fontsize=14)
+    plt.ylabel("Energy (MWh) / Power (MW)", fontsize=14)
+    plt.legend(loc="upper left", fontsize=10)
+    plt.grid(True, linestyle="--", alpha=0.7)
+
+    # Show the plot
+    plt.show()
+
 
 # # Function to plot the feature importances
 # def plot_feature_importances(model, features):

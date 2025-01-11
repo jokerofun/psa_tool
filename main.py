@@ -2,8 +2,10 @@ import requests
 import pandas as pd
 import duckdb
 
-from lib_descriptive import plot_battery_arbitrage
-from lib_prescriptive import battery_arbitrage
+from lib_descriptive import plot_battery_arbitrage, plot_battery_arbitrage_multiple
+from lib_prescriptive import battery_arbitrage, battery_arbitrage_multiple
+
+import matplotlib.pyplot as plt
 
 con = duckdb.connect('database.db')
 result = con.execute('SELECT * FROM information_schema.tables WHERE table_name = \'future_prices\'')
@@ -40,9 +42,11 @@ future_df.set_index('HourDK', inplace=True)
 
 # Run the battery arbitrage strategy
 future_prices = future_df['SpotPriceEUR'].values
-charge, discharge, soc = battery_arbitrage(future_prices, battery_capacity, charging_power, discharging_power, efficiency)
+optimal_profit, optimal_schedule, soc_schedule = battery_arbitrage_multiple(future_prices, num_batteries=3)
 
 # Plot the battery arbitrage strategy
-plot_battery_arbitrage(future_df, soc, charge, discharge)
+plot_battery_arbitrage_multiple(future_prices, soc_schedule, optimal_schedule, num_batteries=3)
+# save the plot
+plt.savefig('battery_arbitrage.png')
 
 con.close()

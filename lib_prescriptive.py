@@ -1,4 +1,6 @@
 import cvxpy as cp
+import math
+import numpy as np
 
 # Function to solve the battery arbitrage problem
 def battery_arbitrage(prices, battery_capacity, charging_power, discharging_power, efficiency):
@@ -50,3 +52,83 @@ def battery_arbitrage(prices, battery_capacity, charging_power, discharging_powe
     print(f"Optimal Profit: {problem.value:.2f} EUR")
     
     return charge.value, discharge.value, state_of_charge.value
+
+
+
+def battery_arbitrage_multiple(prices, num_batteries = 3, battery_capacities = [20, 60, 300], max_charging_powers= [20, 20, 10], max_discharging_powers= [20, 20, 10], efficiencies = [0.9, 0.7, 0.45]):
+    """
+    Solves the battery arbitrage problem for a specified number of batteries.
+
+    Parameters:
+        prices (list): Electricity prices for each time period (length T).
+        num_batteries (int): Number of batteries to use (1, 2, or 3).
+        battery_capacities (list): List of capacities for each battery (MWh).
+        max_charging_powers (list): List of max charging power for each battery (MW).
+        max_discharging_powers (list): List of max discharging power for each battery (MW).
+        efficiencies (list): List of efficiencies for each battery (fraction, e.g., 0.9 for 90%).
+
+    Returns:
+        tuple: Optimal profit, optimal charging/discharging schedules, and SOC schedules.
+    """
+    T = len(prices)  # Number of time periods
+
+    # Square root the efficiency to account for both charging and discharging
+    efficiencies = [math.sqrt(eff) for eff in efficiencies]
+
+    battery_capacities = battery_capacities[:num_batteries]
+    max_charging_powers = max_charging_powers[:num_batteries]
+    max_discharging_powers = max_discharging_powers[:num_batteries]
+    efficiencies = efficiencies[:num_batteries]
+
+    # Decision Variables
+    u = cp.Variable((T, num_batteries))  # Unified charging/discharging power (positive for charging, negative for discharging)
+    soc = cp.Variable((T, num_batteries))  # State of charge for each battery
+    charge_power = cp.Variable((T, num_batteries), nonneg=True)  # Positive charging power
+    discharge_power = cp.Variable((T, num_batteries), nonneg=True)  # Positive discharging power
+
+    # Objective: Maximize arbitrage profit
+    profit = cp.sum(cp.multiply(-u, np.array(prices).reshape(-1, 1)))  # Negative u when discharging adds revenue
+    objective = cp.Maximize(profit)
+
+    # Constraints
+    constraints = []
+
+    for i in range(num_batteries):
+        # Initial and final state of charge
+        constraints += [soc[0, i] == 0, soc[-1, i] == 0]
+
+        for t in range(T):
+            if t == 0:
+                # SOC dynamics for the first time period
+                constraints += [
+                    soc[t, i] == efficiencies[i] * charge_power[t, i] - (1 / efficiencies[i]) * discharge_power[t, i]
+                ]
+            else:
+                # SOC dynamics for subsequent periods
+                constraints += [
+                    soc[t, i] == soc[t - 1, i] + efficiencies[i] * charge_power[t, i] - (1 / efficiencies[i]) * discharge_power[t, i]
+                ]
+
+            # Power flow constraints
+            constraints += [
+                u[t, i] == charge_power[t, i] - discharge_power[t, i],  # Unified power flow
+                charge_power[t, i] <= max_charging_powers[i],  # Charging power limit
+                discharge_power[t, i] <= max_discharging_powers[i],  # Discharging power limit
+            ]
+
+            # SOC limits
+            constraints += [
+                soc[t, i] <= battery_capacities[i],  # Max SOC
+                soc[t, i] >= 0,  # Non-negative SOC
+            ]
+
+    # Solve the optimization problem
+    problem = cp.Problem(objective, constraints)
+    problem.solve(solver=cp.OSQP, verbose=True)
+
+    # Extract the results
+    optimal_profit = problem.value
+    optimal_schedule = u.value
+    soc_schedule = soc.value
+
+    return optimal_profit, optimal_schedule, soc_schedule
