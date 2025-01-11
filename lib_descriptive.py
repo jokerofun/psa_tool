@@ -181,7 +181,7 @@ def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries, output
     ax_summary.bar(df.index, -total_discharge, width=0.4, label="Total Discharge (MW)", color="red", alpha=0.6)
 
     ax_summary.set_title("Summary Plot", fontsize=14)
-    ax_summary.set_xlabel("Time Periods")
+    ax_summary.set_xlabel("Time Period (in hours)")
     ax_summary.set_ylabel("Energy (MWh) / Power (MW)")
     ax_summary.legend(loc="upper left", fontsize=9)
     ax_summary.grid(True, linestyle="--", alpha=0.7)
@@ -222,5 +222,34 @@ def plot_exec_time(DA_exec_time, PDA_create_model_exec_time, PDA_predict_exec_ti
     ax.set_title('Execution Time', fontsize=14)
     ax.legend(loc='upper right')
 
+    plt.tight_layout()
+    plt.show()
+
+def plot_PSA_exec_time(data):
+    """
+    Create a bar chart with execution times.
+    
+    Args:
+        data (list of dict): A list of dictionaries, where each dictionary has:
+            - "days": numeric value representing the number of days.
+            - "batteries": numeric value representing the number of batteries.
+            - "exec_time": numeric value representing the execution time in seconds.
+    """
+    # Generate labels and heights from the input data
+    labels = [f"{item['days']} day(s), {item['batteries']} batteries" for item in data]
+    heights = [item['exec_time'] for item in data]
+
+    # Create the bar chart
+    plt.figure(figsize=(10, 6))
+    plt.bar(labels, heights, color='skyblue', edgecolor='black')
+    
+    # Add labels, title, and grid
+    plt.xlabel("Number of Days and Batteries", fontsize=12)
+    plt.ylabel("Execution Time (seconds)", fontsize=12)
+    plt.title("Battery Arbitrage Execution Times", fontsize=14)
+    plt.xticks(rotation=45, ha='right', fontsize=10)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    # Display the chart
     plt.tight_layout()
     plt.show()
