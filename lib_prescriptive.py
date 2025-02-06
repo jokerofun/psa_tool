@@ -83,13 +83,12 @@ def battery_arbitrage_multiple(prices, num_days = 7 ,num_batteries = 3, battery_
     efficiencies = efficiencies[:num_batteries]
 
     # Decision Variables
-    u = cp.Variable((T, num_batteries))  # Unified charging/discharging power (positive for charging, negative for discharging)
     soc = cp.Variable((T, num_batteries))  # State of charge for each battery
     charge_power = cp.Variable((T, num_batteries), nonneg=True)  # Positive charging power
     discharge_power = cp.Variable((T, num_batteries), nonneg=True)  # Positive discharging power
 
     # Objective: Maximize arbitrage profit
-    profit = cp.sum(cp.multiply(-u, np.array(prices).reshape(-1, 1)))  # Negative u when discharging adds revenue
+    profit = cp.sum(cp.multiply(discharge_power - charge_power, np.array(prices).reshape(-1, 1)))  # Negative u when discharging adds revenue
     objective = cp.Maximize(profit)
 
     # Constraints
@@ -113,7 +112,6 @@ def battery_arbitrage_multiple(prices, num_days = 7 ,num_batteries = 3, battery_
 
             # Power flow constraints
             constraints += [
-                u[t, i] == charge_power[t, i] - discharge_power[t, i],  # Unified power flow
                 charge_power[t, i] <= max_charging_powers[i],  # Charging power limit
                 discharge_power[t, i] <= max_discharging_powers[i],  # Discharging power limit
             ]
@@ -130,7 +128,7 @@ def battery_arbitrage_multiple(prices, num_days = 7 ,num_batteries = 3, battery_
 
     # Extract the results
     optimal_profit = problem.value
-    optimal_schedule = u.value
+    optimal_schedule = discharge_power.value - charge_power.value
     soc_schedule = soc.value
 
     return optimal_profit, optimal_schedule, soc_schedule

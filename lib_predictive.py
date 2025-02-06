@@ -38,7 +38,7 @@ def evaluate_model(model, X_test, y_test):
     return predictions
 
 # Function to preprocess data
-def preprocess_data(df, wind_data, temp_data):
+def preprocess_data(df, wind_array, temp_data, gas_data):
     df['hour'] = df['HourDK'].dt.hour
     df['epoch'] = df['HourDK'].astype(np.int64) 
     df['weekday'] = df['HourDK'].dt.weekday
@@ -54,15 +54,22 @@ def preprocess_data(df, wind_data, temp_data):
 
     # Ensure both datetime columns are in the same timezone
     df['HourDK'] = pd.to_datetime(df['HourDK']).dt.tz_localize(None)
-    wind_data['observed'] = pd.to_datetime(wind_data['observed']).dt.tz_localize(None)
+    # wind_data['observed'] = pd.to_datetime(wind_data['observed']).dt.tz_localize(None)
+    for wind in wind_array:
+        wind['observed'] = pd.to_datetime(wind['observed']).dt.tz_localize(None)
     temp_data['observed'] = pd.to_datetime(temp_data['observed']).dt.tz_localize(None)
 
-    wind_data.rename(columns={'observed': 'HourDK', 'value': 'wind_speed'}, inplace=True)
+    # wind_data.rename(columns={'observed': 'HourDK', 'value': 'wind_speed'}, inplace=True)
+    for wind in wind_array:
+        # rename columns to avoid duplicates
+        wind.rename(columns={'observed': 'HourDK', 'value': 'wind_speed'}, inplace=True)
     temp_data.rename(columns={'observed': 'HourDK', 'value': 'temperature'}, inplace=True)
 
     # Merge wind data with electricity prices
-    df = pd.merge_asof(df.sort_values('HourDK'), wind_data.sort_values('HourDK'), on='HourDK')
+    for wind in wind_array:
+        df = pd.merge_asof(df.sort_values('HourDK'), wind.sort_values('HourDK'), on='HourDK')
     df = pd.merge_asof(df.sort_values('HourDK'), temp_data.sort_values('HourDK'), on='HourDK')
+    df = pd.merge_asof(df.sort_values('HourDK'), gas_data.sort_values('HourDK'), on='HourDK')
     df.dropna(inplace=True)
     
     # Remove outliers with prices above 300 Eur, replace with 300 Eur
