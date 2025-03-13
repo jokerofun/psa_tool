@@ -256,6 +256,3 @@ if __name__ == "__main__":
     problemClass.solve()
     problemClass.printResults()
     print("done")
-    
-
-    
