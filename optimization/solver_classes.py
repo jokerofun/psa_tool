@@ -239,23 +239,18 @@ if __name__ == "__main__":
     problemClass = GraphProblemClass()
     node1 = ConnectingNode(problemClass)
     node2 = ConnectingNode(problemClass)
-    producer = Producer(problemClass, node1, 5, 2)
+    producer = Producer(problemClass, node1, production_capacity=5, price=2)
     consumer = Consumer(problemClass, node2)
-    battery = Battery(problemClass, node2, 5, 5, 10)
-    transmission_line = TransmissionLine(problemClass, node1, node2, 5)
-    power_exchange = PowerExchange(problemClass, node1, 10, 10)
+    battery = Battery(problemClass, node2, production_capacity= 5, consumption_capacity= 5, battery_capacity= 5)
+    transmission_line = TransmissionLine(problemClass, node1, node2, capacity=5, transmission_loss=0)
+    power_exchange = PowerExchange(problemClass, node1, production_capacity= 10, consumption_capacity=5)
 
-    problemClass.setTimeLen(5)
-    prices = [1,2,4,5,1]
-    # prices = [1]
-    
-    power_exchange.setPrices(prices)
+    problemClass.setTimeLen(5)    
+    power_exchange.setPrices([1,2,4,5,1])
     consumer.setConsumptionSchedule([5,2,8,10,8])
-    # consumer.setConsumptionSchedule([1])
 
     problemClass.solve()
     problemClass.printResults()
-    print("done")
     
 
     
