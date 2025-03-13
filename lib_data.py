@@ -26,6 +26,32 @@ def fetch_spot_prices(start_date, end_date):
     df['HourDK'] = pd.to_datetime(df['HourDK'])
     return df
 
+def fetch_gas_prices(start_date, end_date):
+    # Read data from csv file if it exists
+    try:
+        df = pd.read_csv('data\gas_prices_test.csv')
+        df['HourDK'] = pd.to_datetime(df['HourDK'])
+        return df
+    except FileNotFoundError:
+        pass
+
+    url = "https://api.energidataservice.dk/dataset/GasDailyBalancingPrice"
+    params = {
+        'start': start_date.strftime('%Y-%m-%dT%H:%M'),
+        'end': end_date.strftime('%Y-%m-%dT%H:%M'),
+    }
+    response = requests.get(url, params=params)
+    data = response.json()['records']
+    df = pd.DataFrame(data)
+    #expand gas day to 24 hours
+    df = df.loc[df.index.repeat(24)].reset_index(drop=True)
+    #add hourdk column 
+    df['HourDK'] = pd.date_range(start_date, periods=len(df), freq='h')
+    df['HourDK'] = pd.to_datetime(df['HourDK'])
+    # only keep HourDk and EEXSpotIndexEUR_MWh	
+    df = df[['HourDK', 'EEXSpotIndexEUR_MWh']]
+    return df
+
 def fetch_forecast_data(lat, lon):
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
