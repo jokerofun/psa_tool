@@ -34,9 +34,7 @@ class GraphProblemClass():
 
     def printResults(self):
         for node in self.nodes:
-            print(node.name)
-            for var in node.getVariables():
-                print(var.value)
+            print(node.getVariables())
 
     def setTimeLen(self, time_len):
         self.time_len = time_len
@@ -108,17 +106,17 @@ class DeviceNode(Node):
     
     def __sub__(self, other: Node): 
         if self.connecting_node is None and other.getConnectingNode() is None:
-            print("Connecting nodes are None: " + self.name)
+            # print("Connecting nodes are None: " + self.name)
             self.connecting_node = ConnectingNode(self.problem_class)
             other.setConnectingNode(self.connecting_node)
             self.connecting_node.connect(self)
             self.connecting_node.connect(other)
         elif self.connecting_node is None:
-            print("Connecting node is None: " + self.name)
+            # print("Connecting node is None: " + self.name)
             self.connecting_node = other.getConnectingNode()
             self.connecting_node.connect(self)
         elif other.connecting_node is None:
-            print("Other connecting node is None: " + self.name)
+            # print("Other connecting node is None: " + self.name)
             other.setConnectingNode(self.connecting_node)
             self.connecting_node.connect(other)  
             
@@ -176,7 +174,8 @@ class TransmissionLine(DeviceNode):
             return 0
         
     def getVariables(self):
-        return [self.power_flow_left_right - self.power_flow_right_left]
+        return {self.name : {"powerFlow" : self.power_flow_left_right.value - self.power_flow_right_left.value}}
+        
 
 
 class Producer(DeviceNode):
@@ -201,7 +200,8 @@ class Producer(DeviceNode):
         return cp.sum(self.production_schedule * self.price)
     
     def getVariables(self):
-        return [self.production_schedule]
+        return {self.name : {"production_schedule" : self.production_schedule.value}}
+        
     
 class Consumer(DeviceNode):
     def __init__(self, problem_class):
@@ -219,6 +219,9 @@ class Consumer(DeviceNode):
 
     def getPowerFlow(self, connecting_node, t):
         return -self.consumption_schedule[t]
+    
+    def getVariables(self):
+        return {self.name : {"powerFlow" : -self.consumption_schedule.value}}
 
 class Prosumer(DeviceNode):
     def __init__(self, problem_class, production_capacity, consumption_capacity):
@@ -248,7 +251,7 @@ class PowerExchange(Prosumer):
         return cp.sum(self.prices @ self.powerFlow)
     
     def getVariables(self):
-        return [self.powerFlow]
+        return {self.name : {"powerFlow" : self.powerFlow.value}}
     
 class Battery(Prosumer):
     def __init__(self, problem_class, production_capacity, consumption_capacity, battery_capacity, efficiency = 0.9):
@@ -278,14 +281,14 @@ class Battery(Prosumer):
             )
         return constraints
 
-    def getPowerFlow(self, t):
+    def getPowerFlow(self, connecting_node, t):
         return self.discharge[t] - self.charge[t]
 
     def getCost(self):
         0
 
     def getVariables(self):
-        return [self.SOC, self.discharge - self.charge]
+        return {self.name : {"SOC" : self.SOC.value, "powerFlow":  self.discharge.value - self.charge.value}}
 
     
 if __name__ == "__main__":
