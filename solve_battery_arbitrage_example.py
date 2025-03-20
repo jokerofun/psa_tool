@@ -6,21 +6,26 @@ if __name__ == "__main__":
     # Create a GraphProblemClass instance
     problemClass = GraphProblemClass()
 
-    # Create ConnectingNode instances
-    node1 = ConnectingNode(problemClass)
-    node2 = ConnectingNode(problemClass)
-
     # Create Producer, Consumer, and Battery instances
     # Producer and Consumer instances are not needed for this problem
-    producer = Producer(problemClass, node1, 5, 2)
-    consumer = Consumer(problemClass, node2)
-    battery1 = Battery(problemClass, node2, 5, 5, 10)
-    battery2 = Battery(problemClass, node2, 5, 5, 10)
-    battery3 = Battery(problemClass, node2, 5, 5, 10)
+    # producer = Producer(problemClass, 5, 2)
+    # consumer = Consumer(problemClass)
+    battery1 = Battery(problemClass, 5, 5, 10)
+    battery2 = Battery(problemClass, 5, 5, 10)
+    battery3 = Battery(problemClass, 5, 5, 10)
 
     # Create TransmissionLine and PowerExchange instances
-    transmission_line = TransmissionLine(problemClass, node1, node2, 5)
-    power_exchange = PowerExchange(problemClass, node1, 10, 10)
+    transmission_line = TransmissionLine(problemClass, 5, 0)
+    power_exchange = PowerExchange(problemClass, 10, 5)
+
+    # producer - transmission_line
+    # transmission_line - consumer
+    # producer - power_exchange
+    # battery - consumer
+
+    power_exchange - battery1
+    # power_exchange - battery2
+    # power_exchange - battery3
 
     # Set the time length for the optimization problem
     problemClass.setTimeLen(5)
@@ -40,7 +45,7 @@ if __name__ == "__main__":
     power_exchange.setPrices(dfs["prices_processed"].tolist())
 
     # Set the consumption schedule for the consumer
-    consumer.setConsumptionSchedule([5, 2, 8, 10, 8])
+    # consumer.setConsumptionSchedule([5, 2, 8, 10, 8])
 
     # Solve the optimization problem
     problemClass.solve()
