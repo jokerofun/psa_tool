@@ -14,7 +14,7 @@ class DataManager:
         # here goes db connection stuff
         pass
         
-    def getData(nodeID: int) -> np.array: 
+    def getData(self, nodeID: int) -> np.array: 
         match nodeID:
             case 1:
                 return [1,2,4,5,1]

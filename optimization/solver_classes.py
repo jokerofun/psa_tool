@@ -278,7 +278,7 @@ class Battery(Prosumer):
             )
         return constraints
 
-    def getPowerFlow(self, connecting_node, t):
+    def getPowerFlow(self, t):
         return self.discharge[t] - self.charge[t]
 
     def getCost(self):
@@ -309,13 +309,6 @@ if __name__ == "__main__":
     problemClass.solve()
     problemClass.printResults()
     
-    # print(inspect.signature(producer))
-    print(inspect.signature(Producer))
-    print(inspect.signature(Producer.getPowerFlow))
-    print(inspect.signature(producer.getPowerFlow))
-    # print(inspect.signature(producer))
-    print(inspect.getsource(Producer))
-    print(inspect.getsource(Producer.getPowerFlow))
-    print(inspect.getsource(producer.getPowerFlow))
+    
 
     
