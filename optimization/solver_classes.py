@@ -36,6 +36,12 @@ class GraphProblemClass():
         for node in self.nodes:
             print(node.getVariables())
 
+    def getAllVariables(self):
+        variables = []
+        for node in self.nodes:
+            variables.append(node.getVariables())
+        return variables
+
     def setTimeLen(self, time_len):
         self.time_len = time_len
         for node in self.nodes:
@@ -285,7 +291,7 @@ class Battery(Prosumer):
         return self.discharge[t] - self.charge[t]
 
     def getCost(self):
-        0
+        return 0
 
     def getVariables(self):
         return {self.name : {"SOC" : self.SOC.value, "powerFlow":  self.discharge.value - self.charge.value}}

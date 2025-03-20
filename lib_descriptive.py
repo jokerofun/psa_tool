@@ -125,9 +125,9 @@ def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries, output
         "Prices (EUR/MWh)": prices,
     }
     for i in range(num_batteries):
-        data[f"Battery {i+1} SOC (MWh)"] = soc[:, i]
-        data[f"Battery {i+1} Charge (MW)"] = np.maximum(0, schedule[:, i])  # Positive values are charging
-        data[f"Battery {i+1} Discharge (MW)"] = -np.minimum(0, schedule[:, i])  # Negative values are discharging
+        data[f"Battery {i+1} SOC (MWh)"] = soc[i]
+        data[f"Battery {i+1} Charge (MW)"] = np.maximum(0, schedule[i])  # Positive values are charging
+        data[f"Battery {i+1} Discharge (MW)"] = -np.minimum(0, schedule[i])  # Negative values are discharging
 
     df = pd.DataFrame(data, index=time_index)
 
@@ -172,9 +172,9 @@ def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries, output
     ax_summary.plot(df.index, df["Prices (EUR/MWh)"], label="Electricity Prices", color="black", linestyle="--", linewidth=1.5)
 
     # Aggregate SOC, charging, and discharging for all batteries
-    total_soc = soc.sum(axis=1)
-    total_charge = np.maximum(0, schedule).sum(axis=1)
-    total_discharge = -np.minimum(0, schedule).sum(axis=1)
+    total_soc = soc.sum(axis=0)
+    total_charge = np.maximum(0, schedule).sum(axis=0)
+    total_discharge = -np.minimum(0, schedule).sum(axis=0)
 
     ax_summary.plot(df.index, total_soc, label="Total SOC (MWh)", linewidth=2)
     ax_summary.bar(df.index, total_charge, width=0.4, label="Total Charge (MW)", color="green", alpha=0.6)
