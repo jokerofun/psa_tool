@@ -51,7 +51,8 @@ class GraphProblemClass():
 class Node():
     def __init__(self, problem_class : GraphProblemClass):
         self.problem_class = problem_class
-        problem_class.add_node(self)
+        if problem_class is not None:
+            problem_class.add_node(self)
         self.name = ""
         
     # @abc.abstractmethod
@@ -268,7 +269,7 @@ class Battery(Prosumer):
         self.name = name
 
     def __repr__(self):
-        return "Battery"
+        return f"Battery(problem_class={self.problem_class},production_capacity={self.production_capacity}, consumption_capacity={self.consumption_capacity}, battery_capacity={self.battery_capacity}, efficiency={self.efficiency})"
 
     def setTimeLen(self, time_len):
         self.charge = cp.Variable(time_len, nonneg=True)
