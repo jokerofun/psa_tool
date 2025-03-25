@@ -1,52 +1,3 @@
-# Base class that provides a generic getter for attributes.
-class BaseNode:
-    def get_attr(self, attr):
-        """
-        Retrieve the attribute value by name.
-        This works for both stored attributes and computed properties.
-        """
-        try:
-            return getattr(self, attr)
-        except AttributeError:
-            raise AttributeError(f"{self.__class__.__name__} has no attribute '{attr}'")
-
-# Example subclass using built‑in @property to define getters.
-class Foo(BaseNode):
-    nodeID = 2  # Class-level attribute
-
-    def __init__(self, name, cost):
-        self._name = name
-        self._cost = cost
-
-    @property
-    def cost(self):
-        """Return the cost for Foo."""
-        return self._cost
-
-    @property
-    def name(self):
-        return self._name
-
-# Another example subclass.
-class Bar(BaseNode):
-    nodeID = 3
-
-    def __init__(self, name, cost):
-        self._name = name
-        self._cost = cost
-
-    @property
-    def cost(self):
-        """
-        Return the cost for Bar.
-        For example, Bar applies a different computation.
-        """
-        return self._cost * 1.1
-
-    @property
-    def name(self):
-        return self._name
-
 # The Selector class can filter objects and extract attribute values.
 class Selector:
     def __init__(self, items):
@@ -77,25 +28,20 @@ class Selector:
 
     def values(self, attr):
         """
-        Return a list of attribute values for each filtered item,
+        Filters list of attribute values for each filtered item,
         using the generic get_attr method.
         """
-        return [item.get_attr(attr) for item in self.items]
-
+        self.items = [item.get_attr(attr) for item in self.items]
+        
     def get(self):
-        """Return the list of filtered items."""
+        """
+        Returns the filtered items.
+        """
         return self.items
+
 
 # Example usage:
 if __name__ == '__main__':
-    # Create a list of mixed nodes.
-    big_list = [
-        Foo("Alpha", 100),
-        Bar("Beta", 200),
-        Foo("Gamma", 300),
-        Bar("Delta", 400)
-    ]
-
     # Example 1: Use Selector to filter for Foo instances and extract their costs.
     foo_costs = Selector(big_list).of_type(Foo).values("cost")
     print("Costs from Foo instances:", foo_costs)
