@@ -79,24 +79,21 @@ class DataFetchingFromAPINode(DataflowNode):
         return dfs
 
 class DependencyNode():
-    _dependencies = []
-    _is_executed = False
-    _results = {}
-    
     def __init__(self, name: str):
+        self._dependencies = []
+        self._is_executed = False
+        self._results = {}
+    
         self._name = name
 
     def add_dependency(self, node):
         self._dependencies.append(node)
     
     # overlode >> operator
-    def __rrshift__(self, node):
-        self.add_dependency(node)
-        return self
-    
     def __rshift__(self, node):
-        return self
-    
+        node.add_dependency(self)
+        return node
+        
     def getResults(self) -> Dict[str, pd.DataFrame]:
         return self._results
     
@@ -104,9 +101,13 @@ class DependencyNode():
         if not self._is_executed:
             for node in self._dependencies:
                 node.run()
-            input_dfs = {}
+            input_dfs = {}            
             for node in self._dependencies:
-                input_dfs = input_dfs | node.getResults()
+                ## append node name to the keys added
+                for key, value in node.getResults().items():
+                    input_dfs[node._name + "_" + key] = value
+            print(self._name + " is running")
+            print(input_dfs)
             self._results = self.process(input_dfs)
             self._is_executed = True
     
@@ -134,9 +135,9 @@ if __name__ == "__main__":
     dep1.process = lambda dfs: {"csv1": pd.DataFrame({"column1": [1, 2, 3], "column2": [4, 5, 6]})}
     dep2.process = lambda dfs: {"csv2": pd.DataFrame({"column1": [10, 20, 30], "column2": [40, 50, 60]})}
     # merge incoming dataframes
-    dep3.process = lambda dfs: {"preproc": pd.concat([dfs["csv1"], dfs["csv2"]])}
-    # double all values
-    dep4.process = lambda dfs: {"model": dfs["preproc"] * 2}
+    dep3.process = lambda dfs: {"preproc": pd.concat([dfs["csv1_csv1"], dfs["csv2_csv2"]])}
+    # double
+    dep4.process = lambda dfs: {"model": dfs["preproc_preproc"]}
     
     dep4.run()
     
