@@ -3,6 +3,7 @@ import math
 import numpy as np
 import abc
 import inspect
+from persistence.db_manager import DBManager
 
 class BaseSolverClass():
     pass
@@ -35,6 +36,12 @@ class GraphProblemClass():
     def printResults(self):
         for node in self.nodes:
             print(node.getVariables())
+
+    def getAllVariables(self):
+        variables = []
+        for node in self.nodes:
+            variables.append(node.getVariables())
+        return variables
 
     def setTimeLen(self, time_len):
         self.time_len = time_len
@@ -254,11 +261,14 @@ class PowerExchange(Prosumer):
         return {self.name : {"powerFlow" : self.powerFlow.value}}
     
 class Battery(Prosumer):
-    def __init__(self, problem_class, production_capacity, consumption_capacity, battery_capacity, efficiency = 0.9):
+    def __init__(self, problem_class, production_capacity, consumption_capacity, name, battery_capacity, efficiency = 0.9):
         super().__init__(problem_class, production_capacity, consumption_capacity)
         self.battery_capacity = battery_capacity
         self.efficiency = efficiency
-        self.name = "Battery"
+        self.name = name
+
+    def __repr__(self):
+        return "Battery"
 
     def setTimeLen(self, time_len):
         self.charge = cp.Variable(time_len, nonneg=True)
@@ -285,11 +295,26 @@ class Battery(Prosumer):
         return self.discharge[t] - self.charge[t]
 
     def getCost(self):
-        0
+        return 0
 
     def getVariables(self):
         return {self.name : {"SOC" : self.SOC.value, "powerFlow":  self.discharge.value - self.charge.value}}
 
+    def get_class_info(self):
+        return self.__class__.__name__
+    
+    def get_parameters(self):
+        attributes = vars(self)
+        primitive_attributes_only = {}
+
+        for key, value in attributes.items():
+            if not isinstance(value, (GraphProblemClass, ConnectingNode)):
+                primitive_attributes_only[key] = value
+            else:
+                # primitive_attributes_only[key] = value.__class__.__name__
+                primitive_attributes_only[key] = None
+
+        return primitive_attributes_only
     
 if __name__ == "__main__":
     problemClass = GraphProblemClass()

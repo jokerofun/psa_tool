@@ -29,8 +29,8 @@ if not table_exists:
     con.execute('CREATE TABLE future_prices AS SELECT * FROM future_prices_vitual')
 
 # Number of days to query
-start_date = '2023-11-28'
-number_of_days = 14
+start_date = '2024-06-05'
+number_of_days = 1
 
 
 
@@ -50,10 +50,10 @@ print(future_df.tail())
 future_prices = future_df['SpotPriceEUR'].values
 
 
-optimal_profit, optimal_schedule, soc_schedule = battery_arbitrage_multiple(future_prices, num_days=number_of_days, num_batteries=3)
+optimal_profit, optimal_schedule, soc_schedule = battery_arbitrage_multiple(future_prices, num_days=number_of_days, num_batteries=1)
 
 # Plot the battery arbitrage strategy
-plot_battery_arbitrage_multiple(future_prices, soc_schedule, optimal_schedule, num_batteries=3)
+# plot_battery_arbitrage_multiple(future_prices, soc_schedule, optimal_schedule, num_batteries=2)
 
 
 

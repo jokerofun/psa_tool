@@ -125,9 +125,9 @@ def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries, output
         "Prices (EUR/MWh)": prices,
     }
     for i in range(num_batteries):
-        data[f"Battery {i+1} SOC (MWh)"] = soc[:, i]
-        data[f"Battery {i+1} Charge (MW)"] = np.maximum(0, schedule[:, i])  # Positive values are charging
-        data[f"Battery {i+1} Discharge (MW)"] = -np.minimum(0, schedule[:, i])  # Negative values are discharging
+        data[f"Battery {i+1} SOC (MWh)"] = soc[i]
+        data[f"Battery {i+1} Charge (MW)"] = np.maximum(0, schedule[i])  # Positive values are charging
+        data[f"Battery {i+1} Discharge (MW)"] = -np.minimum(0, schedule[i])  # Negative values are discharging
 
     df = pd.DataFrame(data, index=time_index)
 
@@ -172,16 +172,16 @@ def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries, output
     ax_summary.plot(df.index, df["Prices (EUR/MWh)"], label="Electricity Prices", color="black", linestyle="--", linewidth=1.5)
 
     # Aggregate SOC, charging, and discharging for all batteries
-    total_soc = soc.sum(axis=1)
-    total_charge = np.maximum(0, schedule).sum(axis=1)
-    total_discharge = -np.minimum(0, schedule).sum(axis=1)
+    total_soc = soc.sum(axis=0)
+    total_charge = np.maximum(0, schedule).sum(axis=0)
+    total_discharge = -np.minimum(0, schedule).sum(axis=0)
 
     ax_summary.plot(df.index, total_soc, label="Total SOC (MWh)", linewidth=2)
     ax_summary.bar(df.index, total_charge, width=0.4, label="Total Charge (MW)", color="green", alpha=0.6)
     ax_summary.bar(df.index, -total_discharge, width=0.4, label="Total Discharge (MW)", color="red", alpha=0.6)
 
     ax_summary.set_title("Summary Plot", fontsize=14)
-    ax_summary.set_xlabel("Time Periods")
+    ax_summary.set_xlabel("Time Period (in hours)")
     ax_summary.set_ylabel("Energy (MWh) / Power (MW)")
     ax_summary.legend(loc="upper left", fontsize=9)
     ax_summary.grid(True, linestyle="--", alpha=0.7)
@@ -206,3 +206,50 @@ def plot_battery_arbitrage_multiple(prices, soc, schedule, num_batteries, output
 #     plt.xlabel('Features')
 #     plt.ylabel('Importance')
 #     plt.show()
+
+# Function to plot execution time of different phases of analytics
+def plot_exec_time(DA_exec_time, PDA_create_model_exec_time, PDA_predict_exec_time, PSA_exec_time):
+    categories = ['Data Processing', 'Predictions', 'Prescriptions']
+
+    PDA_exec_time = PDA_create_model_exec_time + PDA_predict_exec_time
+    times = [DA_exec_time, PDA_exec_time, PSA_exec_time]
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    bars = ax.bar(categories, times, color=['blue', 'orange', 'green'], edgecolor='black')
+    ax.bar('Predictions', PDA_create_model_exec_time, color='yellow', edgecolor='black', label='Create Model')
+    ax.bar('Predictions', PDA_predict_exec_time, bottom=PDA_create_model_exec_time, color='red', edgecolor='black', label='Forecast')
+    ax.set_ylabel('Time (seconds)', fontsize=12)
+    ax.set_title('Execution Time', fontsize=14)
+    ax.legend(loc='upper right')
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_PSA_exec_time(data):
+    """
+    Create a bar chart with execution times.
+    
+    Args:
+        data (list of dict): A list of dictionaries, where each dictionary has:
+            - "days": numeric value representing the number of days.
+            - "batteries": numeric value representing the number of batteries.
+            - "exec_time": numeric value representing the execution time in seconds.
+    """
+    # Generate labels and heights from the input data
+    labels = [f"{item['days']} day(s), {item['batteries']} batteries" for item in data]
+    heights = [item['exec_time'] for item in data]
+
+    # Create the bar chart
+    plt.figure(figsize=(10, 6))
+    plt.bar(labels, heights, color='skyblue', edgecolor='black')
+    
+    # Add labels, title, and grid
+    plt.xlabel("Number of Days and Batteries", fontsize=12)
+    plt.ylabel("Execution Time (seconds)", fontsize=12)
+    plt.title("Battery Arbitrage Execution Times", fontsize=14)
+    plt.xticks(rotation=45, ha='right', fontsize=10)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    # Display the chart
+    plt.tight_layout()
+    plt.show()
