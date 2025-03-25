@@ -99,7 +99,8 @@ if __name__ == '__main__':
     # Example 1: Use Selector to filter for Foo instances and extract their costs.
     foo_costs = Selector(big_list).of_type(Foo).values("cost")
     print("Costs from Foo instances:", foo_costs)
-
+    # goal is to use solve().maximize().of_type(Battery).values("cost")
+    
     # Example 2: Use Selector to filter nodes with nodeID equal to 3.
     nodes_with_nodeID_3 = Selector(big_list).where("nodeID", 3).get()
     print("Nodes with NODEID equal to 3:", nodes_with_nodeID_3)
