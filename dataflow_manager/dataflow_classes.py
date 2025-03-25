@@ -3,26 +3,32 @@ from typing import Dict
 import pandas as pd
 import uuid
 import requests
+import dataflow_manager.dataflow_manager as manager
 
 db_connection = None  # Placeholder for the database connection
-
 
 class DataflowNode:
     def __init__(self, name: str) -> None:
         self.id = uuid.uuid4()
         self.name = name
+        manager.addNode(self)
 
     def execute(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
         raise NotImplementedError("Subclasses should implement this method")
 
 
 class DataProcessingNode(DataflowNode):
-    def __init__(self, name: str, data: pd.DataFrame) -> None:
+    def __init__(self, name: str, data: pd.DataFrame, data_name: str) -> None:
         super().__init__(name)
         self.data = data
+        self.data_name = data_name
 
     def execute(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
-        dfs[self.name] = self.process(self.data)
+        if self.data is not None:
+            dfs[self.name] = self.process(self.data)
+        else:
+            dfs[self.name] = self.process(dfs[self.data_name])
+            
         return dfs
     
     def process(self, data: pd.DataFrame) -> pd.DataFrame:
