@@ -9,12 +9,13 @@ import requests
 db_connection = None  # Placeholder for the database connection
 
 class DataflowNode:
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: str, final = False) -> None:
         self.id = uuid.uuid4()
         self.name = name
         self._dependencies = []
         self._is_executed = False
         self._results = {}
+        self._final = final
 
     def add_dependency(self, node):
         self._dependencies.append(node)
@@ -46,8 +47,8 @@ class DataflowNode:
 
 
 class DataProcessingNode(DataflowNode):
-    def __init__(self, name: str, process_func: Callable[[Dict[str, pd.DataFrame]], Dict[str, pd.DataFrame]]) -> None:
-        super().__init__(name)
+    def __init__(self, name: str, process_func: Callable[[Dict[str, pd.DataFrame]], Dict[str, pd.DataFrame]] = None, final = False):
+        super().__init__(name, final)
         self.process_func = process_func
     
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
@@ -60,7 +61,7 @@ class DataFetchingFromFileNode(DataflowNode):
         super().__init__(name)
         self.file_path = file_path
 
-    def process(self, dfs):
+    def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
         # Implement data fetching logic here
         print(f"Fetching data from file: {self.file_path}")
         # Example fetching: read data from file

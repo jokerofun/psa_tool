@@ -1,4 +1,4 @@
-from solver_classes import Node, ConnectingNode, GraphProblemClass, DeviceNode
+from .solver_classes import Node, ConnectingNode, GraphProblemClass, DeviceNode
 import cvxpy as cp
 
 class TransmissionLine(DeviceNode):
@@ -199,6 +199,7 @@ class Battery(Prosumer):
                 primitive_attributes_only[key] = None
 
         return primitive_attributes_only
+   
     
     
 if __name__ == "__main__":

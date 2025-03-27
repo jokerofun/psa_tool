@@ -4,7 +4,7 @@ import numpy as np
 import abc
 import inspect
 
-from selector import Selector
+from .selector import Selector
 # from persistence.db_manager import DBManager
 
 class BaseSolverClass():
@@ -32,7 +32,7 @@ class GraphProblemClass():
     # objective function builder, with minimize or maximize
     def getObjectiveFunction(self, objective : str = "minimize"):
         self._objective = objective.lower()
-        print(self._objective)
+        # print(self._objective)
         if self._objective != "minimize" and self._objective != "maximize":
             raise ValueError("Objective function must be either minimize or maximize")
         self._selector = Selector(self._nodes)
@@ -40,7 +40,7 @@ class GraphProblemClass():
     
     def solve(self):
         objective = None
-        print(self._selector.get())
+        # print(self._selector.get())
         if self._objective == "minimize":
             objective = cp.Minimize(cp.sum(self._selector.get()))
         elif self._objective == "maximize":
@@ -60,7 +60,7 @@ class GraphProblemClass():
     def getAllVariables(self):
         variables = []
         for node in self._nodes:
-            variables.append(node.getVariables())
+            variables.append(node.variables)
         return variables
 
     def setTimeLen(self, time_len):

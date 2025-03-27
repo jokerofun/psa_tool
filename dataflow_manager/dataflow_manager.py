@@ -2,7 +2,7 @@ from __future__ import annotations
 import queue
 from typing import Dict, TYPE_CHECKING
 
-from dataflow_manager.dataflow import Dataflow
+from .dataflow import Dataflow
 from optimization.solver_classes import Node
 
 # if TYPE_CHECKING:
@@ -59,44 +59,14 @@ class DataFlowManager:
             return self.dataFlows[NodeClass]
         dataflow = Dataflow(NodeClass)
         self.dataFlows[NodeClass] = dataflow
-        return Dataflow(NodeClass)
+        return self.dataFlows[NodeClass]
 
-    def node(self, name: str) -> DataflowNode:
-        for node in nodes_queue.queue:
-            if node.name == name:
-                return node
-        return None
-
-    def datafromcsvNode(self, name: str, file_path: str) -> DataflowNode:
-        # node = DataFetchingFromFileNode(name, file_path)
-        # addNode(node)
-        # return node
-        pass
-
-    def datafromAPINode(self, name: str, url: str) -> DataflowNode:
-        # node = DataFetchingFromAPI(name, url)
-        # addNode(node)
-        # return node
-        pass 
-    
-    def processingNode(self, name: str, data: pd.DataFrame = None, data_name: str = None) -> DataflowNode:
-        # node = DataProcessingNode(name, data, data_name)
-        # addNode(node)
-        # return node
-        pass
-
-    def datafromDBNode(self, name: str, table_name: str) -> DataflowNode:
-        # node = DataFetchingFromDBNode(name, table_name)
-        # addNode(node)
-        # return node
-        pass
-
-    def getData(self, nodeClassInstance, nodeID):
+    def getData(self, nodeClass, nodeID):
         # get class of nodeClassInstance
-        nodeClass = nodeClassInstance.__class__
+        # nodeClass = nodeClassInstance.__class__
         # check if nodeclass is subclass of Node
         if not issubclass(nodeClass, Node):
-            raise Exception("NodeClass should be a subclass of Node")
+            raise Exception(str(nodeClass) + ": NodeClass should be a subclass of Node")
         # check if nodeClass is in the dataFlows
         if nodeClass not in self.dataFlows:
             raise Exception("NodeClass is not in dataFlows")
@@ -106,4 +76,6 @@ class DataFlowManager:
     
     # overload [] operator 
     def __getitem__(self, key):
+        if key not in self.dataFlows:
+            self.dataFlows[key] = Dataflow(key)
         return self.dataFlows[key]

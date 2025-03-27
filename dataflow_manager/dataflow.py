@@ -1,6 +1,6 @@
 
 
-from dataflow_manager.dataflow_classes import DataflowNode
+from .dataflow_classes import DataProcessingNode, DataflowNode
 
 
 class Dataflow:
@@ -8,13 +8,24 @@ class Dataflow:
         self.NodeClass = NodeClass
         self.nodes = {}
         
-    def node(self, name: str, classType) -> None:
+    # also include optional arguments for the constructor    
+    def node(self, name: str, classType = None, *args, **kwargs) -> None:
         if name in self.nodes:
             return self.nodes[name]
         else:
-            self.nodes[name] = classType(name)
+            if classType is None:
+                self.nodes[name] = DataProcessingNode(name, *args, **kwargs)
+            else:
+                self.nodes[name] = classType(name, *args, **kwargs)
             return self.nodes[name]
     
     # overload [] operator
     def __getitem__(self, name: str) -> DataflowNode:
         return self.node(name)
+    
+    def getData(self, nodeID):
+        # find the one with nodes.final = true
+        for node in self.nodes.values():
+            if node._final:
+                node.run()
+                return node.getResults()
