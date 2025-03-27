@@ -1,10 +1,8 @@
 from collections.abc import Callable
-import os
 from typing import Dict
 import pandas as pd
 import uuid
 import requests
-# import dataflow_manager.dataflow_manager as manager
 
 db_connection = None  # Placeholder for the database connection
 
@@ -13,37 +11,32 @@ class DataflowNode:
         self.id = uuid.uuid4()
         self.name = name
         self._dependencies = []
-        self._is_executed = False
         self._results = {}
         self._final = final
 
     def add_dependency(self, node):
         self._dependencies.append(node)
 
-    # Overload >> operator
+    # Overload >> operator dependency chaining
     def __rshift__(self, node):
         node.add_dependency(self)
         return node
     
-    def getResults(self) -> Dict[str, pd.DataFrame]:
-        return self._results
-    
     def run(self):
-        if not self._is_executed:
-            for node in self._dependencies:
-                node.run()
-            input_dfs = {}            
-            for node in self._dependencies:
-                ## append node name to the keys added
-                for key, value in node.getResults().items():
-                    input_dfs[key] = value
-            print(self.name + " is running")
-            # print(input_dfs)
-            self._results = self.process(input_dfs)
-            self._is_executed = True
+        input_dfs = {}
+        for node in self._dependencies:
+            node.run()
+            input_dfs.update(node.get_results())
+
+        print(f"{self.name} is running")
+        self.process(input_dfs)
+        self._results = input_dfs
 
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
-        raise NotImplementedError("Subclasses should implement this method")
+        raise NotImplementedError("Subclasses must implement this method")
+    
+    def get_results(self) -> Dict[str, pd.DataFrame]:
+        return self._results
 
 
 class DataProcessingNode(DataflowNode):
@@ -52,55 +45,42 @@ class DataProcessingNode(DataflowNode):
         self.process_func = process_func
     
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
-        dfs = self.process_func(dfs)
-        return dfs
-
-
-class DataFetchingFromFileNode(DataflowNode):
-    def __init__(self, name: str, file_path: str | os.PathLike) -> None:
+        return self.process_func(dfs)
+    
+class DataFetchingNode(DataflowNode):
+    def __init__(self, name: str, source: str) -> None:
         super().__init__(name)
-        self.file_path = file_path
+        self.source = source
 
-    def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
-        # Implement data fetching logic here
-        print(f"Fetching data from file: {self.file_path}")
-        # Example fetching: read data from file
-        dfs[self.name] = pd.read_csv(self.file_path)
-        return dfs
+    def fetch_data(self) -> pd.DataFrame:
+        """Subclasses must implement this method to fetch data"""
+        raise NotImplementedError
 
-
-class DataFetchingFromDBNode(DataflowNode):
-    def __init__(self, name: str, table_name: str) -> None:
-        super().__init__(name)
-        self.table_name = table_name
-
-    def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
-        # Implement data fetching logic here
-        print(f"Fetching data from DB table: {self.table_name}")
-        # Example fetching: query data from a database
-        dfs[self.name] = pd.read_sql(
-            f"SELECT * FROM {self.table_name}", db_connection)
-        return dfs
+    def process(self, dfs: Dict[str, pd.DataFrame]) -> None:
+        print(f"Fetching data for {self.name} from {self.source}")
+        dfs[self.name] = self.fetch_data()
 
 
-class DataFetchingFromAPINode(DataflowNode):
-    def __init__(self, name: str, api_url: str) -> None:
-        super().__init__(name)
-        self.api_url = api_url
+class DataFetchingFromFileNode(DataFetchingNode):
+    def fetch_data(self) -> pd.DataFrame:
+        return pd.read_csv(self.source)
 
-    def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
-        # Implement data fetching logic here
-        print(f"Fetching data from API: {self.api_url}")
-        # Example fetching: call an API to get data
-        response = requests.get(self.api_url)
-        dfs[self.name] = pd.DataFrame(response.json())
-        return dfs     
+
+class DataFetchingFromDBNode(DataFetchingNode):
+    def fetch_data(self) -> pd.DataFrame:
+        return pd.read_sql(f"SELECT * FROM {self.source}", db_connection)
+
+
+class DataFetchingFromAPINode(DataFetchingNode):
+    def fetch_data(self) -> pd.DataFrame:
+        response = requests.get(self.source)
+        return pd.DataFrame(response.json())
     
     
 # Example usage
 if __name__ == "__main__":
-    pricesEUR = DataFetchingFromFileNode(name="pricesEUR", file_path="dataflow_manager/test_data/pricesEUR.csv")
-    pricesDKK = DataFetchingFromFileNode(name="pricesDKK", file_path="dataflow_manager/test_data/pricesDKK.csv")
+    pricesEUR = DataFetchingFromFileNode(name="pricesEUR", source="dataflow_manager/test_data/pricesEUR.csv")
+    pricesDKK = DataFetchingFromFileNode(name="pricesDKK", source="dataflow_manager/test_data/pricesDKK.csv")
 
     def merge_dataframes(dfs):
         dfs["merged_prices"] = pd.concat([dfs["pricesEUR"], dfs["pricesDKK"]])
@@ -111,8 +91,12 @@ if __name__ == "__main__":
         print("Training model")
         return dfs
     
+    # Process function can be passed as an argument
     merged = DataProcessingNode(name="merged_prices", process_func=merge_dataframes)
-    model = DataProcessingNode(name="model", process_func=train_model)
+    model = DataProcessingNode(name="model", process_func=None)
+
+    # Or set it later
+    model.process_func = train_model
     
     pricesEUR >> merged
     pricesDKK >> merged
@@ -120,8 +104,4 @@ if __name__ == "__main__":
     
     model.run()
     
-    print(model.getResults())
-    
-    # data_node = DataProcessingNode("data_node", "sample_data")
-    # result_dfs = data_node.execute(dfs)
-    # print(result_dfs)
+    print(model.get_results())
