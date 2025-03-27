@@ -6,6 +6,9 @@ class DBManager:
         self.conn = duckdb.connect(db_path)
         self.__create_tables()
 
+    def __del__(self):
+        self.close()
+
     def __create_tables(self):
         with open('persistence/migrations/001-initial.sql', 'r') as file:
             sql_script = file.read()
@@ -24,7 +27,6 @@ class DBManager:
                 'RETURNING optimization_problem_id'
         parameters = [name, description]
         problem_class_id = self.conn.execute(query, parameters).fetchone()[0]
-
     
     def load_optimization_problem(self, name):
         query = 'SELECT optimization_problem_id, name, description ' \
@@ -32,7 +34,7 @@ class DBManager:
                 'WHERE name = ?'
         parameters = [name]
 
-        # TODO: fetch dfs
+        # TODO: fetch objects instead of tuples
         result = self.conn.execute(query, parameters).fetchone()
 
         return result
@@ -76,6 +78,22 @@ class DBManager:
         result = self.conn.execute(query, parameters).fetchone()
         
         return result
+
+    def connect_problem_node(self, problem_name, node_name):
+        problem = self.load_optimization_problem(problem_name)
+        node = self.load_node(node_name)
+
+        if problem is None or node is None:
+            return
+
+        query = 'INSERT INTO optimization_problems_nodes (optimization_problem_id, node_id) ' \
+                'VALUES (?, ?)'
+        parameters = [problem[0], node[0]]
+
+        self.conn.execute(query, parameters)
+
+    def disconnect_problem_node(self, problem_name, node_name):
+        pass
 
     def get_connection(self):
         return self.conn
