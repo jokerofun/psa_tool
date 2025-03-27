@@ -136,8 +136,9 @@ if __name__ == "__main__":
     dep2.process = lambda dfs: {"csv2": pd.DataFrame({"column1": [10, 20, 30], "column2": [40, 50, 60]})}
     # merge incoming dataframes
     dep3.process = lambda dfs: {"preproc": pd.concat([dfs["csv1_csv1"], dfs["csv2_csv2"]])}
-    # double
-    dep4.process = lambda dfs: {"model": dfs["preproc_preproc"]}
+    # double the individual values
+    dep4.process = lambda dfs: {"model": dfs["preproc_preproc"] * 2}
+    # dep4.process = lambda dfs: {"model": dfs["preproc_preproc"]}
     
     dep4.run()
     
