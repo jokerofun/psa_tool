@@ -30,7 +30,7 @@ class ClassBuilder:
         return cls(**valid_params)
 
     def find_class_file(self, class_name):
-        """Search for a file where the class is defined in the given directories."""
+        """Search for the file where the class is defined in the given directories."""
         for directory in self.search_dirs:
             for root, _, files in os.walk(directory):
                 for file in files:
@@ -38,8 +38,9 @@ class ClassBuilder:
                         module_name = file[:-3]  # Remove .py extension
                         module_path = os.path.join(root, file)
                         with open(module_path, "r", encoding="utf-8") as f:
-                            if f"class {class_name}" in f.read():  # Check if class exists in the file
-                                return module_name, root.replace("/", ".")  # Convert path to module format
+                            if f"class {class_name}(" in f.read():  # Check if class exists in the file
+                                module_base = root.replace(os.sep, ".")  # Convert path to module format
+                                return module_name, module_base
         return None, None
     
     def build(self, class_name, params):
@@ -48,7 +49,6 @@ class ClassBuilder:
         if module_name:
             full_module_name = f"{module_path}.{module_name}" if module_path else module_name
             obj = self.instantiate_class(full_module_name, class_name, params)
-            print(obj)
             return obj
         else:
             print(f"Class '{class_name}' not found in search directories.")

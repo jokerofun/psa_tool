@@ -25,5 +25,6 @@ CREATE TABLE IF NOT EXISTS optimization_problems_nodes (
     optimization_problem_id INTEGER NOT NULL,
     node_id INTEGER NOT NULL,
     FOREIGN KEY (optimization_problem_id) REFERENCES optimization_problems(optimization_problem_id),
-    FOREIGN KEY (node_id) REFERENCES nodes(node_id)
+    FOREIGN KEY (node_id) REFERENCES nodes(node_id),
+    UNIQUE(optimization_problem_id, node_id)    
 );

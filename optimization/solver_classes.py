@@ -3,17 +3,23 @@ import math
 import numpy as np
 import abc
 import inspect
-from persistence.db_manager import DBManager
 
 class BaseSolverClass():
     pass
 
 class GraphProblemClass():
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.nodes = []
+
+    def __repr__(self):
+        return f"GraphProblemClass(name={self.name},nodes={self.nodes})"
     
     def add_node(self, node):
         self.nodes.append(node)
+
+    def add_nodes(self, nodes):
+        self.nodes.extend(nodes)
 
     def collectCosts(self):
         return cp.sum([node.getCost() for node in self.nodes])
@@ -269,7 +275,7 @@ class Battery(Prosumer):
         self.name = name
 
     def __repr__(self):
-        return f"Battery(problem_class={self.problem_class},production_capacity={self.production_capacity}, consumption_capacity={self.consumption_capacity}, battery_capacity={self.battery_capacity}, efficiency={self.efficiency})"
+        return f"Battery(name={self.name},problem_class={self.problem_class},production_capacity={self.production_capacity}, consumption_capacity={self.consumption_capacity}, battery_capacity={self.battery_capacity}, efficiency={self.efficiency})"
 
     def setTimeLen(self, time_len):
         self.charge = cp.Variable(time_len, nonneg=True)
