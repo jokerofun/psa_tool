@@ -25,7 +25,7 @@ if __name__ == "__main__":
     battery1 = Battery(problemClass, 50, 50, "bat1", 100 )
     battery2 = Battery(problemClass, 100, 100,"bat2",  200)
     battery3 = Battery(problemClass, 150, 150, "bat3", 300)
-    power_exchange = PowerExchange(problemClass, 50, 50)
+    power_exchange = PowerExchange(problemClass, 450, 450)
 
     # Connect the nodes
     power_exchange - battery1
@@ -50,6 +50,8 @@ if __name__ == "__main__":
     power_exchange.prices = dfs["priceEUR"].values
     
     problemClass.getObjectiveFunction("minimize").values("cost")
+    
+    print(problemClass._nodes)
     # solve the problem and get the results
     problemClass.solve()
     allVariables = problemClass.getAllVariables()

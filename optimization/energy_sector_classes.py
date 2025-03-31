@@ -155,18 +155,23 @@ class Battery(Prosumer):
     def setTimeLen(self, time_len):
         self.charge = cp.Variable(time_len, nonneg=True)
         self.discharge = cp.Variable(time_len, nonneg=True)
+        self.mode = cp.Variable(time_len, boolean=True)
         self.SOC = cp.Variable(shape = (time_len), nonneg=True)
 
     def constraints(self, t):
         constraints = []
-        constraints.append(self.charge[t] <= self.production_capacity)
-        constraints.append(self.discharge[t] <= self.consumption_capacity)
-
-        constraints = [self.SOC[t] <= self.battery_capacity]
+        # Ensure that if mode[t] == 1 then only charging is allowed (discharge[t] is forced to 0)
+        # If mode[t] == 0 then only discharging is allowed (charge[t] is forced to 0)
+        # We use the production_capacity and consumption_capacity as big-M values.
+        constraints.append(self.charge[t] <= self.production_capacity * self.mode[t])
+        constraints.append(self.discharge[t] <= self.consumption_capacity * (1 - self.mode[t]))
+        constraints.append(self.SOC[t] <= self.battery_capacity)
+        
         if t == 0:
             constraints.append(
                 self.SOC[t] == self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t]
             )
+            constraints.append( self.SOC[t] == 0 )
         else:
             constraints.append(
                 self.SOC[t] == self.SOC[t-1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t]

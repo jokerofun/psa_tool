@@ -115,8 +115,8 @@ class ConnectingNode(Node):
     def setTimeLen(self, time_len):
         self.time_len = time_len
 
-    def getConstraints(self, t):
-        return [cp.sum([node.getPowerFlow(self, t) for node in self.connected_nodes]) == 0]
+    def constraints(self, t):
+        return [cp.sum([node.powerflow(self, t) for node in self.connected_nodes]) == 0]
     
 ## find a better name for this class, because it is not a leaf     
 class DeviceNode(Node):
