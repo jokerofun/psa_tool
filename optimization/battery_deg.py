@@ -1,4 +1,4 @@
-from solver_classes import Battery
+from .solver_classes import Battery
 import numpy as np
 
 # battery extended with degradation

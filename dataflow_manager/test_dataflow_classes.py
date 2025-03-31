@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import pandas as pd
-from dataflow_classes import DataProcessingNode, DataFetchingFromFileNode, DataFetchingFromDBNode, DataFetchingFromAPINode
+from .dataflow_classes import DataProcessingNode, DataFetchingFromFileNode, DataFetchingFromDBNode, DataFetchingFromAPINode
 
 class TestDataflowNodes(unittest.TestCase):
 
