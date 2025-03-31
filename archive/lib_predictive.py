@@ -10,8 +10,8 @@ from keras.src.layers import LSTM, Dense, Dropout
 
 import datetime
 
-from lib_data import fetch_data
-from lib_descriptive import plot_future_predictions, plot_predictions
+from archive.lib_data import fetch_data
+from archive.lib_descriptive import plot_future_predictions, plot_predictions
 
 # Function to train an LSTM model
 def train_lstm_model(X_train, y_train, X_val, y_val):
