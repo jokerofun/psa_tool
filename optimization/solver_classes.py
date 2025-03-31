@@ -27,6 +27,11 @@ class GraphProblemClass():
     def add_nodes(self, nodes):
         self._nodes.extend(nodes)
 
+    def get_node(self, node_name):
+        node = next((item for item in self._nodes if getattr(item, "name", None) == str(node_name)), None)
+
+        return node
+
     def collectCosts(self):
         return cp.sum([node.cost for node in self._nodes])
     
@@ -94,6 +99,19 @@ class Node():
         
     def constraints(self, t):
         return []
+    
+    def get_parameters(self):
+        attributes = vars(self)
+        primitive_attributes_only = {}
+
+        for key, value in attributes.items():
+            if not isinstance(value, (GraphProblemClass, ConnectingNode)):
+                primitive_attributes_only[key] = value
+            else:
+                # primitive_attributes_only[key] = value.__class__.__name__
+                primitive_attributes_only[key] = None
+
+        return primitive_attributes_only
     
     @abc.abstractmethod
     def getConnectingNode(self):

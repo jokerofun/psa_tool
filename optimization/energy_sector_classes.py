@@ -109,10 +109,12 @@ class Prosumer(DeviceNode):
 
 class PowerExchange(Prosumer):
     _prices = []
-    def __init__(self, problem_class, production_capacity, consumption_capacity):
+    def __init__(self, problem_class, production_capacity, consumption_capacity, name):
         super().__init__(problem_class, production_capacity, consumption_capacity)
-        self.name = "PowerExchange"
+        self.name = name
 
+    def __repr__(self):
+        return f"PowerExchange(name={self.name},production_capacity={self.production_capacity},consumption_capacity={self.consumption_capacity})"
     def setTimeLen(self, time_len):
         self.powerFlow = cp.Variable(time_len)
 

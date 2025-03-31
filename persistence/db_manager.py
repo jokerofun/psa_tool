@@ -23,7 +23,7 @@ class DBManager:
                 self.conn.execute(stmt)
 
     def save_optimization_problem(self, name, description):
-        if self.load_optimization_problem(name) is not None:
+        if not self.load_optimization_problem(name).empty:
             return
         
         query = 'INSERT INTO optimization_problems (name, description) ' \
@@ -111,8 +111,7 @@ class DBManager:
     def connect_problem_node(self, problem_name, node_name):
         problem = self.load_optimization_problem(problem_name)
         node = self.load_node_by_name(node_name)
-
-        if problem is None or node is None:
+        if problem.empty or node is None:
             return
         
         problem_nodes = self.get_problem_nodes(problem_name)
@@ -122,20 +121,20 @@ class DBManager:
         
         query = 'INSERT INTO optimization_problems_nodes (optimization_problem_id, node_id) ' \
                 'VALUES (?, ?)'
-        parameters = [problem[0], node[0]]
+        parameters = [int(problem.loc[0, 'optimization_problem_id']), node[0]]
 
         self.conn.execute(query, parameters)
 
     def get_problem_nodes(self, problem_name):
         problem = self.load_optimization_problem(problem_name)
 
-        if problem is None:
+        if problem.empty:
             return
         
         query = 'SELECT node_id ' \
                 'FROM optimization_problems_nodes ' \
                 'WHERE optimization_problem_id = ?'
-        parameters = [problem[0]]
+        parameters = [int(problem.loc[0, 'optimization_problem_id'])]
 
         result = self.conn.execute(query, parameters).fetchdf()
 
