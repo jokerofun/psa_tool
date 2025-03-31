@@ -28,4 +28,4 @@ class Dataflow:
         for node in self.nodes.values():
             if node._final:
                 node.run()
-                return node.getResults()
+                return node.get_results()
