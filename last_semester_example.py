@@ -27,7 +27,7 @@ if __name__ == "__main__":
     battery1 = Battery(problemClass, 50, 50, "bat1", 100 )
     battery2 = Battery(problemClass, 100, 100,"bat2",  200)
     battery3 = Battery(problemClass, 150, 150, "bat3", 300)
-    power_exchange = PowerExchange(problemClass, 50, 50, "power_exchange")
+    power_exchange = PowerExchange(problemClass, 350, 350, "power_exchange")
 
     # Connect the nodes
     power_exchange - battery1
@@ -70,7 +70,7 @@ if __name__ == "__main__":
             for key, value in item.items():
                 if 'SOC' in value and 'powerFlow' in value:  # Check if the key contains SOC and powerFlow
                     soc.append(value['SOC'])
-                    power_flow.append(value['powerFlow'])
+                    power_flow.append(-value['powerFlow'])
 
     soc = np.array(soc)
     power_flow = np.array(power_flow)

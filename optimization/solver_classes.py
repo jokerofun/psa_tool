@@ -19,7 +19,7 @@ class GraphProblemClass():
         self._nodes = []
 
     def __repr__(self):
-        return f"GraphProblemClass(name={self.name},nodes={self.nodes})"
+        return f"GraphProblemClass(name={self.name},nodes={self._nodes})"
     
     def add_node(self, node):
         self._nodes.append(node)
