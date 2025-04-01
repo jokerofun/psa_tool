@@ -4,8 +4,10 @@
 
 # define batteries and power exhanges or load them from db
 
+import numpy as np
 from dataflow_manager.dataflow_classes import DataFetchingFromFileNode
 from dataflow_manager.dataflow_manager import DataFlowManager
+from archive.lib_descriptive import plot_battery_arbitrage_multiple
 from optimization.energy_sector_classes import Battery, PowerExchange
 from optimization.solver_classes import GraphProblemClass
 
@@ -21,11 +23,11 @@ def trainFunc1(dfs):
     return dfs
 
 if __name__ == "__main__":
-    problemClass = GraphProblemClass()
+    problemClass = GraphProblemClass("graph_problem")
     battery1 = Battery(problemClass, 50, 50, "bat1", 100 )
     battery2 = Battery(problemClass, 100, 100,"bat2",  200)
     battery3 = Battery(problemClass, 150, 150, "bat3", 300)
-    power_exchange = PowerExchange(problemClass, 450, 450)
+    power_exchange = PowerExchange(problemClass, 50, 50, "power_exchange")
 
     # Connect the nodes
     power_exchange - battery1
@@ -47,7 +49,7 @@ if __name__ == "__main__":
     dfs = DataFlowManager.getInstance().getData(PowerExchange, 1)
     print(dfs)
     # convert to numpy array
-    power_exchange.prices = dfs["priceEUR"].values
+    power_exchange.prices = dfs["csv_prices"].values.flatten()
     
     problemClass.getObjectiveFunction("minimize").values("cost")
     
@@ -56,5 +58,22 @@ if __name__ == "__main__":
     problemClass.solve()
     allVariables = problemClass.getAllVariables()
     print(allVariables)
+
+
+
+    # # For each battery, get the state of charge and the power flow and store it as ndimensioal array
+    soc = []
+    power_flow = []
+
+    for item in allVariables:
+        if isinstance(item, dict):  # Ensure the item is a dictionary
+            for key, value in item.items():
+                if 'SOC' in value and 'powerFlow' in value:  # Check if the key contains SOC and powerFlow
+                    soc.append(value['SOC'])
+                    power_flow.append(value['powerFlow'])
+
+    soc = np.array(soc)
+    power_flow = np.array(power_flow)
+    plot_battery_arbitrage_multiple(power_exchange.prices, soc, power_flow, 3)
     
     

@@ -14,11 +14,23 @@ class GraphProblemClass():
     _nodes = []
     _objective = ""
     _selector = None
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self._nodes = []
+
+    def __repr__(self):
+        return f"GraphProblemClass(name={self.name},nodes={self.nodes})"
     
     def add_node(self, node):
         self._nodes.append(node)
+
+    def add_nodes(self, nodes):
+        self._nodes.extend(nodes)
+
+    def get_node(self, node_name):
+        node = next((item for item in self._nodes if getattr(item, "name", None) == str(node_name)), None)
+
+        return node
 
     def collectCosts(self):
         return cp.sum([node.cost for node in self._nodes])
@@ -71,7 +83,8 @@ class GraphProblemClass():
 class Node():
     def __init__(self, problem_class : GraphProblemClass):
         self.problem_class = problem_class
-        problem_class.add_node(self)
+        if problem_class is not None:
+            problem_class.add_node(self)
         self.name = ""
         
     def get_attr(self, attr):
@@ -86,6 +99,19 @@ class Node():
         
     def constraints(self, t):
         return []
+    
+    def get_parameters(self):
+        attributes = vars(self)
+        primitive_attributes_only = {}
+
+        for key, value in attributes.items():
+            if not isinstance(value, (GraphProblemClass, ConnectingNode)):
+                primitive_attributes_only[key] = value
+            else:
+                # primitive_attributes_only[key] = value.__class__.__name__
+                primitive_attributes_only[key] = None
+
+        return primitive_attributes_only
     
     @abc.abstractmethod
     def getConnectingNode(self):
@@ -160,7 +186,4 @@ class DeviceNode(Node):
     # define rsub as doing nothing
     # def __rsub__(self, other: Node):
     #     return self
-        
-    
 
-    

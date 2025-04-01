@@ -2,8 +2,8 @@ import requests
 import pandas as pd
 import duckdb
 
-from lib_descriptive import plot_battery_arbitrage, plot_battery_arbitrage_multiple
-from lib_prescriptive import battery_arbitrage, battery_arbitrage_multiple
+from archive.lib_descriptive import plot_battery_arbitrage, plot_battery_arbitrage_multiple
+from archive.lib_prescriptive import battery_arbitrage, battery_arbitrage_multiple
 
 import matplotlib.pyplot as plt
 

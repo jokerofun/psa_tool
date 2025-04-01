@@ -54,8 +54,6 @@ class TransmissionLine(DeviceNode):
     @property
     def variables(self):
         return {self.name : {"powerFlow" : self.power_flow_left_right.value - self.power_flow_right_left.value}}
-        
-
 
 class Producer(DeviceNode):
     def __init__(self, problem_class, production_capacity, price = 10):
@@ -82,8 +80,7 @@ class Producer(DeviceNode):
     @property
     def variables(self):
         return {self.name : {"production_schedule" : self.production_schedule.value}}
-        
-    
+
 class Consumer(DeviceNode):
     def __init__(self, problem_class):
         super().__init__(problem_class)
@@ -109,14 +106,15 @@ class Prosumer(DeviceNode):
         super().__init__(problem_class)
         self.production_capacity = production_capacity
         self.consumption_capacity = consumption_capacity
-        
 
 class PowerExchange(Prosumer):
     _prices = []
-    def __init__(self, problem_class, production_capacity, consumption_capacity):
+    def __init__(self, problem_class, production_capacity, consumption_capacity, name):
         super().__init__(problem_class, production_capacity, consumption_capacity)
-        self.name = "PowerExchange"
+        self.name = name
 
+    def __repr__(self):
+        return f"PowerExchange(name={self.name},production_capacity={self.production_capacity},consumption_capacity={self.consumption_capacity})"
     def setTimeLen(self, time_len):
         self.powerFlow = cp.Variable(time_len)
 
@@ -150,7 +148,7 @@ class Battery(Prosumer):
         self.name = name
 
     def __repr__(self):
-        return "Battery"
+        return f"Battery(name={self.name},problem_class={self.problem_class},production_capacity={self.production_capacity}, consumption_capacity={self.consumption_capacity}, battery_capacity={self.battery_capacity}, efficiency={self.efficiency})"
 
     def setTimeLen(self, time_len):
         self.charge = cp.Variable(time_len, nonneg=True)
@@ -204,9 +202,7 @@ class Battery(Prosumer):
                 primitive_attributes_only[key] = None
 
         return primitive_attributes_only
-   
-    
-    
+ 
 if __name__ == "__main__":
     problemClass = GraphProblemClass()
     producer = Producer(problemClass, production_capacity=5, price=2)
