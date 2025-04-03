@@ -1,8 +1,5 @@
 import cvxpy as cp
-import math
-import numpy as np
 import abc
-import inspect
 
 from .selector import Selector
 # from persistence.db_manager import DBManager
@@ -11,7 +8,6 @@ class BaseSolverClass():
     pass
 
 class GraphProblemClass():
-    _nodes = []
     _objective = ""
     _selector = None
     def __init__(self, name):
@@ -44,7 +40,6 @@ class GraphProblemClass():
     # objective function builder, with minimize or maximize
     def getObjectiveFunction(self, objective : str = "minimize"):
         self._objective = objective.lower()
-        # print(self._objective)
         if self._objective != "minimize" and self._objective != "maximize":
             raise ValueError("Objective function must be either minimize or maximize")
         self._selector = Selector(self._nodes)
@@ -52,7 +47,6 @@ class GraphProblemClass():
     
     def solve(self):
         objective = None
-        # print(self._selector.get())
         if self._objective == "minimize":
             objective = cp.Minimize(cp.sum(self._selector.get()))
         elif self._objective == "maximize":
@@ -150,7 +144,7 @@ class DeviceNode(Node):
         super().__init__(problem_class)
         self.connecting_node = None
 
-    def powerflow(self, connecting_node : ConnectingNode):
+    def powerflow(self):
         return
     
     @property
@@ -169,21 +163,13 @@ class DeviceNode(Node):
     
     def __sub__(self, other: Node): 
         if self.connecting_node is None and other.getConnectingNode() is None:
-            # print("Connecting nodes are None: " + self.name)
             self.connecting_node = ConnectingNode(self.problem_class)
             other.setConnectingNode(self.connecting_node)
             self.connecting_node.connect(self)
             self.connecting_node.connect(other)
         elif self.connecting_node is None:
-            # print("Connecting node is None: " + self.name)
             self.connecting_node = other.getConnectingNode()
             self.connecting_node.connect(self)
         elif other.connecting_node is None:
-            # print("Other connecting node is None: " + self.name)
             other.setConnectingNode(self.connecting_node)
             self.connecting_node.connect(other)  
-            
-    # define rsub as doing nothing
-    # def __rsub__(self, other: Node):
-    #     return self
-
