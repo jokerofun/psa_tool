@@ -8,168 +8,112 @@ class BaseSolverClass():
     pass
 
 class GraphProblemClass():
-    _objective = ""
-    _selector = None
     def __init__(self, name):
         self.name = name
         self._nodes = []
+        self.time_len = 0
 
     def __repr__(self):
-        return f"GraphProblemClass(name={self.name},nodes={self._nodes})"
-    
+        return f"GraphProblemClass(name={self.name}, nodes={self._nodes})"
+
     def add_node(self, node):
         self._nodes.append(node)
 
-    def add_nodes(self, nodes):
-        self._nodes.extend(nodes)
-
     def get_node(self, node_name):
-        node = next((item for item in self._nodes if getattr(item, "name", None) == str(node_name)), None)
+        return next((node for node in self._nodes if getattr(node, "name", None) == node_name), None)
 
-        return node
-
-    def collectCosts(self):
+    def collect_costs(self):
         return cp.sum([node.cost for node in self._nodes])
-    
-    def collectConstraints(self, t):
-        constraints = []
-        for node in self._nodes:
-            constraints.extend(node.constraints(t))
-        return constraints
-    
-    # objective function builder, with minimize or maximize
-    def getObjectiveFunction(self, objective : str = "minimize"):
-        self._objective = objective.lower()
-        if self._objective != "minimize" and self._objective != "maximize":
-            raise ValueError("Objective function must be either minimize or maximize")
-        self._selector = Selector(self._nodes)
-        return self._selector
-    
-    def solve(self):
-        objective = None
-        if self._objective == "minimize":
-            objective = cp.Minimize(cp.sum(self._selector.get()))
-        elif self._objective == "maximize":
-            objective = cp.Maximize(cp.sum(self._selector.get()))
-        else:
-            raise ValueError("_objective was not set")
-        constraints = []
-        for t in range(self.time_len):
-            constraints.extend(self.collectConstraints(t))
-        problem = cp.Problem(objective, constraints)
+
+    def collect_constraints(self, t):
+        return [constraint for node in self._nodes for constraint in node.constraints(t)]
+
+    def solve(self, objective="minimize"):
+        if objective not in {"minimize", "maximize"}:
+            raise ValueError("Objective must be 'minimize' or 'maximize'")
+        
+        obj_func = cp.Minimize if objective == "minimize" else cp.Maximize
+        objective = obj_func(self.collect_costs())
+        constraints = [self.collect_constraints(t) for t in range(self.time_len)]
+        problem = cp.Problem(objective, [c for sublist in constraints for c in sublist])
         problem.solve()
 
-    def printResults(self):
+    def set_time_len(self, time_len):
+        self.time_len = time_len
         for node in self._nodes:
-            print(node.variables)
+            node.set_time_len(time_len)
+
+    def getObjectiveFunction(self, objective_type):
+        """Retrieve the objective function for the problem."""
+        if objective_type == "minimize":
+            return cp.Minimize(self.collect_costs())
+        elif objective_type == "maximize":
+            return cp.Maximize(self.collect_costs())
+        else:
+            raise ValueError("Objective type must be 'minimize' or 'maximize'")
 
     def getAllVariables(self):
+        """Retrieve all variables from the nodes."""
+        # variables = {}
+        # for node in self._nodes:
+        #     variables[node.name] = node.variables
+        # return variables
         variables = []
+
         for node in self._nodes:
             variables.append(node.variables)
         return variables
 
-    def setTimeLen(self, time_len):
-        self.time_len = time_len
-        for node in self._nodes:
-            node.setTimeLen(time_len)
-
 class Node():
-    def __init__(self, problem_class : GraphProblemClass):
+    def __init__(self, problem_class, name="", is_connecting_node=False):
         self.problem_class = problem_class
-        if problem_class is not None:
+        self.name = name
+        self.is_connecting_node = is_connecting_node
+        self.connected_nodes = [] if is_connecting_node else None
+        self.connecting_node = None
+        if problem_class:
             problem_class.add_node(self)
-        self.name = ""
-        
-    def get_attr(self, attr):
-        """
-        Retrieve the attribute value by name.
-        This works for both stored attributes and computed properties.
-        """
-        try:
-            return getattr(self, attr)
-        except AttributeError:
-            raise AttributeError(f"{self.__class__.__name__} has no attribute '{attr}'")
-        
+
+    def connect(self, other):
+        """Connect this node to another node."""
+        if self.is_connecting_node:
+            self.connected_nodes.append(other)
+        else:
+            if not self.connecting_node and not other.connecting_node:
+                connecting_node = Node(self.problem_class, name="ConnectingNode", is_connecting_node=True)
+                connecting_node.connect(self)
+                connecting_node.connect(other)
+                self.connecting_node = connecting_node
+                other.connecting_node = connecting_node
+            elif not self.connecting_node:
+                other.connecting_node.connect(self)
+                self.connecting_node = other.connecting_node
+            elif not other.connecting_node:
+                self.connecting_node.connect(other)
+                other.connecting_node = self.connecting_node
+
+    def __sub__(self, other):
+        """Overload the - operator to connect nodes."""
+        if isinstance(other, Node):
+            self.connect(other)
+            return self
+        raise ValueError("Can only connect to another Node instance")
+
     def constraints(self, t):
+        if self.is_connecting_node:
+            return [cp.sum([node.powerflow(t) for node in self.connected_nodes]) == 0]
         return []
-    
-    def get_parameters(self):
-        attributes = vars(self)
-        primitive_attributes_only = {}
 
-        for key, value in attributes.items():
-            if not isinstance(value, (GraphProblemClass, ConnectingNode)):
-                primitive_attributes_only[key] = value
-            else:
-                # primitive_attributes_only[key] = value.__class__.__name__
-                primitive_attributes_only[key] = None
-
-        return primitive_attributes_only
-    
-    @abc.abstractmethod
-    def getConnectingNode(self):
-        return
-    
-    @abc.abstractmethod
-    def setConnectingNode(self, connecting_node):
-        return
-    
-    @property
-    def variables(self):
-        return []
-    
-    @property
-    def cost(self):
-        return
-    
-class ConnectingNode(Node):
-    def __init__(self, problem_class):
-        super().__init__(problem_class)
-        self.connected_nodes = []
-        self.name = "ConnectingNode"
-
-    def connect(self, node):
-        self.connected_nodes.append(node)
-
-    def setTimeLen(self, time_len):
+    def set_time_len(self, time_len):
         self.time_len = time_len
 
-    def constraints(self, t):
-        return [cp.sum([node.powerflow(t) for node in self.connected_nodes]) == 0]
-    
-## find a better name for this class, because it is not a leaf     
-class DeviceNode(Node):
-    def __init__(self, problem_class):
-        super().__init__(problem_class)
-        self.connecting_node = None
-
-    def powerflow(self):
-        return
-    
     @property
     def cost(self):
-        return 
-    
+        return
+
     @property
     def variables(self):
         return []
-    
-    def getConnectingNode(self):
-        return self.connecting_node
-    
-    def setConnectingNode(self, connecting_node):
-        self.connecting_node = connecting_node
-    
-    def __sub__(self, other: Node): 
-        if self.connecting_node is None and other.getConnectingNode() is None:
-            self.connecting_node = ConnectingNode(self.problem_class)
-            other.setConnectingNode(self.connecting_node)
-            self.connecting_node.connect(self)
-            self.connecting_node.connect(other)
-        elif self.connecting_node is None:
-            self.connecting_node = other.getConnectingNode()
-            self.connecting_node.connect(self)
-        elif other.connecting_node is None:
-            other.setConnectingNode(self.connecting_node)
-            self.connecting_node.connect(other)  
+
+    def powerflow(self, t):
+        return

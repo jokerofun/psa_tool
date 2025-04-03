@@ -1,37 +1,27 @@
-from .solver_classes import Node, ConnectingNode, GraphProblemClass, DeviceNode
+from .solver_classes import Node, GraphProblemClass
 import cvxpy as cp
 
-class TransmissionLine(DeviceNode):
-    def __init__(self, problem_class, capacity, transmission_loss = 0):
-        super().__init__(problem_class)
-        # direction is left(1) -> right (2)
-        # special case as it will have 2 connecting nodes. The left one will be the standard connecting node
-        # right one will be connecting_node_right
+class TransmissionLine(Node):
+    def __init__(self, problem_class, capacity, transmission_loss=0):
+        super().__init__(problem_class, name="TransmissionLine")
         self.connecting_node_right = None
         self.transmission_loss = transmission_loss
-        self.capacity = capacity  
-        self.name = "TransmissionLine"
-        
-    def __sub__(self, other: Node):
-        if self.connecting_node_right is None and other.getConnectingNode() is None:
-            self.connecting_node_right = ConnectingNode(self.problem_class)
-            other.setConnectingNode(self.connecting_node_right)
-            self.connecting_node_right.connect(self)
-            self.connecting_node_right.connect(other)
-        elif self.connecting_node_right is None:
-            self.connecting_node_right = other.getConnectingNode()
-            self.connecting_node_right.connect(self)
-        elif other.connecting_node is None:
-            other.setConnectingNode(self.connecting_node_right)
-            self.connecting_node_right.connect(other)
-            
-    def getConnectingNode(self):
-        return self.connecting_node_right
-    
-    def setConnectingNode(self, connecting_node):
-        self.connecting_node_right = connecting_node
+        self.capacity = capacity
 
-    def setTimeLen(self, time_len):
+    # def __sub__(self, other: Node):
+    #     if self.connecting_node_right is None and other.connecting_node is None:
+    #         self.connecting_node_right = Node(self.problem_class, is_connecting_node=True)
+    #         other.connecting_node = self.connecting_node_right
+    #         self.connecting_node_right.connect(self)
+    #         self.connecting_node_right.connect(other)
+    #     elif self.connecting_node_right is None:
+    #         self.connecting_node_right = other.connecting_node
+    #         self.connecting_node_right.connect(self)
+    #     elif other.connecting_node is None:
+    #         other.connecting_node = self.connecting_node_right
+    #         self.connecting_node_right.connect(other)
+
+    def set_time_len(self, time_len):
         self.time_len = time_len
         self.power_flow_left_right = cp.Variable(time_len)
         self.power_flow_right_left = cp.Variable(time_len)
@@ -40,56 +30,53 @@ class TransmissionLine(DeviceNode):
         return [
             self.power_flow_left_right[t] <= self.capacity,
             self.power_flow_right_left[t] <= self.capacity
-        ] 
-    
-    @property
-    def powerflow(self, connecting_node : ConnectingNode, t):
+        ]
+
+    def powerflow(self, connecting_node: Node, t):
         if connecting_node == self.connecting_node_right:
-            return (1-self.transmission_loss)*self.power_flow_left_right[t] - self.power_flow_right_left[t]
+            return (1 - self.transmission_loss) * self.power_flow_left_right[t] - self.power_flow_right_left[t]
         elif connecting_node == self.connecting_node:
-            return (1-self.transmission_loss)*self.power_flow_right_left[t] - self.power_flow_left_right[t]
+            return (1 - self.transmission_loss) * self.power_flow_right_left[t] - self.power_flow_left_right[t]
         else:
             return 0
-        
+
     @property
     def variables(self):
-        return {self.name : {"powerFlow" : self.power_flow_left_right.value - self.power_flow_right_left.value}}
+        return {self.name: {"powerFlow": self.power_flow_left_right.value - self.power_flow_right_left.value}}
 
-class Producer(DeviceNode):
-    def __init__(self, problem_class, production_capacity, price = 10):
-        super().__init__(problem_class)
+class Producer(Node):
+    def __init__(self, problem_class, production_capacity, price=10):
+        super().__init__(problem_class, name="Producer")
         self.production_capacity = production_capacity
         self.price = price
-        self.name = "Producer"
 
-    def setTimeLen(self, time_len):
+    def set_time_len(self, time_len):
         self.production_schedule = cp.Variable(time_len, nonneg=True)
 
     def constraints(self, t):
         return [
             self.production_schedule[t] <= self.production_capacity
         ]
-    
+
     def powerflow(self, t):
         return self.production_schedule[t]
-    
+
     @property
     def cost(self):
         return cp.sum(self.production_schedule * self.price)
-    
+
     @property
     def variables(self):
-        return {self.name : {"production_schedule" : self.production_schedule.value}}
+        return {self.name: {"production_schedule": self.production_schedule.value}}
 
-class Consumer(DeviceNode):
+class Consumer(Node):
     def __init__(self, problem_class):
-        super().__init__(problem_class)
-        self.name = "Consumer"
+        super().__init__(problem_class, name="Consumer")
 
-    def setTimeLen(self, time_len):
+    def set_time_len(self, time_len):
         self.consumption_schedule = cp.Parameter(time_len, nonneg=True)
 
-    def setConsumptionSchedule(self, consumption_schedule):
+    def set_consumption_schedule(self, consumption_schedule):
         self.consumption_schedule.value = consumption_schedule
 
     def constraints(self, t):
@@ -97,26 +84,25 @@ class Consumer(DeviceNode):
 
     def powerflow(self, t):
         return -self.consumption_schedule[t]
-    
-    def variables(self):
-        return {self.name : {"powerFlow" : -self.consumption_schedule.value}}
 
-class Prosumer(DeviceNode):
-    def __init__(self, problem_class, production_capacity, consumption_capacity):
-        super().__init__(problem_class)
+    @property
+    def variables(self):
+        return {self.name: {"powerFlow": -self.consumption_schedule.value}}
+
+class Prosumer(Node):
+    def __init__(self, problem_class, production_capacity, consumption_capacity, name="Prosumer"):
+        super().__init__(problem_class, name=name)
         self.production_capacity = production_capacity
         self.consumption_capacity = consumption_capacity
 
 class PowerExchange(Prosumer):
     _prices = []
-    def __init__(self, problem_class, production_capacity, consumption_capacity, name):
-        super().__init__(problem_class, production_capacity, consumption_capacity)
-        self.name = name
 
-    def __repr__(self):
-        return f"PowerExchange(name={self.name},production_capacity={self.production_capacity},consumption_capacity={self.consumption_capacity})"
-    def setTimeLen(self, time_len):
-        self.powerFlow = cp.Variable(time_len)
+    def __init__(self, problem_class, production_capacity, consumption_capacity, name):
+        super().__init__(problem_class, production_capacity, consumption_capacity, name)
+
+    def set_time_len(self, time_len):
+        self.power_flow = cp.Variable(time_len)
 
     @property
     def prices(self):
@@ -127,81 +113,61 @@ class PowerExchange(Prosumer):
         self._prices = prices
 
     def constraints(self, t):
-        return [self.powerFlow[t] <= self.production_capacity, self.powerFlow[t] >= -self.consumption_capacity]
+        return [
+            self.power_flow[t] <= self.production_capacity,
+            self.power_flow[t] >= -self.consumption_capacity
+        ]
 
     def powerflow(self, t):
-        return self.powerFlow[t]
-    
+        return self.power_flow[t]
+
     @property
     def cost(self):
-        return cp.sum(self._prices @ self.powerFlow)
-    
+        return cp.sum(self._prices @ self.power_flow)
+
     @property
     def variables(self):
-        return {self.name : {"powerFlow" : self.powerFlow.value}}
+        return {self.name: {"powerFlow": self.power_flow.value}}
     
 class Battery(Prosumer):
-    def __init__(self, problem_class, production_capacity, consumption_capacity, name, battery_capacity, efficiency = 0.9):
-        super().__init__(problem_class, production_capacity, consumption_capacity)
+    def __init__(self, problem_class, production_capacity, consumption_capacity, name, battery_capacity, efficiency=0.9):
+        super().__init__(problem_class, production_capacity, consumption_capacity, name)
         self.battery_capacity = battery_capacity
         self.efficiency = efficiency
-        self.name = name
 
-    def __repr__(self):
-        return f"Battery(name={self.name},problem_class={self.problem_class},production_capacity={self.production_capacity}, consumption_capacity={self.consumption_capacity}, battery_capacity={self.battery_capacity}, efficiency={self.efficiency})"
-
-    def setTimeLen(self, time_len):
+    def set_time_len(self, time_len):
         self.charge = cp.Variable(time_len, nonneg=True)
         self.discharge = cp.Variable(time_len, nonneg=True)
         self.mode = cp.Variable(time_len, boolean=True)
-        self.SOC = cp.Variable(shape = (time_len), nonneg=True)
+        self.SOC = cp.Variable(shape=(time_len), nonneg=True)
 
     def constraints(self, t):
-        constraints = []
-        # Ensure that if mode[t] == 1 then only charging is allowed (discharge[t] is forced to 0)
-        # If mode[t] == 0 then only discharging is allowed (charge[t] is forced to 0)
-        # We use the production_capacity and consumption_capacity as big-M values.
-        constraints.append(self.charge[t] <= self.production_capacity * self.mode[t])
-        constraints.append(self.discharge[t] <= self.consumption_capacity * (1 - self.mode[t]))
-        constraints.append(self.SOC[t] <= self.battery_capacity)
-        
+        constraints = [
+            self.charge[t] <= self.production_capacity * self.mode[t],
+            self.discharge[t] <= self.consumption_capacity * (1 - self.mode[t]),
+            self.SOC[t] <= self.battery_capacity
+        ]
         if t == 0:
             constraints.append(
                 self.SOC[t] == self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t]
             )
-            constraints.append( self.SOC[t] == 0 )
+            constraints.append(self.SOC[t] == 0)
         else:
             constraints.append(
-                self.SOC[t] == self.SOC[t-1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t]
+                self.SOC[t] == self.SOC[t - 1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t]
             )
         return constraints
 
     def powerflow(self, t):
         return self.discharge[t] - self.charge[t]
-    
+
     @property
     def cost(self):
         return 0
 
     @property
     def variables(self):
-        return {self.name : {"SOC" : self.SOC.value, "powerFlow":  self.discharge.value - self.charge.value}}
-
-    def get_class_info(self):
-        return self.__class__.__name__
-    
-    def get_parameters(self):
-        attributes = vars(self)
-        primitive_attributes_only = {}
-
-        for key, value in attributes.items():
-            if not isinstance(value, (GraphProblemClass, ConnectingNode)):
-                primitive_attributes_only[key] = value
-            else:
-                # primitive_attributes_only[key] = value.__class__.__name__
-                primitive_attributes_only[key] = None
-
-        return primitive_attributes_only
+        return {self.name: {"SOC": self.SOC.value, "powerFlow": self.discharge.value - self.charge.value}}
  
 if __name__ == "__main__":
     problemClass = GraphProblemClass()

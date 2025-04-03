@@ -8,7 +8,7 @@ import numpy as np
 from dataflow_manager.dataflow_classes import DataFetchingFromFileNode
 from dataflow_manager.dataflow_manager import DataFlowManager
 from archive.lib_descriptive import plot_battery_arbitrage_multiple
-from optimization.energy_sector_classes import Battery, PowerExchange
+from optimization.energy_sector_classes import Battery, PowerExchange, TransmissionLine
 from optimization.solver_classes import GraphProblemClass
 
 def procFunc1(dfs):
@@ -28,11 +28,13 @@ if __name__ == "__main__":
     battery2 = Battery(problemClass, 100, 100,"bat2",  200)
     battery3 = Battery(problemClass, 150, 150, "bat3", 300)
     power_exchange = PowerExchange(problemClass, 350, 350, "power_exchange")
+    # transmission_line = TransmissionLine(problem_class=problemClass, capacity=100, transmission_loss=0.1)
 
     # Connect the nodes
     power_exchange - battery1
     power_exchange - battery2
     power_exchange - battery3
+    # battery3 - transmission_line
     
     # define a dataflow for the power exchange 
     PE_dataflow = DataFlowManager.getInstance().newDataFlow(PowerExchange)
@@ -42,7 +44,7 @@ if __name__ == "__main__":
     PE_dataflow.node(name="prepoc") >> PE_dataflow.node(name="training", final=True)
 
 
-    problemClass.setTimeLen(5)
+    problemClass.set_time_len(5)
     # override process function for the porcessing nodes
     PE_dataflow.node("prepoc").process_func = procFunc1
     PE_dataflow.node("training").process_func = trainFunc1
@@ -51,7 +53,8 @@ if __name__ == "__main__":
     # convert to numpy array
     power_exchange.prices = dfs["csv_prices"].values.flatten()
     
-    problemClass.getObjectiveFunction("minimize").values("cost")
+    # abad = problemClass.getObjectiveFunction("minimize")
+    # grrer = abad.values("cost")
     
     print(problemClass._nodes)
     # solve the problem and get the results
