@@ -70,7 +70,7 @@ class Producer(DeviceNode):
             self.production_schedule[t] <= self.production_capacity
         ]
     
-    def powerflow(self, connecting_node, t):
+    def powerflow(self, t):
         return self.production_schedule[t]
     
     @property
@@ -95,7 +95,7 @@ class Consumer(DeviceNode):
     def constraints(self, t):
         return []
 
-    def powerflow(self, connecting_node, t):
+    def powerflow(self, t):
         return -self.consumption_schedule[t]
     
     def variables(self):
@@ -129,7 +129,7 @@ class PowerExchange(Prosumer):
     def constraints(self, t):
         return [self.powerFlow[t] <= self.production_capacity, self.powerFlow[t] >= -self.consumption_capacity]
 
-    def powerflow(self, connecting_node, t):
+    def powerflow(self, t):
         return self.powerFlow[t]
     
     @property
@@ -176,7 +176,7 @@ class Battery(Prosumer):
             )
         return constraints
 
-    def powerflow(self, connecting_node, t):
+    def powerflow(self, t):
         return self.discharge[t] - self.charge[t]
     
     @property
