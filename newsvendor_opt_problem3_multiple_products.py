@@ -101,32 +101,32 @@ if __name__ == "__main__":
         {"demand": 1100, "prob": 0.010},
     ]
     scenarios2 = [
-        {"demand": 700, "prob": 0.450},
-        {"demand": 800, "prob": 0.300},
-        {"demand": 900, "prob": 0.220},
-        {"demand": 1000, "prob": 0.015},
-        {"demand": 1100, "prob": 0.010},
+        {"demand": 100, "prob": 0.350},
+        {"demand": 200, "prob": 0.100},
+        {"demand": 300, "prob": 0.220},
+        {"demand": 500, "prob": 0.315},
+        {"demand": 700, "prob": 0.010},
     ]
     scenarios3 = [
-        {"demand": 700, "prob": 0.450},
-        {"demand": 800, "prob": 0.300},
-        {"demand": 900, "prob": 0.220},
-        {"demand": 1000, "prob": 0.015},
-        {"demand": 1100, "prob": 0.010},
+        {"demand": 20, "prob": 0.750},
+        {"demand": 40, "prob": 0.200},
+        {"demand": 50, "prob": 0.220},
+        {"demand": 60, "prob": 0.015},
+        {"demand": 100, "prob": 0.060},
     ]
 
     costs1 = {"cost": 0.005}  # per unit cost
     price1 = 0.08  # selling price
-    costs2 = {"cost": 0.005}  # per unit cost
-    price2 = 0.08  # selling price
-    costs3 = {"cost": 0.005}  # per unit cost
-    price3 = 0.08  # selling price
+    costs2 = {"cost": 0.009}  # per unit cost
+    price2 = 0.02  # selling price
+    costs3 = {"cost": 0.004}  # per unit cost
+    price3 = 0.05  # selling price
 
     problem = GraphProblemClass("NewsvendorProblem")
-    connection = ClusterNode(None, budget=1000, supplier_capacity=500)
-    product1 = NewsvendorNode(None, scenarios1, costs1, price1)
-    product2 = NewsvendorNode(None, scenarios2, costs2, price2)
-    product3 = NewsvendorNode(None, scenarios3, costs3, price3)
+    connection = ClusterNode(None, budget=1000, supplier_capacity=5000)
+    product1 = NewsvendorNode(None, scenarios1, costs1, price1, "Product 1")
+    product2 = NewsvendorNode(None, scenarios2, costs2, price2, "Product 2")
+    product3 = NewsvendorNode(None, scenarios3, costs3, price3, "Product 3")
     connection.connect(product1)
     connection.connect(product2)
     connection.connect(product3)
