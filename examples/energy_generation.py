@@ -32,7 +32,7 @@ class Generator(Node):
     
     @property
     def variables(self):
-        return {self.name: {"power_output": self.power_output.value}}
+        return {self.name: {"power_output": self.power_output.value.round(2)}}
     
 class Area(Node):
     def __init__(self, name):
@@ -67,4 +67,6 @@ class Area(Node):
 
     @property
     def variables(self):
-        return {self.name: {"future_hourly_demand": self.future_hourly_demand}}
+        hourly_cost = sum(gen.cost_per_mwh * gen.power_output.value.round(2) for gen in self.generators)
+        total_cost = sum(hourly_cost)
+        return {self.name: {"future_hourly_demand": self.future_hourly_demand, "hourly_cost:": hourly_cost, "total_cost": total_cost}}

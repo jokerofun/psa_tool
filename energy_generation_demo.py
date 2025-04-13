@@ -3,6 +3,8 @@ from dataflow_manager.dataflow_manager import DataFlowManager
 from examples.energy_generation import Generator, Area
 from optimization.solver_classes import GraphProblemClass
 
+import matplotlib.pyplot as plt
+
 def procFunc1(dfs):
     print("Processing data")
     dfs = dfs["future_demand"] 
@@ -11,6 +13,21 @@ def procFunc1(dfs):
 def trainFunc1(dfs):
     print("Training future demand prediction model")
     return dfs
+
+def plot_energy_generation_demo(area: Area):
+    # Plot results
+    plt.figure(figsize=(14, 6))
+    for gen in area1.generators:
+        plt.plot(range(24), gen.power_output.value, label=gen.name)
+    plt.plot(range(24), area1.future_hourly_demand, 'k--', label="Demand", linewidth=1.5)
+    plt.title("Optimal Generation Schedule")
+    plt.xlabel("Hour")
+    plt.ylabel("MW")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("figures/energy_generation_schedule.png")
+    plt.show()
 
 if __name__ == "__main__":
     problemClass = GraphProblemClass("energy_generation_optimization_demo1")
@@ -35,6 +52,9 @@ if __name__ == "__main__":
 
     print(problemClass._nodes)
     problemClass.getObjectiveFunction("minimize").values("cost")
-    problemClass.solve()
+    value = problemClass.solve()
     result = problemClass.getAllVariables()
     print(result)
+    print(f"Total generation cost over 24 hours: ${value:.2f}")
+
+    plot_energy_generation_demo(area1)

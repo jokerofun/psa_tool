@@ -59,6 +59,11 @@ class GraphProblemClass():
         problem = cp.Problem(objective, constraints)
         problem.solve()
 
+        if problem.status == cp.OPTIMAL:
+            print(f"Result: {problem.value}")
+
+        return problem.value
+
     def printResults(self):
         for node in self._nodes:
             print(node.variables)
