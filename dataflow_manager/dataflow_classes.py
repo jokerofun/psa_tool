@@ -8,12 +8,13 @@ db_connection = None  # Placeholder for the database connection
 
 
 class DataflowNode:
-    def __init__(self, name: str, final=False) -> None:
+    def __init__(self, name: str, parameters = {}, final=False) -> None:
         self.id = uuid.uuid4()
         self.name = name
         self._dependencies = []
         self._results = {}
         self._final = final
+        self._parameters = parameters
 
     def add_dependency(self, node):
         self._dependencies.append(node)
@@ -30,7 +31,7 @@ class DataflowNode:
             input_dfs.update(node.get_results())
 
         print(f"{self.name} is running")
-        self.process(input_dfs)
+        self.process(input_dfs, self._parameters)
         self._results = input_dfs
 
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
@@ -41,12 +42,12 @@ class DataflowNode:
 
 
 class DataProcessingNode(DataflowNode):
-    def __init__(self, name: str, process_func: Callable[[Dict[str, pd.DataFrame]], Dict[str, pd.DataFrame]] = None, final=False):
+    def __init__(self, name: str, process_func: Callable[[Dict[str, pd.DataFrame]], Dict[str, pd.DataFrame]] = None, parameters = Dict[str, any], final=False):
         super().__init__(name, final)
         self.process_func = process_func
 
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
-        return self.process_func(dfs)
+        return self.process_func(dfs,self._parameters)
 
 
 class DataFetchingNode(DataflowNode):
@@ -77,6 +78,8 @@ class DataFetchingFromAPINode(DataFetchingNode):
     def fetch_data(self) -> pd.DataFrame:
         response = requests.get(self.source)
         return pd.DataFrame(response.json())
+    
+
 
 
 # Example usage
