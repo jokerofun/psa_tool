@@ -32,7 +32,7 @@ if __name__ == "__main__":
     dfs = DataFlowManager.getInstance().getData(PowerExchange, 1)
     print(dfs)
     # convert to numpy array
-    power_exchange.prices = dfs["priceEUR"].values
+    power_exchange.prices = dfs["csv_prices"].values.flatten()
     
     problemClass.getObjectiveFunction("minimize").values("cost")
     # solve the problem and get the results
