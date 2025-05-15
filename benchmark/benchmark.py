@@ -21,7 +21,7 @@ class Benchmark:
         times = []
         result = None
 
-        print(f"Benchmarking '{func.__name__}' for {runs} run(s)...")
+        print(f"Benchmarking '{func.__name__}' for {runs} run(s)... with args: {args} and kwargs: {kwargs}")
 
         for i in range(1, runs + 1):
             start = time.perf_counter()
