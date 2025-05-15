@@ -4,6 +4,7 @@ import json
 from optimization.solver_classes import GraphProblemClass
 from persistence.class_builder import ClassBuilder
 
+
 class DBManager:
     def __init__(self, db_path="database.db", model_class_dirs=['optimization']):
         self.conn = duckdb.connect(db_path)
@@ -25,13 +26,13 @@ class DBManager:
     def save_optimization_problem(self, name, description):
         if not self.load_optimization_problem(name).empty:
             return
-        
+
         query = 'INSERT INTO optimization_problems (name, description) ' \
                 'VALUES (?, ?) ' \
                 'RETURNING optimization_problem_id'
         parameters = [name, description]
         problem_class_id = self.conn.execute(query, parameters).fetchone()[0]
-    
+
     def load_optimization_problem(self, name):
         query = 'SELECT optimization_problem_id, name, description ' \
                 'FROM optimization_problems ' \
@@ -40,31 +41,33 @@ class DBManager:
 
         # TODO: fetch objects instead of tuples
         result = self.conn.execute(query, parameters).fetchdf()
-        
+
         return result
 
     def load_optimization_problem_with_nodes(self, name):
         optimization_problem = self.load_optimization_problem(name)
         if optimization_problem.empty:
             return None
-        
+
         query = 'SELECT nodes.node_id, name, class_type, parameters_json ' \
                 'FROM nodes ' \
                 'JOIN parameters ON nodes.parameter_id = parameters.parameter_id ' \
                 'JOIN optimization_problems_nodes ON nodes.node_id = optimization_problems_nodes.node_id ' \
                 'WHERE optimization_problems_nodes.optimization_problem_id = ?'
-        parameters = [int(optimization_problem.loc[0, 'optimization_problem_id'])]
+        parameters = [
+            int(optimization_problem.loc[0, 'optimization_problem_id'])]
 
         nodes_df = self.conn.execute(query, parameters).fetchdf()
         print(nodes_df)
         if nodes_df.empty:
             return None
-        
+
         problem_nodes = []
         for index, node in nodes_df.iterrows():
             node_params_json = json.loads(node['parameters_json'])
             del node_params_json['connecting_node']
-            node_class = self.class_builder.build(node['class_type'], node_params_json)
+            node_class = self.class_builder.build(
+                node['class_type'], node_params_json)
             problem_nodes.append(node_class)
 
         problem = GraphProblemClass(name=name)
@@ -80,13 +83,15 @@ class DBManager:
         parameters_json = json.dumps(class_parameters)
         parameters_query = 'INSERT INTO parameters (parameters_json) ' \
                            'VALUES (?) ' \
-                           'RETURNING parameter_id' 
-        parameter_id = self.conn.execute(parameters_query, [parameters_json]).fetchone()[0]
+                           'RETURNING parameter_id'
+        parameter_id = self.conn.execute(
+            parameters_query, [parameters_json]).fetchone()[0]
         node_query = 'INSERT INTO nodes (name, class_type, parameter_id) ' \
                      'VALUES (?, ?, ?) ' \
                      'RETURNING node_id'
         node_query_parameters = [node_name, class_type, parameter_id]
-        node_id = self.conn.execute(node_query, node_query_parameters).fetchone()[0]
+        node_id = self.conn.execute(
+            node_query, node_query_parameters).fetchone()[0]
 
     def load_node_by_id(self, node_id):
         query = 'SELECT node_id, name, class_type, parameters_json FROM nodes ' \
@@ -97,7 +102,7 @@ class DBManager:
         result = self.conn.execute(query, parameters).fetchdf()
 
         return result
-    
+
     def load_node_by_name(self, node_name):
         query = 'SELECT node_id, name, class_type, parameters_json FROM nodes ' \
                 'JOIN parameters ON nodes.parameter_id = parameters.parameter_id ' \
@@ -105,7 +110,6 @@ class DBManager:
         parameters = [node_name]
 
         result = self.conn.execute(query, parameters).fetchone()
-        # print(result)
         return result
 
     def connect_problem_node(self, problem_name, node_name):
@@ -113,12 +117,12 @@ class DBManager:
         node = self.load_node_by_name(node_name)
         if problem.empty or node is None:
             return
-        
+
         problem_nodes = self.get_problem_nodes(problem_name)
         if node[0] in problem_nodes['node_id'].tolist():
             print("already connected")
             return
-        
+
         query = 'INSERT INTO optimization_problems_nodes (optimization_problem_id, node_id) ' \
                 'VALUES (?, ?)'
         parameters = [int(problem.loc[0, 'optimization_problem_id']), node[0]]
@@ -130,7 +134,7 @@ class DBManager:
 
         if problem.empty:
             return
-        
+
         query = 'SELECT node_id ' \
                 'FROM optimization_problems_nodes ' \
                 'WHERE optimization_problem_id = ?'
@@ -139,7 +143,7 @@ class DBManager:
         result = self.conn.execute(query, parameters).fetchdf()
 
         return result
-    
+
     def disconnect_problem_node(self, problem_name, node_name):
         pass
 
@@ -156,6 +160,7 @@ class DBManager:
         self.conn.execute('DROP SEQUENCE IF EXISTS parameter_id_seq')
         self.conn.execute('DROP SEQUENCE IF EXISTS node_id_seq')
         self.conn.execute('DROP TABLE IF EXISTS optimization_problems')
-        self.conn.execute('DROP SEQUENCE IF EXISTS optimization_problem_id_seq')
+        self.conn.execute(
+            'DROP SEQUENCE IF EXISTS optimization_problem_id_seq')
 
         self.__create_tables()

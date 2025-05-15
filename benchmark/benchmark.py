@@ -1,6 +1,7 @@
 import time
 from typing import Any, Callable, Dict
 
+
 class Benchmark:
     @staticmethod
     def run(func: Callable, *args, runs: int = 1, **kwargs) -> Dict[str, Any]:
@@ -48,6 +49,7 @@ class Benchmark:
         print(f"Last Result: {stats['last_result']}")
 
         return stats
+
 
 if __name__ == "__main__":
     # Example usage
