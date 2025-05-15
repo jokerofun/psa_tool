@@ -170,3 +170,4 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 *.api
+examples/dataflow_nodes/wind_turbine_generation.py
