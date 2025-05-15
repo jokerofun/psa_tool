@@ -1,19 +1,12 @@
 import openmeteo_requests
 
 import pandas as pd
-import requests_cache
-from retry_requests import retry
 
-openmeteo = None
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-def get_client():
-    ## Create a singleton instance of the OpenMeteo client
-    global openmeteo
-    if openmeteo is None:
-        cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
-        retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
-        openmeteo = openmeteo_requests.Client(session = retry_session)
-    return openmeteo
+from dataflow_manager.clients import openmeteo_client
 
 def get_wind_data(dataframe = None, parameters: dict = {"latitude": 0, "longitude": 0}):
     """
@@ -38,7 +31,7 @@ def get_wind_data(dataframe = None, parameters: dict = {"latitude": 0, "longitud
         "hourly": "wind_speed_10m",
         "wind_speed_unit": "ms"
     }
-    responses = get_client().weather_api(url, params=params)
+    responses = openmeteo_client.get_openmeteo_client().weather_api(url, params=params)
     response = responses[0]
     hourly = response.Hourly()
     hourly_wind_speed_10m = hourly.Variables(0).ValuesAsNumpy() 
