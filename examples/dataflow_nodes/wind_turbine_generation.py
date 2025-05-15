@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+import openmeteo_wind
+
 def generate_wind_turbine_data(dataframe: dict, parameters: dict = {"rated_power": 1, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25}):
     """
     Generate wind turbine data for 24 hours with 1 hour intervals.
@@ -37,14 +39,16 @@ def generate_wind_turbine_data(dataframe: dict, parameters: dict = {"rated_power
 if __name__ == "__main__":
     parameters = {"rated_power": 10, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25}  # rated power of the wind turbine
     # generate a dataframe with date and wind_speed_10m columns
-    wind_df = pd.DataFrame()
-    wind_df["date"] = pd.date_range(start = pd.Timestamp.now(), periods = 24, freq = "H")
-    ## increase the wind speed by 1 m/s every hour
-    wind_df["wind_speed_10m"] = np.arange(0, 48, 2)
+    # wind_df = pd.DataFrame()
+    # wind_df["date"] = pd.date_range(start = pd.Timestamp.now(), periods = 24, freq = "H")
+    # ## increase the wind speed by 1 m/s every hour
+    # wind_df["wind_speed_10m"] = np.arange(0, 48, 2)
     
-    dataframe = {"wind_data": wind_df}
+    # dataframe = {"wind_data": wind_df}
     
-    wind_turbine_data = generate_wind_turbine_data(dataframe=dataframe, parameters=parameters)
+    parameters1 = {"latitude": 57.0488, "longitude": 9.9217}  # Aalborg, Denmark
+    wind_turbine_data = openmeteo_wind.get_wind_data(parameters=parameters1)
+    wind_power = generate_wind_turbine_data(dataframe={"wind_data": wind_turbine_data}, parameters=parameters)
     print(wind_turbine_data)
     # graph the data
     plt.plot(wind_turbine_data["date"], wind_turbine_data["energy_generated"])

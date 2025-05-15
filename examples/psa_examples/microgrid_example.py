@@ -3,6 +3,9 @@ import pandas as pd
 
 import sys
 import os
+
+from dataflow_manager.dataflow_manager import DataFlowManager
+from optimization.energy_sector_classes import Battery, Consumer, PowerExchange
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from dataflow_manager.dataflow_classes import DataProcessingNode
 
@@ -23,6 +26,14 @@ if __name__ == "__main__":
     for i in range(number_of_houses):
         parameters[i + 4] = {"A0" : 0.2 , "A1": 0.4, "A2": 0.4, "phi0": 3.4 + np.random.rand(1) * 0.4, "phi1": 10+ np.random.rand(1) * 0.4}
         
+    DataFlowManager.getInstance().newDataFlow(Battery)
+    DataFlowManager.getInstance().newDataFlow(PowerExchange)
+    DataFlowManager.getInstance().newDataFlow(Consumer)
+    DataFlowManager.getInstance().newDataFlow(SolarPanel)
+    DataFlowManager.getInstance().newDataFlow(WindTurbine)
+    
+    
+    
     
         
     
