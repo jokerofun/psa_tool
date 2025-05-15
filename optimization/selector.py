@@ -9,9 +9,11 @@ class Selector:
         If a list/tuple is provided, the filter will include items that are instances of any of the types.
         """
         if isinstance(type_or_types, (list, tuple)):
-            self.items = [item for item in self.items if any(isinstance(item, t) for t in type_or_types)]
+            self.items = [item for item in self.items if any(
+                isinstance(item, t) for t in type_or_types)]
         else:
-            self.items = [item for item in self.items if isinstance(item, type_or_types)]
+            self.items = [item for item in self.items if isinstance(
+                item, type_or_types)]
         return self
 
     def where(self, attr, value):
@@ -21,9 +23,11 @@ class Selector:
         Otherwise, an equality check is performed.
         """
         if callable(value):
-            self.items = [item for item in self.items if value(item.get_attr(attr))]
+            self.items = [item for item in self.items if value(
+                item.get_attr(attr))]
         else:
-            self.items = [item for item in self.items if item.get_attr(attr) == value]
+            self.items = [
+                item for item in self.items if item.get_attr(attr) == value]
         return self
 
     def values(self, attr):
@@ -32,7 +36,7 @@ class Selector:
         using the generic get_attr method.
         """
         self.items = [item.get_attr(attr) for item in self.items]
-        
+
     def get(self):
         """
         Returns the filtered items.
@@ -46,7 +50,7 @@ if __name__ == '__main__':
     foo_costs = Selector(big_list).of_type(Foo).values("cost")
     print("Costs from Foo instances:", foo_costs)
     # goal is to use solve().maximize().of_type(Battery).values("cost")
-    
+
     # Example 2: Use Selector to filter nodes with nodeID equal to 3.
     nodes_with_nodeID_3 = Selector(big_list).where("nodeID", 3).get()
     print("Nodes with NODEID equal to 3:", nodes_with_nodeID_3)

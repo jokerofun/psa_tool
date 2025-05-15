@@ -2,30 +2,34 @@ import importlib
 import os
 import inspect
 
+
 class ClassBuilder:
     def __init__(self, search_dirs):
-         self.search_dirs = search_dirs
+        self.search_dirs = search_dirs
 
     def get_class_from_module(self, module_name, class_name):
         """Dynamically import a module and retrieve the class if it exists."""
         try:
-            module = importlib.import_module(module_name)  # Dynamically import the module
+            # Dynamically import the module
+            module = importlib.import_module(module_name)
             cls = getattr(module, class_name, None)  # Get the class
             if cls is None:
-                raise ImportError(f"Class '{class_name}' not found in module '{module_name}'")
+                raise ImportError(
+                    f"Class '{class_name}' not found in module '{module_name}'")
             return cls
         except ModuleNotFoundError:
             raise ImportError(f"Module '{module_name}' not found.")
-    
+
     def instantiate_class(self, module_name, class_name, params):
         """Instantiate the class with provided parameters if it exists."""
         cls = self.get_class_from_module(module_name, class_name)
-        
+
         # Get class constructor parameters
         constructor_params = inspect.signature(cls).parameters
-        
+
         # Filter parameters that match constructor arguments
-        valid_params = {k: v for k, v in params.items() if k in constructor_params}
+        valid_params = {k: v for k,
+                        v in params.items() if k in constructor_params}
 
         return cls(**valid_params)
 
@@ -38,11 +42,13 @@ class ClassBuilder:
                         module_name = file[:-3]  # Remove .py extension
                         module_path = os.path.join(root, file)
                         with open(module_path, "r", encoding="utf-8") as f:
-                            if f"class {class_name}(" in f.read():  # Check if class exists in the file
-                                module_base = root.replace(os.sep, ".")  # Convert path to module format
+                            # Check if class exists in the file
+                            if f"class {class_name}(" in f.read():
+                                # Convert path to module format
+                                module_base = root.replace(os.sep, ".")
                                 return module_name, module_base
         return None, None
-    
+
     def build(self, class_name, params):
         # Locate the class file
         module_name, module_path = self.find_class_file(class_name)
