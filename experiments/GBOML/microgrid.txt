@@ -1,0 +1,64 @@
+#TIMEHORIZON
+T = 365 * 24 * 20;
+
+#NODE SOLAR_PV
+#PARAMETERS
+capex = 600; // capital expenditure per unit capacity
+capacity_factor = import "pv_gen.csv";
+#VARIABLES
+internal: capacity;
+internal: investment_cost;
+external: electricity[T];
+#CONSTRAINTS
+capacity >= 0;
+electricity[t] >= 0;
+electricity[t] <= capacity_factor[mod(t, 24)] * capacity;
+investment_cost == capex * capacity;
+#OBJECTIVES
+min investment: investment_cost;
+
+#NODE BATTERY
+#PARAMETERS
+capex = 150; // capital expenditure per unit capacity
+efficiency = 0.75;
+#VARIABLES
+internal: capacity;
+internal: investment_cost;
+internal: energy[T];
+external: charge[T];
+external: discharge[T];
+#CONSTRAINTS
+capacity >= 0;
+energy[t] >= 0;
+charge[t] >= 0;
+discharge[t] >= 0;
+energy[t] <= capacity;
+energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;
+energy[0] == energy[T-1];
+investment_cost == capex * capacity;
+#OBJECTIVES
+min: investment_cost;
+
+#NODE DEMAND
+#PARAMETERS
+demand = import "demand.csv";
+#VARIABLES
+external: consumption[T];
+#CONSTRAINTS
+consumption[t] == demand[mod(t, 24)];
+
+#NODE DISTRIBUTION
+#PARAMETERS
+electricity_price = 0.05;
+#VARIABLES
+internal: operating_cost[T];
+external: power_import[T];
+#CONSTRAINTS
+power_import[t] >= 0;
+operating_cost[t] == electricity_price * power_import[t];
+#OBJECTIVES
+min: operating_cost[t];
+
+#HYPEREDGE POWER_BALANCE
+#CONSTRAINTS
+SOLAR_PV.electricity[t] + BATTERY.discharge[t] + DISTRIBUTION.power_import[t] == BATTERY.charge[t] + DEMAND.consumption[t];
