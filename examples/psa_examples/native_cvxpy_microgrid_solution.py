@@ -20,9 +20,11 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     battery_efficiency = 0.9  # 90% efficiency
 
     # Example time series
-    np.random.seed(0)
-    home_demand = np.random.uniform(1, 2, (num_homes, T))  # kW per home
-    school_demand = np.random.uniform(10, 20, T)  # kW
+    np.random.seed(42)
+    # home_demand = np.random.uniform(1, 2, (num_homes, T))  # kW per home
+    home_demand = np.random.uniform(5, 8, (num_homes, T))  # kW per home
+    # school_demand = np.random.uniform(10, 20, T)  # kW
+    school_demand = np.random.uniform(30, 50, T)  # kW
     solar_profile = np.clip(
         np.sin(np.linspace(0, np.pi, T)), 0, None)  # normalized
     wind_profile = np.clip(
@@ -89,6 +91,9 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     prob = cp.Problem(objective, constraints)
     prob.solve(solver=cp.OSQP, verbose=False)
 
+    # Round results
+    grid_import.value = np.round(grid_import.value, 2)
+    
     print("Total grid import (kWh):", np.sum(grid_import.value))
     print("Grid import per hour:", grid_import.value)
 
