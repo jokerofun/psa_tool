@@ -115,6 +115,7 @@ class PowerExchange(Prosumer):
 
     def __repr__(self):
         return f"PowerExchange(name={self.name},production_capacity={self.production_capacity},consumption_capacity={self.consumption_capacity})"
+    
     def setTimeLen(self, time_len):
         self.powerFlow = cp.Variable(time_len)
 

@@ -1,6 +1,6 @@
 from dataflow_manager.dataflow_classes import DataFetchingFromFileNode
 from dataflow_manager.dataflow_manager import DataFlowManager
-from examples.energy_generation import Generator, Area
+from archive.energy_generation.models import Generator, Area
 from optimization.solver_classes import GraphProblemClass
 
 import matplotlib.pyplot as plt
@@ -31,9 +31,9 @@ def plot_energy_generation_demo(area: Area):
 
 if __name__ == "__main__":
     problemClass = GraphProblemClass("energy_generation_optimization_demo1")
-    generator1 = Generator("Generator1", 50, 10, 100)
-    generator2 = Generator("Generator2", 60, 0, 60)
-    generator3 = Generator("Generator3", 70, 20, 80)
+    generator1 = Generator("Producer1", 50, 10, 100)
+    generator2 = Generator("Producer2", 60, 0, 60)
+    generator3 = Generator("Producer3", 70, 20, 80)
     area1 = Area("DK0")
     area1.add_generators([generator1, generator2, generator3])
     problemClass.add_nodes([area1, generator1, generator2, generator3])
