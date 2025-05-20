@@ -1,10 +1,10 @@
 import cvxpy as cp
 import abc
 
-from selector import Selector
+from .selector import Selector
 # from persistence.db_manager import DBManager
 
-class ProblemClass():
+class GraphProblemClass():
     def __init__(self, name):
         self.name = name
         self._nodes = []
@@ -57,15 +57,12 @@ class ProblemClass():
         for t in range(self.time_length):
             constraints.extend(self.collect_constraints(t))
         problem = cp.Problem(objective, constraints)
+        problem.solve(solver=cp.GUROBI, verbose=True)
 
-        problem.solve()
-    
-    def get_variables(self):
-        variables = []
-        for node in self._nodes:
-            for variable in node:
-                variable = cp.Variable(5)
-            
+        if problem.status == cp.OPTIMAL:
+            print(f"Result: {problem.value}")
+
+        return problem.value
 
     def print_results(self):
         for node in self._nodes:
@@ -141,17 +138,21 @@ class ConnectingNode(Node):
     def connect(self, node):
         self.connected_nodes.append(node)
 
+    def connect_nodes(self, nodes):
+        self.connected_nodes.extend(nodes)
+
     def set_time_length(self, time_length):
         self.time_len = time_length
 
     def constraints(self, t):
-        return [cp.sum([node.power_flow(t) for node in self.connected_nodes]) == 0]
+        return [cp.sum([node.powerflow(t) for node in self.connected_nodes]) == 0]
 
 # TODO: to remove?
 class DeviceNode(Node):
     def __init__(self, name):
         super().__init__(name)
         self.connecting_node = None
+        self.connected_nodes = []
 
     def powerflow(self):
         return
@@ -172,7 +173,7 @@ class DeviceNode(Node):
     
     def __sub__(self, other: Node): 
         if self.connecting_node is None and other.getConnectingNode() is None:
-            self.connecting_node = ConnectingNode(self.problem_class)
+            self.connecting_node = ConnectingNode()
             other.setConnectingNode(self.connecting_node)
             self.connecting_node.connect(self)
             self.connecting_node.connect(other)
