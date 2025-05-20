@@ -21,7 +21,7 @@ if __name__ == "__main__":
     no_households = 1000
     solar_capacity_household = 50 # kW
     solar_capacity_school = 250 # kW
-    wind_capacity = 50 # kW
+    wind_capacity = 5000 # kW
     no_batteries = 3
     battery_capacity = 5000 # kWh
     battery_power = 5000 # kW
