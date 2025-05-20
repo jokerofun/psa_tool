@@ -1,5 +1,6 @@
 import os
 import sys
+from matplotlib import pyplot as plt
 import numpy as np
 import pyomo.environ as pyo
 
@@ -17,7 +18,7 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     num_homes = 50
     solar_capacity_home = 5  # kW
     solar_capacity_school = 25  # kW
-    wind_capacity = 50  # kW
+    wind_capacity = 100  # kW
     n_batteries = num_batteries
     battery_capacity = 500  # kWh
     battery_power = 500  # kW max charge/discharge
@@ -26,7 +27,7 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     # Actual data
     df: dict = {}
     demand = generate_consumption_data(df, parameters={"A0" : 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9})
-    demand["consumption"] = demand["consumption"] * num_homes
+    demand["consumption"] = (demand["consumption"] * num_homes) / 100
     total_demand = demand
     df["total_demand"] = total_demand
     wind_data = get_wind_data(df)
@@ -94,6 +95,21 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     grid_import = np.array([pyo.value(model.grid_import[t]) for t in model.T])
     print("Total grid import (kWh):", np.sum(grid_import))
     print("Grid import per hour:", grid_import)
+
+    # Plot demand and production
+    plt.figure(figsize=(12, 6))
+    plt.plot(total_demand[:T], label="Total Demand")
+    plt.plot(solar_prod[:T], label="Solar Production")
+    plt.plot(wind_prod[:T], label="Wind Production")
+    plt.plot(solar_prod[:T] + wind_prod[:T], label="Total Renewable Production")
+    plt.xlabel("Hour")
+    plt.ylabel("kWh")
+    plt.title("Demand and Production Profiles")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+    plt.savefig("demand_production_profiles.png")
 
     return grid_import
 
@@ -180,8 +196,23 @@ def solve_microgrid_pyomo_with_mock_data(time_intervals=24, num_batteries=1):
     print("Total grid import (kWh):", np.sum(grid_import))
     print("Grid import per hour:", grid_import)
 
+    # Plot demand and production
+    plt.figure(figsize=(12, 6))
+    plt.plot(total_demand[:T], label="Total Demand")
+    plt.plot(solar_prod[:T], label="Solar Production")
+    plt.plot(wind_prod[:T], label="Wind Production")
+    plt.plot(solar_prod[:T] + wind_prod[:T], label="Total Renewable Production")
+    plt.xlabel("Hour")
+    plt.ylabel("kWh")
+    plt.title("Demand and Production Profiles")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+    plt.savefig("demand_production_profiles.png")
+
     return grid_import
 
 if __name__ == "__main__":
     # Benchmark.run(solve_microgrid_pyomo, runs=1)
-    Benchmark.run(solve_microgrid_pyomo, 24, 3, runs=3)
+    Benchmark.run(solve_microgrid_pyomo, 24, 3, runs=1)
