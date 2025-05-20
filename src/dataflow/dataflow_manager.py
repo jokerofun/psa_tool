@@ -1,41 +1,12 @@
 from __future__ import annotations
-import queue
-from typing import Dict, TYPE_CHECKING
 
 from .dataflow import Dataflow
 from src.optimization.solver_classes import Node
 
-# if TYPE_CHECKING:
-#     import pandas as pd
-#     from dataflow_manager.dataflow_classes import DataflowNode
-
-# nodes_queue = queue.Queue()
-
-# def addNode(node: DataflowNode) -> None:
-#     nodes_queue.put(node)
-
-# def listQueue() -> None:
-#     print(list(nodes_queue.queue))
-
-# def addNodes(nodes: list[DataflowNode]) -> None:
-#     for node in nodes:
-#         nodes_queue.put(node)
-
-# def execute() -> Dict[str, pd.DataFrame]:
-#     dfs = {}
-#     while not nodes_queue.empty():
-#         node = nodes_queue.get()
-#         try:
-#             dfs = node.execute(dfs)
-#         except Exception as e:
-#             print(f"Error executing node {node.name}: {e}")
-#             nodes_queue.put(node)
-#             break
-#     return dfs
-
 # singleton class
 class DataFlowManager:
     __instance = None
+    
 
     @staticmethod
     def getInstance() -> DataFlowManager:
@@ -48,34 +19,36 @@ class DataFlowManager:
             raise Exception("This class is a singleton!")
         else:
             DataFlowManager.__instance = self
-            self.dataFlows = {}
+            self._dataflows = {}
 
     def newDataFlow(self, NodeClass) -> Dataflow:
         # check if NodeClass is Node class or its subclass
         if not issubclass(NodeClass, Node):
             raise Exception("NodeClass should be a subclass of Node")
         # check if NodeClass is already in the dataFlows
-        if NodeClass in self.dataFlows:
-            return self.dataFlows[NodeClass]
+        if NodeClass in self._dataflows:
+            return self._dataflows[NodeClass]
         dataflow = Dataflow(NodeClass)
-        self.dataFlows[NodeClass] = dataflow
-        return self.dataFlows[NodeClass]
+        self._dataflows[NodeClass] = dataflow
+        return self._dataflows[NodeClass]
 
-    def getData(self, nodeClass, nodeID):
-        # get class of nodeClassInstance
-        # nodeClass = nodeClassInstance.__class__
+    def getData(self, nodeClass, parameters = {}):
         # check if nodeclass is subclass of Node
         if not issubclass(nodeClass, Node):
-            raise Exception(str(nodeClass) + ": NodeClass should be a subclass of Node")
+            raise Exception(str(nodeClass) +
+                            ": NodeClass should be a subclass of Node")
         # check if nodeClass is in the dataFlows
-        if nodeClass not in self.dataFlows:
+        if nodeClass not in self._dataflows:
             raise Exception("NodeClass is not in dataFlows")
         # get the dataflow instance
-        dataflow = self.dataFlows[nodeClass]
-        return dataflow.getData(nodeID)
-    
-    # overload [] operator 
+        dataflow = self._dataflows[nodeClass]
+        ## assume that there are two columns one with date values and the other with values, convert the values to numpy array
+        # dataflow['values'].values.flatten()
+        # get the column name without the date column
+        return dataflow.getData(parameters)
+
+    # overload [] operator
     def __getitem__(self, key):
-        if key not in self.dataFlows:
-            self.dataFlows[key] = Dataflow(key)
-        return self.dataFlows[key]
+        if key not in self._dataflow:
+            self._dataflow[key] = Dataflow(key)
+        return self._dataflow[key]

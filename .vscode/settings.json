@@ -8,5 +8,13 @@
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.unittestEnabled": true,
-    "dbcode.connections": []
+    "dbcode.connections": [],
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "DuckDB",
+            "database": "${workspaceFolder:psa_tool}/database.db",
+            "name": "duckdb"
+        }
+    ]
 }
