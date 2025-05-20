@@ -3,7 +3,9 @@
 
 
 # define batteries and power exhanges or load them from db
-
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 import numpy as np
 from dataflow_manager.dataflow_classes import DataFetchingFromFileNode
 from dataflow_manager.dataflow_manager import DataFlowManager
@@ -11,13 +13,13 @@ from archive.lib_descriptive import plot_battery_arbitrage_multiple
 from optimization.energy_sector_classes import Battery, PowerExchange
 from optimization.solver_classes import GraphProblemClass
 
-def procFunc1(dfs):
+def procFunc1(dfs, parameters = {}):
     # do some processing
     print("Processing data")
-    dfs = dfs["csv_prices"] 
+    dfs = dfs["results"] 
     return dfs
 
-def trainFunc1(dfs):
+def trainFunc1(dfs, parameters = {}):
     # do some processing
     print("Training model")
     return dfs
@@ -37,7 +39,7 @@ if __name__ == "__main__":
     # define a dataflow for the power exchange 
     PE_dataflow = DataFlowManager.getInstance().newDataFlow(PowerExchange)
     
-    PE_dataflow.node("csv_prices", DataFetchingFromFileNode, "dataflow_manager/test_data/pricesEUR.csv") >> PE_dataflow.node(name="prepoc")
+    PE_dataflow.node("results", DataFetchingFromFileNode, "dataflow_manager/test_data/pricesEUR.csv") >> PE_dataflow.node(name="prepoc")
     PE_dataflow.node("csv_prices_dkk", DataFetchingFromFileNode, "dataflow_manager/test_data/pricesDKK.csv") >> PE_dataflow.node(name="prepoc")
     PE_dataflow.node(name="prepoc") >> PE_dataflow.node(name="training", final=True)
 
@@ -46,11 +48,7 @@ if __name__ == "__main__":
     # override process function for the porcessing nodes
     PE_dataflow.node("prepoc").process_func = procFunc1
     PE_dataflow.node("training").process_func = trainFunc1
-    dfs = DataFlowManager.getInstance().getData(PowerExchange, 1)
-    print(dfs)
     # convert to numpy array
-    power_exchange.prices = dfs["csv_prices"].values.flatten()
-    
     problemClass.getObjectiveFunction("minimize").values("cost")
     
     print(problemClass._nodes)

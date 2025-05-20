@@ -82,6 +82,7 @@ class GraphProblemClass():
 class Node():
     def __init__(self, problem_class: GraphProblemClass):
         self.problem_class = problem_class
+        self._parameters = {}
         if problem_class is not None:
             problem_class.add_node(self)
         self.name = ""
