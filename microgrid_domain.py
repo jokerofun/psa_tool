@@ -66,13 +66,15 @@ class SolarPanel(Producer):
 
     def powerflow(self, t):
         return self.c[t] * self.max_power_output_kW[t]
+        # return  self.max_power_output_kW[t]
     
     def constraints(self, t):
         # self.power_output_kWh[t] = self.c[t] * self.max_power_output_kW[t] # power output in kWh
-        return [self.c[t] >= 0,
-                self.c[t] <= 1 
-                # self.power_output_kWh[t] == self.c[t] * self.P_rated_kW * self.Q[t], 
-                # self.power_output_kWh[t] == self.c[t] * self.max_power_output_kW[t]
+        return [
+            self.c[t] >= 0,
+            self.c[t] <= 1 
+            #     # self.power_output_kWh[t] == self.c[t] * self.P_rated_kW * self.Q[t], 
+            #     # self.power_output_kWh[t] == self.c[t] * self.max_power_output_kW[t]
             ]
 
     # def init_variables(self):
@@ -135,10 +137,6 @@ class Battery(DeviceNode):
 
     def constraints(self, t):
         constraints = [
-            self.charge[t] >= 0,
-            self.discharge[t] >= 0,
-            self.SoC[t] >= 0,
-            self.capacity_kWh >= 0,
             self.SoC[t] <= self.capacity_kWh,
             self.charge[t] <= self.charging_power_kW,# * self.mode[t],
             self.discharge[t] <= self.discharging_power_kW# * (1 - self.mode[t]),
@@ -147,7 +145,7 @@ class Battery(DeviceNode):
         if t == 0:
             constraints.append(
                 self.SoC[t] == self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])
-            constraints.append(self.SoC[t] == 0)
+            # constraints.append(self.SoC[t] == 0)
         else:
             constraints.append(
                 self.SoC[t] == self.SoC[t-1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])
@@ -168,6 +166,7 @@ class Battery(DeviceNode):
 class Grid(ConnectingNode):
     def __init__(self, name):
         super().__init__(name)
+        self.connect_nodes([self])
         # self.energy_import = [] # energy import in kWh
         # self.consumption_units = []
         # self.production_units = []

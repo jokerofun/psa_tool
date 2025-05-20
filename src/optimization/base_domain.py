@@ -57,7 +57,7 @@ class GraphProblemClass():
         for t in range(self.time_length):
             constraints.extend(self.collect_constraints(t))
         problem = cp.Problem(objective, constraints)
-        problem.solve(solver=cp.GUROBI, verbose=True)
+        problem.solve(solver=cp.OSQP, verbose=True)
 
         if problem.status == cp.OPTIMAL:
             print(f"Result: {problem.value}")
@@ -145,6 +145,7 @@ class ConnectingNode(Node):
         self.time_len = time_length
 
     def constraints(self, t):
+        # print([node.powerflow(t) for node in self.connected_nodes])
         return [cp.sum([node.powerflow(t) for node in self.connected_nodes]) == 0]
 
 # TODO: to remove?

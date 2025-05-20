@@ -18,13 +18,13 @@ def trainFunc1(dfs):
 if __name__ == "__main__":
     # Define the parameters for the microgrid
     T = 24 # time segments
-    no_households = 1
+    no_households = 1000
     solar_capacity_household = 50 # kW
     solar_capacity_school = 250 # kW
     wind_capacity = 50 # kW
     no_batteries = 3
-    battery_capacity = 500 # kWh
-    battery_power = 500 # kW
+    battery_capacity = 5000 # kWh
+    battery_power = 5000 # kW
     battery_efficiency = 0.9 # in %
 
     # Generate random data for microgrid components
@@ -35,10 +35,10 @@ if __name__ == "__main__":
     solar_profile = np.clip(np.sin(np.linspace(0, np.pi, T)), 0, None) # kWh
     # wind_profile = np.clip(np.sin(np.linspace(0, 2 * np.pi, T) - 1), 0, None) # kWh
     wind_profile = np.clip(np.sin(np.linspace(0, 2 * np.pi, T) - 1), 0, None) # kWh
-
+    print(solar_profile)
     # Create optimization problem class
     problemClass = GraphProblemClass("microgrid_problem")
-
+    # print out all the profile types
     # Create microgrid models/components
     grid = Grid("grid1")
     household_consumers = [Consumer(f"household_{i}", household_consumption[i]) for i in range(no_households)]
@@ -46,20 +46,20 @@ if __name__ == "__main__":
     solar_panels_household = [SolarPanel(f"solar_panel_{i}", solar_capacity_household * solar_profile) for i in range(no_households)]
     solar_panel_school = SolarPanel("solar_panel_school", solar_capacity_school * solar_profile)
     wind_turbine = WindTurbine("wind_turbine", wind_capacity * wind_profile)
-    # batteries = [Battery(f"battery_{i}", battery_power, battery_power, battery_capacity, battery_efficiency) for i in range(no_batteries)]
+    batteries = [Battery(f"battery_{i}", battery_power, battery_power, battery_capacity, battery_efficiency) for i in range(no_batteries)]
     
     # add components to the problem class
     problemClass.add_nodes(household_consumers)
     problemClass.add_nodes(solar_panels_household)
     problemClass.add_nodes([school, solar_panel_school])
     problemClass.add_node(wind_turbine)
-    # problemClass.add_nodes(batteries)
+    problemClass.add_nodes(batteries)
     problemClass.add_node(grid)
 
     grid.connect_nodes(household_consumers)
     grid.connect_nodes(solar_panels_household)
     grid.connect_nodes([school, solar_panel_school, wind_turbine])
-    # grid.connect_nodes(batteries)
+    grid.connect_nodes(batteries)
 
     problemClass.set_time_length(T)
 
