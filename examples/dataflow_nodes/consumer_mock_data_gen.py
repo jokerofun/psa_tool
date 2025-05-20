@@ -16,9 +16,9 @@ def generate_consumption_data(dataframe = None, parameters: dict = {"A0" : 0, "A
     pd.DataFrame
         Dataframe with consumption data.
     """
-    dataframe = pd.DataFrame()
+    df = pd.DataFrame()
     # Generate time series for 24 hours with 1 hour intervals
-    dataframe["date"] = pd.date_range(start = pd.Timestamp.now(), periods = 24, freq = "H")
+    df["date"] = pd.date_range(start = pd.Timestamp.now(), periods = 24, freq = "h")
     
     # Generate consumption data using the parameters
     A0 = parameters["A0"]
@@ -28,9 +28,9 @@ def generate_consumption_data(dataframe = None, parameters: dict = {"A0" : 0, "A
     phi1 = parameters["phi1"]
     
     # Generate consumption data using the parameters
-    dataframe["consumption"] = A0 + A1 * (np.sin((dataframe.index-phi0)* 2*np.pi/12) + 1) + A2 * (np.sin((dataframe.index-phi0)* 2*np.pi/24) + 1)
+    df["consumption"] = A0 + A1 * (np.sin((df.index-phi0)* 2*np.pi/12) + 1) + A2 * (np.sin((df.index-phi0)* 2*np.pi/24) + 1)
     
-    return dataframe
+    return df
 
 ## example usage
 if __name__ == "__main__":

@@ -1,8 +1,11 @@
+import os
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import openmeteo_wind
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+import examples.dataflow_nodes.openmeteo_wind as openmeteo_wind
 
 def generate_wind_turbine_data(dataframe: dict, parameters: dict = {"rated_power": 1, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25}):
     """
