@@ -86,7 +86,9 @@ class SolarPanel(Producer):
     
     @property
     def variables(self):
-        return {self.name : {"production_schedule" : 0}}
+        # FORMAT THE FLOATS INTO 0.2 DECIMAL PLACES
+        
+        return {self.name : {"production_schedule" : self.c.value}}
 
 class WindTurbine(Producer):
     def __init__(self, name, max_power_output_kW):
@@ -116,23 +118,10 @@ class Battery(DeviceNode):
         self.discharging_power_kW = discharging_power_kW
         self.capacity_kWh = capacity_kWh
         self.efficiency = efficiency
-        # self.charge: list
-        # self.discharge: list
-        # self.SoC: list
-        # self.mode:bool
-
-        # self.init_variables(self)
-
-    # def init_variables(self):
-    #     self.add_variable(self.charge)
-    #     self.add_variable(self.discharge)
-    #     self.add_variable(self.SoC)
-    #     self.add_variable(self.mode) # control variable mode
 
     def set_time_length(self, time_len):
         self.charge = cp.Variable(time_len, nonneg=True)
         self.discharge = cp.Variable(time_len, nonneg=True)
-        # self.mode = cp.Variable(time_len, boolean=True)
         self.SoC = cp.Variable(shape = (time_len), nonneg=True)
 
     def constraints(self, t):
@@ -145,11 +134,9 @@ class Battery(DeviceNode):
         if t == 0:
             constraints.append(
                 self.SoC[t] == self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])
-            # constraints.append(self.SoC[t] == 0)
         else:
             constraints.append(
-                self.SoC[t] == self.SoC[t-1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])
-        
+                self.SoC[t] == self.SoC[t-1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])        
         return constraints
     
     def powerflow(self, t):
