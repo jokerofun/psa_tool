@@ -31,13 +31,12 @@ class Dataflow:
     def __getitem__(self, name: str) -> DataflowTask:
         return self.task(name)
     
-    @DeprecationWarning
-    def get_data(self, nodeID):
-        # find the one with nodes.final = true
-        for task in self.tasks.values():
-            if task._final:
-                task.run()
-                return task.get_results()
+    def get_data(self, task_name):
+        if task_name not in self.tasks:
+            return {}
+        
+        task = self.tasks[task_name]
+        return task.get_results()  # Ensure the task is run to get results
     
     def get_final_task(self) -> DataflowTask:
         """

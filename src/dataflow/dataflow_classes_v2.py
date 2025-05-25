@@ -15,29 +15,29 @@ class DataflowTask:
         self._results = {}
         self._final = final
 
-    def add_dependency(self, node):
-        if not isinstance(node, DataflowTask):
+    def add_dependency(self, task):
+        if not isinstance(task, DataflowTask):
             raise TypeError("Dependency must be an instance of DataflowTask class")
         
-        self._dependencies.append(node)
+        self._dependencies.append(task)
 
-    def add_dependencies(self, nodes):
-        for node in nodes:
-            if not isinstance(node, DataflowTask):
+    def add_dependencies(self, tasks):
+        for task in tasks:
+            if not isinstance(task, DataflowTask):
                 raise TypeError("Dependency must be an instance of DataflowTask class")
             
-            self.add_dependency(node)
+            self.add_dependency(task)
 
     # Overload >> operator dependency chaining
-    def __rshift__(self, node):
-        node.add_dependency(self)
-        return node
+    def __rshift__(self, task):
+        task.add_dependency(self)
+        return task
     
     def run(self):
         input_dfs = {}
-        for node in self._dependencies:
-            node.run()
-            input_dfs.update(node.get_results())
+        for task in self._dependencies:
+            task.run()
+            input_dfs.update(task.get_results())
 
         print(f"{self.name} task is running...")
         self.process(input_dfs)

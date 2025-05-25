@@ -44,9 +44,9 @@ class DataflowManager:
         for dataflow in self.dataflows.values():
             dataflow.execute()
 
-    # get data from a specific node in an object's dataflow
-    # note: object is associated with a dataflow class that has a list of nodes e.g. for fetching data, processing data, or ML
-    def get_data(self, object, nodeID):
+    # get data from a specific task in an object's dataflow
+    # note: object is associated with a dataflow class that has a list of tasks e.g. for fetching data, processing data, or ML
+    def get_data(self, object, task_name):
         # get class of nodeClassInstance
         # nodeClass = nodeClassInstance.__class__
         # check if nodeclass is subclass of Node
@@ -57,10 +57,8 @@ class DataflowManager:
             raise Exception("Object doesn't have any dataflow")
         # get the dataflow instance
         dataflow = self.dataflows[object.name]
-        return dataflow.get_data(nodeID)
+        return dataflow.get_data(task_name)
     
     # overload [] operator 
     def __getitem__(self, key):
-        if key not in self.dataflows:
-            self.dataflows[key] = Dataflow(key)
-        return self.dataflows[key]
+        return self.new_dataflow(key)
