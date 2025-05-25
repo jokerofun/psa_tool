@@ -1,5 +1,5 @@
 import cvxpy as cp
-from dataflow.dataflow_manager_v2 import DataflowManager
+from src.dataflow.dataflow_manager_v2 import DataflowManager
 from .selector import Selector
 # from persistence.db_manager import DBManager
 

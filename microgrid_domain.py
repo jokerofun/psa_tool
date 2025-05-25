@@ -2,25 +2,6 @@ from src.optimization.energy_domain import Resource
 
 import cvxpy as cp
 
-# class Node():
-#     def __init__(self, name):
-#         self.name = name
-#         self.parameters = []
-#         self.variables = []
-
-#     def constraints(self, t):
-#         return []
-
-#     def add_parameter(self, parameter):
-#         self.parameters.append(parameter)
-
-#     def add_variable(self, variable):
-#         self.variables.append(variable)
-    
-#     @property
-#     def cost(self):
-#         return 0
-
 class Consumer(Resource):
     def __init__(self, name, consumption_kWh=[]):
         super().__init__(name)
@@ -173,11 +154,3 @@ class Grid(Resource):
     @property
     def variables(self):
         return {self.name : {"powerFlow" : self.energy_import.value}}
-    
-    # def constraints(self, t):
-    #     energy_produced = sum([unit.power_output_kWh[t] for unit in self.production_units])
-    #     energy_consumed = sum([unit.consumption_kWh[t] for unit in self.consumption_units])
-    #     energy_charged = sum([unit.charge[t] for unit in self.storage_units])
-    #     energy_discharged = sum([unit.discharge[t] for unit in self.storage_units])
-
-    #     return [energy_produced + energy_charged + self.energy_import[t] == energy_consumed + energy_discharged]

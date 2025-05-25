@@ -1,28 +1,19 @@
-from src.optimization.base_domain import GraphProblemClass
+from src.optimization.graph_problem_class import GraphProblemClass
 from src.optimization.energy_domain import ConnectingNode
 from microgrid_domain import Consumer, Grid, SolarPanel, Battery, WindTurbine
-from src.dataflow.dataflow_classes import DataFetchingFromFileNode
-from src.dataflow.dataflow_manager import DataFlowManager
+from src.dataflow.dataflow_classes_v2 import DataFetchingFromFileTask
+from src.dataflow.dataflow_manager_v2 import DataflowManager
+from src.dataflow.dataflow_v2 import Dataflow
 import numpy as np
-
-def procFunc1(dfs):
-    # do some processing
-    print("Processing data")
-    dfs = dfs["csv_prices"] 
-    return dfs
-
-def trainFunc1(dfs):
-    # do some processing
-    print("Training model")
-    return dfs
+from src.dataflow.default_tasks import *
 
 if __name__ == "__main__":
     # Define the parameters for the microgrid
     T = 24 # time segments
-    no_households = 50
+    no_households = 2
     solar_capacity_household = 5 # kW
     solar_capacity_school = 25 # kW
-    wind_capacity = 50 # kW
+    wind_capacity = 1 # kW
     no_batteries = 1
     battery_capacity = 500 # kWh
     battery_power = 500 # kW
@@ -40,13 +31,13 @@ if __name__ == "__main__":
 
     # Create microgrid models/components
     grid = Grid("grid1")
-    household_consumers = [Consumer(f"household_{i}", household_consumption[i]) for i in range(no_households)]
+    household_consumers = [Consumer(f"household_{i+1}", household_consumption[i]) for i in range(no_households)]
     school = Consumer("school", school_consumption)
-    solar_panels_household = [SolarPanel(f"solar_panel_{i}", solar_capacity_household * solar_profile) for i in range(no_households)]
+    solar_panels_household = [SolarPanel(f"solar_panel_{i+1}", solar_capacity_household * solar_profile) for i in range(no_households)]
     solar_panel_school = SolarPanel("solar_panel_school", solar_capacity_school * solar_profile)
     wind_turbine = WindTurbine("wind_turbine", wind_capacity * wind_profile)
     balance = ConnectingNode("balance")
-    batteries = [Battery(f"battery_{i}", battery_power, battery_power, battery_capacity, battery_efficiency) for i in range(no_batteries)]
+    batteries = [Battery(f"battery_{i+1}", battery_power, battery_power, battery_capacity, battery_efficiency) for i in range(no_batteries)]
     
     # add components to the problem class
     problemClass.add_nodes(household_consumers)
@@ -64,8 +55,13 @@ if __name__ == "__main__":
 
     problemClass.set_time_length(T)
 
-    # problemClass.get_objective_function("minimize").values("cost")
-    # result = problemClass.solve()
-    # allVariables = problemClass.get_all_variables()
-    # print(allVariables)
-    print(household_consumers[10].name)
+    result = problemClass.solve(objective="minimize", value="cost")
+
+    # PE_dataflow = DataflowManager.getInstance().new_dataflow(wind_turbine)
+
+    # PE_dataflow.task("csv_prices", DataFetchingFromFileTask, "data/test_data/pricesEUR.csv") >> PE_dataflow.task(name="prepoc", process_func=procFunc1)
+    # PE_dataflow.task("csv_prices_dkk", DataFetchingFromFileTask, "data/test_data/pricesDKK.csv") >> PE_dataflow.task(name="prepoc")
+    # PE_dataflow.task(name="prepoc") >> PE_dataflow.task(name="training", process_func=trainFunc1, final=True)
+
+    # PE_dataflow.execute()
+    # print(PE_dataflow.results)

@@ -20,27 +20,21 @@ class DataflowManager:
         else:
             DataflowManager.__instance = self
             self.dataflows = {}
-
-    def new_dataflow(self, object) -> Dataflow:
-        # check if NodeClass is Node class or its subclass
-        if not isinstance(object, Node):
-            raise Exception("Object should be a subclass of Node")
-        # check if NodeClass is already in the dataFlows
-        if object.name in self.dataflows:
-            return self.dataflows[object.name]
-        dataflow = Dataflow(object.name, object)
-        self.dataflows[object.name] = dataflow
-
-        return self.dataflows[object.name]
     
-    def new_dataflow(self, object, dataflow) -> Dataflow:
+    def new_dataflow(self, object, dataflow = None) -> Dataflow:
+        if object is None:
+            raise Exception("Object cannot be None")
         if not isinstance(object, Node):
             raise Exception("Object should be a subclass of Node")
-        if not isinstance(dataflow, Dataflow):
+        if dataflow is not None and not isinstance(dataflow, Dataflow):
             raise Exception("Dataflow should be an instance of Dataflow class")
-        
+
         if object.name in self.dataflows:
             return self.dataflows[object.name]
+         
+        if dataflow is None:
+            dataflow = Dataflow(object.name, object)
+
         self.dataflows[object.name] = dataflow
 
         return dataflow

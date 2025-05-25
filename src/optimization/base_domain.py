@@ -5,6 +5,7 @@ class Node():
     def __init__(self, name):
         self.name = name
         self.dataflow = Dataflow(f"{self.name}_dataflow", self)
+        self.dataflow.default_workflow(source="data/test_data/pricesEUR.csv")
     
     def __repr__(self):
         return f"Node(name={self.name})"
