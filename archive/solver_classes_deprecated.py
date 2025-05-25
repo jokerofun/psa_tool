@@ -7,16 +7,18 @@ from ..src.optimization.selector import Selector
 class BaseSolverClass():
     pass
 
+
 class GraphProblemClass():
     _objective = ""
     _selector = None
+
     def __init__(self, name):
         self.name = name
         self._nodes = []
 
     def __repr__(self):
         return f"GraphProblemClass(name={self.name},nodes={self._nodes})"
-    
+
     def add_node(self, node):
         self._nodes.append(node)
 
@@ -24,27 +26,29 @@ class GraphProblemClass():
         self._nodes.extend(nodes)
 
     def get_node(self, node_name):
-        node = next((item for item in self._nodes if getattr(item, "name", None) == str(node_name)), None)
+        node = next((item for item in self._nodes if getattr(
+            item, "name", None) == str(node_name)), None)
 
         return node
 
     def collectCosts(self):
         return cp.sum([node.cost for node in self._nodes])
-    
+
     def collectConstraints(self, t):
         constraints = []
         for node in self._nodes:
             constraints.extend(node.constraints(t))
         return constraints
-    
+
     # objective function builder, with minimize or maximize
-    def getObjectiveFunction(self, objective : str = "minimize"):
+    def getObjectiveFunction(self, objective: str = "minimize"):
         self._objective = objective.lower()
         if self._objective != "minimize" and self._objective != "maximize":
-            raise ValueError("Objective function must be either minimize or maximize")
+            raise ValueError(
+                "Objective function must be either minimize or maximize")
         self._selector = Selector(self._nodes)
         return self._selector
-    
+
     def solve(self):
         objective = None
         if self._objective == "minimize":
@@ -79,13 +83,14 @@ class GraphProblemClass():
         for node in self._nodes:
             node.setTimeLen(time_len)
 
+
 class Node():
-    def __init__(self, problem_class : GraphProblemClass):
+    def __init__(self, problem_class: GraphProblemClass):
         self.problem_class = problem_class
         if problem_class is not None:
             problem_class.add_node(self)
         self.name = ""
-        
+
     def get_attr(self, attr):
         """
         Retrieve the attribute value by name.
@@ -94,11 +99,12 @@ class Node():
         try:
             return getattr(self, attr)
         except AttributeError:
-            raise AttributeError(f"{self.__class__.__name__} has no attribute '{attr}'")
-        
+            raise AttributeError(
+                f"{self.__class__.__name__} has no attribute '{attr}'")
+
     def constraints(self, t):
         return []
-    
+
     def get_parameters(self):
         attributes = vars(self)
         primitive_attributes_only = {}
@@ -111,23 +117,24 @@ class Node():
                 primitive_attributes_only[key] = None
 
         return primitive_attributes_only
-    
+
     @abc.abstractmethod
     def getConnectingNode(self):
         return
-    
+
     @abc.abstractmethod
     def setConnectingNode(self, connecting_node):
         return
-    
+
     @property
     def variables(self):
         return []
-    
+
     @property
     def cost(self):
         return
-    
+
+
 class ConnectingNode(Node):
     def __init__(self, problem_class):
         super().__init__(problem_class)
@@ -142,8 +149,8 @@ class ConnectingNode(Node):
 
     def constraints(self, t):
         return [cp.sum([node.powerflow(t) for node in self.connected_nodes]) == 0]
-    
-## find a better name for this class, because it is not a leaf     
+
+
 class DeviceNode(Node):
     def __init__(self, problem_class):
         super().__init__(problem_class)
@@ -151,22 +158,22 @@ class DeviceNode(Node):
 
     def powerflow(self):
         return
-    
+
     @property
     def cost(self):
-        return 
-    
+        return
+
     @property
     def variables(self):
         return []
-    
+
     def getConnectingNode(self):
         return self.connecting_node
-    
+
     def setConnectingNode(self, connecting_node):
         self.connecting_node = connecting_node
-    
-    def __sub__(self, other: Node): 
+
+    def __sub__(self, other: Node):
         if self.connecting_node is None and other.getConnectingNode() is None:
             self.connecting_node = ConnectingNode(self.problem_class)
             other.setConnectingNode(self.connecting_node)
@@ -177,4 +184,4 @@ class DeviceNode(Node):
             self.connecting_node.connect(self)
         elif other.connecting_node is None:
             other.setConnectingNode(self.connecting_node)
-            self.connecting_node.connect(other)  
+            self.connecting_node.connect(other)
