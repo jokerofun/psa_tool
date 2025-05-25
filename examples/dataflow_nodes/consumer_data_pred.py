@@ -2,7 +2,7 @@
 import os
 import sys
 import pandas as pd
-from pycaret.regression import load_model, predict_model
+from pycaret.regression import load_model, predict_model, compare_models, setup, save_model
 
 sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../..')))
@@ -15,7 +15,7 @@ def predict_consumer_data(dataframe=None, hours=24, model_name="consumer_model")
     Parameters
     ----------
     dataframe : pd.DataFrame, optional
-        Dataframe containing the input data for prediction. If None, it will fetch data from the dataflow.
+        Dataframe containing the input data for prediction. If None, an empty dataframe will be created with the necessary features.
     hours : int, optional
         Number of hours to predict. Default is 24.
     model_name : str, optional
@@ -27,7 +27,7 @@ def predict_consumer_data(dataframe=None, hours=24, model_name="consumer_model")
         Dataframe containing the predictions.
     """
 
-    # Create a dataframe containing datetime index, hour, dayofweek, and month features for the next week
+    # Create a dataframe containing datetime index, hour, dayofweek, and month features for the next n hours
     df = pd.DataFrame({
         'datetime': pd.date_range(start=pd.Timestamp.now().normalize(), periods=hours, freq='H')
     })
@@ -37,10 +37,13 @@ def predict_consumer_data(dataframe=None, hours=24, model_name="consumer_model")
     df['month'] = df.index.month
 
     # Load the trained model
-    model = load_model(model_name)
+    try:
+        model = load_model(model_name)
+    except FileNotFoundError:
+        model = None
 
     if model is None:
-        train_consumer_model(dataframe=df, model_name=model_name)
+        train_consumer_model(dataframe=None, model_name=model_name)
         model = load_model(model_name)
 
     # Make predictions
@@ -77,17 +80,14 @@ def train_consumer_model(dataframe=None, model_name="consumer_model"):
     df['dayofweek'] = df.index.dayofweek
     df['month'] = df.index.month
 
-    # Initialize PyCaret regression setup
-    from pycaret.regression import setup, create_model, save_model
-    setup(data=df, target='active_energy_kWh', session_id=123)
+    # Initialize PyCaret setup with gpu support
+    setup(data=df, target='active_energy_kWh', session_id=123, use_gpu=True)
 
-    # Create a regression model
-    model = create_model('lr')  # 'lr' for linear regression
+    # Find best model with turbo mode enabled
+    best_model = compare_models(turbo=True)
 
     # Save the trained model
-    save_model(model, model_name)
-
-# Fetch training data
+    save_model(best_model, model_name)
 
 
 def fetch_training_data():
@@ -110,7 +110,7 @@ def fetch_training_data():
         df['Date'] + ' ' + df['Time'], dayfirst=True)
     df.set_index('datetime', inplace=True)
 
-    # Convert relevant columns to numeric
+    # Convert relevant column to numeric
     df['global_active_power'] = pd.to_numeric(
         df['Global_active_power'], errors='coerce')
 
@@ -124,4 +124,19 @@ def fetch_training_data():
 if __name__ == "__main__":
     # df = fetch_training_data()
     # train_consumer_model(df)
-    predict_consumer_data()
+    predictions = predict_consumer_data()
+
+    # Plot the predictions
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=(10, 5))
+    plt.plot(predictions.index,
+             predictions['consumption_kWh'], label='Predicted Consumption (kWh)')
+    plt.title('Predicted Consumer Data')
+    plt.xlabel('Datetime')
+    plt.ylabel('Consumption (kWh)')
+    plt.legend()
+    plt.grid()
+    plt.tight_layout()
+    plt.show()
+    plt.savefig("predicted_consumer_data.png")
+    print(predictions)

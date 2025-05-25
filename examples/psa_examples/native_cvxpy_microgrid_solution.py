@@ -23,7 +23,7 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     num_homes = 50
     solar_capacity_home = 5  # kW
     solar_capacity_school = 25  # kW
-    wind_capacity = 100  # kW
+    wind_capacity = 1000  # kW
     n_batteries = num_batteries
     battery_capacity = 500  # kWh
     battery_power = 500  # kW max charge/discharge
@@ -32,13 +32,17 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     # Actual data
     df: dict = {}
 
+    # NOTE Using predicted consumer data
     demand = predict_consumer_data(dataframe=None, hours=T)
     df["total_demand"] = demand["consumption_kWh"] * num_homes
     total_demand = df["total_demand"].values
+
+    # NOTE Using mock data
     # demand = generate_consumption_data(df, parameters={"A0" : 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9})
     # demand["consumption"] = (demand["consumption"] * num_homes) / 100
     # total_demand = demand
     # df["total_demand"] = total_demand
+
     wind_data = get_wind_data(df)
     irradiation_data = get_irradiation_data(df)
     df["wind_data"] = wind_data
