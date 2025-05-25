@@ -8,6 +8,7 @@ import os
 import pandas as pd
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from examples.dataflow_nodes.consumer_data_pred import predict_consumer_data
 from examples.dataflow_nodes.consumer_mock_data_gen import generate_consumption_data
 from examples.dataflow_nodes.openmeteo_irradiation import get_irradiation_data
 from examples.dataflow_nodes.openmeteo_wind import get_wind_data
@@ -30,10 +31,14 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     
     # Actual data
     df: dict = {}
-    demand = generate_consumption_data(df, parameters={"A0" : 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9})
-    demand["consumption"] = (demand["consumption"] * num_homes) / 100
-    total_demand = demand
-    df["total_demand"] = total_demand
+
+    demand = predict_consumer_data(dataframe=None, hours=T)
+    df["total_demand"] = demand["consumption_kWh"] * num_homes
+    total_demand = df["total_demand"].values
+    # demand = generate_consumption_data(df, parameters={"A0" : 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9})
+    # demand["consumption"] = (demand["consumption"] * num_homes) / 100
+    # total_demand = demand
+    # df["total_demand"] = total_demand
     wind_data = get_wind_data(df)
     irradiation_data = get_irradiation_data(df)
     df["wind_data"] = wind_data
@@ -41,7 +46,6 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     wind_prod = generate_wind_turbine_data(df, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
     solar_prod = generate_solar_panel_data(df, parameters={"rated_power": solar_capacity_home,})
 
-    total_demand = total_demand.values[:, 1]
     solar_prod = solar_prod.values[:, 1]
     wind_prod = wind_prod.values[:, 1]
 
@@ -242,4 +246,4 @@ def solve_microgrid_with_mock_data(time_intervals=24, num_batteries=1):
 
 if __name__ == "__main__":
     # Benchmark.run(solve_microgrid, runs=1)
-    Benchmark.run(solve_microgrid_with_mock_data, 24, 3, runs=1)
+    Benchmark.run(solve_microgrid, 24, 3, runs=1)
