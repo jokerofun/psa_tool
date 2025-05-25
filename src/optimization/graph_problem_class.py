@@ -4,8 +4,9 @@ from .selector import Selector
 # from persistence.db_manager import DBManager
 
 class GraphProblemClass():
-    def __init__(self, name):
+    def __init__(self, name, time_length=24):
         self.name = name
+        self.time_length = time_length
         self._nodes = []
         self._objective = ""
         self._selector = None
@@ -30,6 +31,10 @@ class GraphProblemClass():
             if hasattr(node, "dataflow") and node.dataflow is not None:
                 self._dataflow_manager.new_dataflow(node, node.dataflow)
     
+    def set_time_length(self):
+        for node in self._nodes:
+            node.set_time_length(self.time_length)
+
     def collect_costs(self):
         return cp.sum([node.cost for node in self._nodes])
     
@@ -54,6 +59,9 @@ class GraphProblemClass():
         self.fetch_dataflows()
         self._dataflow_manager.execute()
         
+        # set time length for all nodes (which basically initializes the decision variables for nodes)
+        self.set_time_length()
+
         # build the objective function
         self.get_objective_function(objective).values(value)
         objective = None
@@ -63,17 +71,20 @@ class GraphProblemClass():
             objective = cp.Maximize(cp.sum(self._selector.get()))
         else:
             raise ValueError("_objective was not set")
-        
+
+        # collect all constraints from the nodes
         constraints = []
         for t in range(self.time_length):
             constraints.extend(self.collect_constraints(t))
+        
+        # build and solve the optimization problem
         problem = cp.Problem(objective, constraints)
         problem.solve(solver=solver, verbose=True)
 
         if problem.status == cp.OPTIMAL:
             print(f"Result: {problem.value}")
 
-        # print values of decision variables in the nodes of the GraphProblemClass
+        # print values of decision variables of the nodes in the GraphProblemClass
         print("-" * 50)
         self.print_results()
         print("-" * 50)
@@ -84,6 +95,7 @@ class GraphProblemClass():
     def print_results(self):
         for node in self._nodes:
             print(node.variables)
+    
 
     def get_all_variables(self):
         variables = []
@@ -91,8 +103,3 @@ class GraphProblemClass():
             variables.append(node.variables)
             
         return variables
-
-    def set_time_length(self, time_length):
-        self.time_length = time_length
-        for node in self._nodes:
-            node.set_time_length(time_length)

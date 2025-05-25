@@ -27,7 +27,7 @@ if __name__ == "__main__":
     wind_profile = np.clip(np.sin(np.linspace(0, 2 * np.pi, T) - 1), 0, None) # kWh
 
     # Create optimization problem class
-    problemClass = GraphProblemClass("microgrid_problem")
+    problemClass = GraphProblemClass("microgrid_problem", time_length=T)
 
     # Create microgrid models/components
     grid = Grid("grid1")
@@ -52,8 +52,6 @@ if __name__ == "__main__":
     balance.connect_nodes(solar_panels_household)
     balance.connect_nodes([grid, school, solar_panel_school, wind_turbine])
     balance.connect_nodes(batteries)
-
-    problemClass.set_time_length(T)
 
     result = problemClass.solve(objective="minimize", value="cost")
 

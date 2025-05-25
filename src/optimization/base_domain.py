@@ -36,21 +36,13 @@ class Node():
     def get_class_name(self):
         return self.__class__.__name__
     
-    @abc.abstractmethod
-    def getConnectingNode(self):
-        pass
-    
-    @abc.abstractmethod
-    def setConnectingNode(self, connecting_node):
-        pass
-    
     def constraints(self, t):
         return []
 
     @property
     def variables(self):
-        return []
+        pass
     
     @property
     def cost(self):
-        return
+        pass

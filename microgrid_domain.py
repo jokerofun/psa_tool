@@ -7,7 +7,7 @@ class Consumer(Resource):
         super().__init__(name)
         self.consumption_kWh = consumption_kWh # power consumption in kWh
 
-    def set_time_length(self, time_len):
+    def set_time_length(self, t):
         pass
 
     def powerflow(self, t):
@@ -26,6 +26,9 @@ class Producer(Resource):
         super().__init__(name)
         self.max_power_output_kW = max_power_output_kW
 
+    def set_time_length(self, t):
+        pass
+
     @property
     def cost(self):
         return 0
@@ -35,8 +38,8 @@ class SolarPanel(Producer):
         super().__init__(name, max_power_output_kW)
         # self.init_variables(self)
 
-    def set_time_length(self, time_len):
-        self.c = cp.Variable(time_len, nonneg=True) # control variable c
+    def set_time_length(self, t):
+        self.c = cp.Variable(t, nonneg=True) # control variable c
 
     def powerflow(self, t):
         return self.c[t] * self.max_power_output_kW[t]
@@ -67,8 +70,8 @@ class WindTurbine(Producer):
     def powerflow(self, t):
         return self.max_power_output_kW[t]
     
-    def set_time_length(self, time_len):
-        self.time_length = time_len
+    def set_time_length(self, t):
+        self.time_length = t
 
     @property
     def cost(self):
@@ -86,7 +89,6 @@ class Battery(Resource):
         self.capacity_kWh = capacity_kWh
         self.efficiency = efficiency
 
-
         # self.init_variables(self)
 
     # def init_variables(self):
@@ -95,11 +97,11 @@ class Battery(Resource):
     #     self.add_variable(self.SoC)
     #     self.add_variable(self.mode) # control variable mode
 
-    def set_time_length(self, time_len):
-        self.charge = cp.Variable(time_len, nonneg=True)
-        self.discharge = cp.Variable(time_len, nonneg=True)
+    def set_time_length(self, t):
+        self.charge = cp.Variable(t, nonneg=True)
+        self.discharge = cp.Variable(t, nonneg=True)
         # self.mode = cp.Variable(time_len, boolean=True)
-        self.SoC = cp.Variable(shape = (time_len), nonneg=True)
+        self.SoC = cp.Variable(shape = (t), nonneg=True)
 
     def constraints(self, t):
         constraints = [
@@ -141,8 +143,8 @@ class Grid(Resource):
     # def init_variables(self):
     #     self.add_variable(self.energy_import)
 
-    def set_time_length(self, time_len):
-        self.energy_import = cp.Variable(time_len, nonneg=True)
+    def set_time_length(self, t):
+        self.energy_import = cp.Variable(t, nonneg=True)
 
     def powerflow(self, t):
         return self.energy_import[t]
