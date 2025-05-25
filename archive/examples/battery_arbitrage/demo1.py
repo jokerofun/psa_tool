@@ -1,8 +1,10 @@
 import numpy as np
-from archive.lib_descriptive import plot_battery_arbitrage_multiple
-from archive.solver_classes_deprecated import GraphProblemClass, Battery, PowerExchange
-from dataflow_manager.dataflow_classes import DataProcessingNode, DataFetchingFromFileNode
-import dataflow_manager.dataflow_manager as manager
+
+from archive._9th_Semester.src.lib_descriptive import plot_battery_arbitrage_multiple
+from archive.solver_classes_deprecated import GraphProblemClass
+from archive.examples.battery_arbitrage.domain import Battery, PowerExchange
+from src.dataflow.dataflow_classes import DataProcessingNode, DataFetchingFromFileNode
+import src.dataflow.dataflow_manager as manager
 
 if __name__ == "__main__":
     problemClass = GraphProblemClass()

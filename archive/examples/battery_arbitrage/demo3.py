@@ -1,6 +1,6 @@
-from dataflow_manager.dataflow_classes import DataFetchingFromFileNode
-from dataflow_manager.dataflow_manager import DataFlowManager
-from optimization.energy_sector_classes import PowerExchange
+from src.dataflow.dataflow_classes import DataFetchingFromFileNode
+from src.dataflow.dataflow_manager import DataFlowManager
+from archive.examples.energy_domain_deprecated import PowerExchange
 from persistence.db_manager import DBManager
 
 def procFunc1(dfs):

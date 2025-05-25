@@ -1,5 +1,5 @@
 from archive.solver_classes_deprecated import GraphProblemClass
-from optimization.energy_sector_classes import Battery, PowerExchange
+from archive.examples.energy_domain_deprecated import Battery, PowerExchange
 from persistence.db_manager import DBManager
 
 if __name__ == "__main__":
