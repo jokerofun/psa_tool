@@ -1,4 +1,4 @@
-from solver_classes import Node, ConnectingNode, DeviceNode
+from archive.solver_classes_deprecated import Node, ConnectingNode, DeviceNode
 import cvxpy as cp
 
 class TransmissionLine(DeviceNode):

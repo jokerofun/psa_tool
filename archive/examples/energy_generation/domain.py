@@ -1,4 +1,4 @@
-from optimization.solver_classes import Node
+from archive.solver_classes_deprecated import Node
 import cvxpy as cp
 
 class Generator(Node):

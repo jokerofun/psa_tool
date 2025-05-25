@@ -3,7 +3,7 @@ import queue
 from typing import Dict, TYPE_CHECKING
 
 from .dataflow import Dataflow
-from src.optimization.solver_classes import Node
+from src.optimization.base_domain import Node
 
 # if TYPE_CHECKING:
 #     import pandas as pd

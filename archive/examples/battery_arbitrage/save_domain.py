@@ -1,4 +1,4 @@
-from optimization.solver_classes import GraphProblemClass
+from archive.solver_classes_deprecated import GraphProblemClass
 from optimization.energy_sector_classes import Battery, PowerExchange
 from persistence.db_manager import DBManager
 

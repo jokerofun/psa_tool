@@ -5,11 +5,11 @@
 # define batteries and power exhanges or load them from db
 
 import numpy as np
-from dataflow_manager.dataflow_classes import DataFetchingFromFileNode
-from dataflow_manager.dataflow_manager import DataFlowManager
-from archive.lib_descriptive import plot_battery_arbitrage_multiple
-from optimization.energy_sector_classes import Battery, PowerExchange
-from optimization.solver_classes import GraphProblemClass
+from src.dataflow.dataflow_classes import DataFetchingFromFileNode
+from src.dataflow.dataflow_manager import DataFlowManager
+# from "./archive/9th Semester/src/lib_descriptive" import plot_battery_arbitrage_multiple
+from archive.examples.battery_arbitrage.domain import Battery, PowerExchange
+from archive.solver_classes_deprecated import GraphProblemClass
 
 def procFunc1(dfs):
     # do some processing
@@ -74,6 +74,6 @@ if __name__ == "__main__":
 
     soc = np.array(soc)
     power_flow = np.array(power_flow)
-    plot_battery_arbitrage_multiple(power_exchange.prices, soc, power_flow, 3)
+    # plot_battery_arbitrage_multiple(power_exchange.prices, soc, power_flow, 3)
     
     

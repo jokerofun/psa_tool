@@ -1,4 +1,4 @@
-from ....src.optimization.solver_classes import Battery
+from archive.examples.energy_domain_deprecated import Battery
 import numpy as np
 
 # battery extended with degradation

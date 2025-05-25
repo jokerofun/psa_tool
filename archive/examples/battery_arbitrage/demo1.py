@@ -1,6 +1,6 @@
 import numpy as np
 from archive.lib_descriptive import plot_battery_arbitrage_multiple
-from optimization.solver_classes import GraphProblemClass, Battery, PowerExchange
+from archive.solver_classes_deprecated import GraphProblemClass, Battery, PowerExchange
 from dataflow_manager.dataflow_classes import DataProcessingNode, DataFetchingFromFileNode
 import dataflow_manager.dataflow_manager as manager
 

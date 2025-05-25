@@ -28,7 +28,7 @@ class DataflowNode:
             node.run()
             input_dfs.update(node.get_results())
 
-        print(f"{self.name} is running")
+        print(f"{self.name} task is running")
         self.process(input_dfs)
         self._results = input_dfs
 
@@ -79,8 +79,8 @@ class DataFetchingFromAPINode(DataFetchingNode):
     
 # Example usage
 if __name__ == "__main__":
-    pricesEUR = DataFetchingFromFileNode(name="pricesEUR", source="dataflow_manager/test_data/pricesEUR.csv")
-    pricesDKK = DataFetchingFromFileNode(name="pricesDKK", source="dataflow_manager/test_data/pricesDKK.csv")
+    pricesEUR = DataFetchingFromFileNode(name="pricesEUR", source="data/test_data/pricesEUR.csv")
+    pricesDKK = DataFetchingFromFileNode(name="pricesDKK", source="data/test_data/pricesDKK.csv")
 
     def merge_dataframes(dfs):
         dfs["merged_prices"] = pd.concat([dfs["pricesEUR"], dfs["pricesDKK"]])

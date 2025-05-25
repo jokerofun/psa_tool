@@ -1,7 +1,7 @@
 from dataflow_manager.dataflow_classes import DataFetchingFromFileNode
 from dataflow_manager.dataflow_manager import DataFlowManager
 from archive.energy_generation.models import Generator, Area
-from optimization.solver_classes import GraphProblemClass
+from archive.solver_classes_deprecated import GraphProblemClass
 
 import matplotlib.pyplot as plt
 

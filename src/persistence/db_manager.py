@@ -1,7 +1,7 @@
 import duckdb
 import json
 
-from optimization.solver_classes import GraphProblemClass
+from src.optimization.base_domain import GraphProblemClass
 from persistence.class_builder import ClassBuilder
 
 class DBManager:

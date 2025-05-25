@@ -1,4 +1,4 @@
-from src.optimization.base_domain import DeviceNode, ConnectingNode
+from src.optimization.energy_domain import Resource
 
 import cvxpy as cp
 
@@ -21,7 +21,7 @@ import cvxpy as cp
 #     def cost(self):
 #         return 0
 
-class Consumer(DeviceNode):
+class Consumer(Resource):
     def __init__(self, name, consumption_kWh=[]):
         super().__init__(name)
         self.consumption_kWh = consumption_kWh # power consumption in kWh
@@ -32,6 +32,7 @@ class Consumer(DeviceNode):
     def powerflow(self, t):
         return -self.consumption_kWh[t]
     
+    @property
     def variables(self):
         return {self.name : {"powerFlow" : -self.consumption_kWh}}
 
@@ -39,11 +40,10 @@ class Consumer(DeviceNode):
     def cost(self):
         return 0
     
-class Producer(DeviceNode):
+class Producer(Resource):
     def __init__(self, name, max_power_output_kW):
         super().__init__(name)
         self.max_power_output_kW = max_power_output_kW
-        # self.power_output_kWh:list # power output in kWh
 
     @property
     def cost(self):
@@ -52,28 +52,17 @@ class Producer(DeviceNode):
 class SolarPanel(Producer):
     def __init__(self, name, max_power_output_kW):
         super().__init__(name, max_power_output_kW)
-        # self.c = [] # control variable c
-        # self.P_rated_kW = P_rated_kW # rated power capacity in kW
-        # self.Q = Q # solar irradiance per kW/m^2
-        # self.max_power_output_kW = max_power_output_kW # maximum power output in kW
-        # self.c:list
-        # self.power_output_kWh = [x * y for x, y in enumerate(zip(self.c.value, self.max_power_output_kW))] # power output in kWh
         # self.init_variables(self)
 
     def set_time_length(self, time_len):
-        self.c = cp.Variable(time_len, nonneg=True)
-        # self.power_output_kWh = cp.Variable(time_len, nonneg=True) # power output in kWh
+        self.c = cp.Variable(time_len, nonneg=True) # control variable c
 
     def powerflow(self, t):
         return self.c[t] * self.max_power_output_kW[t]
     
     def constraints(self, t):
-        # self.power_output_kWh[t] = self.c[t] * self.max_power_output_kW[t] # power output in kWh
         return [self.c[t] >= 0,
-                self.c[t] <= 1 
-                # self.power_output_kWh[t] == self.c[t] * self.P_rated_kW * self.Q[t], 
-                # self.power_output_kWh[t] == self.c[t] * self.max_power_output_kW[t]
-            ]
+                self.c[t] <= 1]
 
     # def init_variables(self):
     #     self.add_variable(self.c) # control variable c
@@ -84,7 +73,8 @@ class SolarPanel(Producer):
     
     @property
     def variables(self):
-        return {self.name : {"production_schedule" : 0}}
+        # return {self.name : {"production_schedule" : self.c.value * self.max_power_output_kW}}
+        return {self.name : {"production_schedule" : self.c.value}}
 
 class WindTurbine(Producer):
     def __init__(self, name, max_power_output_kW):
@@ -97,7 +87,7 @@ class WindTurbine(Producer):
         return self.max_power_output_kW[t]
     
     def set_time_length(self, time_len):
-        pass
+        self.time_length = time_len
 
     @property
     def cost(self):
@@ -107,17 +97,14 @@ class WindTurbine(Producer):
     def variables(self):
         return {self.name : {"production_schedule" : self.max_power_output_kW}}
     
-class Battery(DeviceNode):
+class Battery(Resource):
     def __init__(self, name, charging_power_kW, discharging_power_kW, capacity_kWh, efficiency):
         super().__init__(name)
-        self.charging_power_kW = charging_power_kW # charging power in kW
+        self.charging_power_kW = charging_power_kW
         self.discharging_power_kW = discharging_power_kW
         self.capacity_kWh = capacity_kWh
         self.efficiency = efficiency
-        # self.charge: list
-        # self.discharge: list
-        # self.SoC: list
-        # self.mode:bool
+
 
         # self.init_variables(self)
 
@@ -140,8 +127,8 @@ class Battery(DeviceNode):
             self.SoC[t] >= 0,
             self.capacity_kWh >= 0,
             self.SoC[t] <= self.capacity_kWh,
-            self.charge[t] <= self.charging_power_kW,# * self.mode[t],
-            self.discharge[t] <= self.discharging_power_kW# * (1 - self.mode[t]),
+            self.charge[t] <= self.charging_power_kW, # * self.mode[t],
+            self.discharge[t] <= self.discharging_power_kW, # * (1 - self.mode[t]),
         ]
         
         if t == 0:
@@ -155,7 +142,7 @@ class Battery(DeviceNode):
         return constraints
     
     def powerflow(self, t):
-        return -(self.charge[t] - self.discharge[t])
+        return self.discharge[t] - self.charge[t]
     
     @property
     def cost(self):
@@ -165,16 +152,9 @@ class Battery(DeviceNode):
     def variables(self):
         return {self.name : {"SOC" : self.SoC.value, "powerFlow":  self.discharge.value - self.charge.value}}
 
-class Grid(ConnectingNode):
+class Grid(Resource):
     def __init__(self, name):
         super().__init__(name)
-        # self.energy_import = [] # energy import in kWh
-        # self.consumption_units = []
-        # self.production_units = []
-        # self.storage_units = []
-
-        # self.energy_import:list
-
         # self.init_variables(self)
     
     # def init_variables(self):
@@ -189,6 +169,10 @@ class Grid(ConnectingNode):
     @property
     def cost(self):
         return cp.sum(self.energy_import)
+    
+    @property
+    def variables(self):
+        return {self.name : {"powerFlow" : self.energy_import.value}}
     
     # def constraints(self, t):
     #     energy_produced = sum([unit.power_output_kWh[t] for unit in self.production_units])

@@ -1,7 +1,7 @@
 import cvxpy as cp
 import abc
 
-from .selector import Selector
+from ..src.optimization.selector import Selector
 # from persistence.db_manager import DBManager
 
 class BaseSolverClass():
