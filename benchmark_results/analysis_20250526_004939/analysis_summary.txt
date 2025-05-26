@@ -1,0 +1,28 @@
+=== Benchmark Analysis Summary ===
+
+--- Performance by Data Size ---
+
+Data Size: 1000.0 rows
+  In-Memory Execution Time: 0.0407s
+  DuckDB Execution Time: 0.0973s
+  Time Ratio (DuckDB/In-Memory): 2.39x
+  In-Memory Memory Usage: 1.89MB
+  DuckDB Memory Usage: 11.44MB
+  Memory Ratio (DuckDB/In-Memory): 6.04x
+
+Data Size: 5000.0 rows
+  In-Memory Execution Time: 0.0803s
+  DuckDB Execution Time: 0.1060s
+  Time Ratio (DuckDB/In-Memory): 1.32x
+  In-Memory Memory Usage: 0.52MB
+  DuckDB Memory Usage: 0.13MB
+  Memory Ratio (DuckDB/In-Memory): 0.25x
+
+--- Overall Findings ---
+On average, DuckDB is 1.86x slower than In-Memory for execution time.
+The performance gap decreases with larger data sizes (change of -1.07x).
+On average, DuckDB uses 3.15x more memory than In-Memory.
+The memory usage difference decreases with larger data sizes (change of -5.79x).
+
+--- Recommendations ---
+In-Memory performs better in both time and memory. Only use DuckDB when persistence is required.

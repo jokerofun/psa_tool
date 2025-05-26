@@ -7,8 +7,8 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 import numpy as np
-from dataflow_manager.dataflow_classes import DataFetchingFromFileNode
-from dataflow_manager.dataflow_manager import DataFlowManager
+from src.dataflow.dataflow_manager import DataFetchingFromFileNode
+from src.dataflow.dataflow_manager import DataFlowManager
 from archive.lib_descriptive import plot_battery_arbitrage_multiple
 from optimization.energy_sector_classes import Battery, PowerExchange
 from optimization.solver_classes import GraphProblemClass
