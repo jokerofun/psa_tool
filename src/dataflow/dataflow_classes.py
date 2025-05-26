@@ -31,7 +31,7 @@ class DataflowNode:
             input_dfs.update(node.get_results())
 
         print(f"{self.name} task is running")
-        self.process(input_dfs)
+        self.process(input_dfs, self._parameters)
         self._results = input_dfs
 
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:

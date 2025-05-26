@@ -5,7 +5,7 @@ import cvxpy as cp
 class Consumer(Resource):
     def __init__(self, name, consumption_kWh=[]):
         super().__init__(name)
-        self.consumption_kWh = consumption_kWh # power consumption in kWh
+        self.consumption_kWh = consumption_kWh
 
     def set_time_length(self, t):
         pass
@@ -34,7 +34,7 @@ class Producer(Resource):
         return 0
 
 class SolarPanel(Producer):
-    def __init__(self, name, max_power_output_kW):
+    def __init__(self, name, max_power_output_kW=[]):
         super().__init__(name, max_power_output_kW)
         # self.init_variables(self)
 

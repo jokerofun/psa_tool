@@ -1,5 +1,3 @@
-import openmeteo_requests
-
 import pandas as pd
 import sys
 import os

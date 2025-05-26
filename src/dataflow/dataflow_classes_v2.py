@@ -8,12 +8,13 @@ import numpy as np
 db_connection = None  # Placeholder for the database connection
 
 class DataflowTask:
-    def __init__(self, name: str, final = False) -> None:
+    def __init__(self, name: str, parameters = {}, final = False) -> None:
         self.id = uuid.uuid4()
         self.name = name
         self._dependencies = []
         self._results = {}
         self._final = final
+        self._parameters = parameters
 
     def add_dependency(self, task):
         if not isinstance(task, DataflowTask):
@@ -40,7 +41,7 @@ class DataflowTask:
             input_dfs.update(task.get_results())
 
         print(f"{self.name} task is running...")
-        self.process(input_dfs)
+        self.process(input_dfs, self._parameters)
         self._results = input_dfs
 
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
@@ -76,12 +77,12 @@ class DataFetchingFromAPITask(DataFetchingTask):
         return pd.DataFrame(response.json())
     
 class DataProcessingTask(DataflowTask):
-    def __init__(self, name: str, process_func: Callable[[Dict[str, pd.DataFrame]], Dict[str, pd.DataFrame]] = None, final = False):
-        super().__init__(name, final)
+    def __init__(self, name: str, process_func: Callable[[Dict[str, pd.DataFrame]], Dict[str, pd.DataFrame]] = None, parameters = Dict[str, any], final = False):
+        super().__init__(name, parameters, final)
         self.process_func = process_func
     
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:
-        return self.process_func(dfs)
+        return self.process_func(dfs, self._parameters)
     
 class MLTask(DataflowTask):
     def __init__(self, name: str, model_func: Callable[[Dict[str, pd.DataFrame]], None], final = True):
