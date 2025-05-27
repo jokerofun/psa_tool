@@ -11,15 +11,31 @@ from examples.dataflow_nodes.openmeteo_irradiation import get_irradiation_data
 from examples.dataflow_nodes.openmeteo_wind import get_wind_data
 from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_data
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
+import cvxpy as cp
+
+def plot_results(t, total_consumption, wind_production, solar_production):
+    import matplotlib.pyplot as plt
+    plt.plot(total_consumption[:t], label='Total Consumption', color='red')
+    plt.plot(wind_production[:t], label='Wind Production', color='blue')
+    plt.plot(solar_production[:t], label='Solar Production', color='orange')
+    plt.plot(wind_production[:t] + solar_production[:t], label='Total Production', color='green')
+    plt.xlabel('Time (hours)')
+    plt.ylabel('Power (kW)')
+    plt.legend()
+    plt.title('Microgrid Power Flow - Consumption vs. Production')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+    plt.savefig("microgrid_result.png")
 
 if __name__ == "__main__":
     # Define the parameters for the microgrid
     T = 24 # time segments
-    no_households = 2
+    no_households = 50
     solar_capacity_household = 5 # kW
     solar_capacity_school = 25 # kW
-    wind_capacity = 1 # kW
-    no_batteries = 1
+    wind_capacity = 500 # kW
+    no_batteries = 3
     battery_capacity = 500 # kWh
     battery_power = 500 # kW
     battery_efficiency = 0.9 # in %
@@ -77,7 +93,17 @@ if __name__ == "__main__":
     balance.connect_nodes([grid, school, solar_panel_school, wind_turbine])
     balance.connect_nodes(batteries)
 
-    result = problemClass.solve(objective="minimize", value="cost")
+    result = problemClass.solve(solver=cp.CBC,objective="minimize", value="cost")
+
+    total_consumption = school.consumption_kWh + sum(household.consumption_kWh for household in household_consumers)
+    solar_production = solar_panel_school.max_power_output_kW + sum(solar_panel.max_power_output_kW for solar_panel in solar_panels_household)
+
+    plot_results(
+        T,
+        total_consumption=total_consumption,
+        wind_production=wind_turbine.max_power_output_kW,
+        solar_production=solar_production
+    )
 
     # PE_dataflow = DataflowManager.getInstance().new_dataflow(wind_turbine)
 
