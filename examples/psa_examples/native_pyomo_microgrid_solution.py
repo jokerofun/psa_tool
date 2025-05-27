@@ -19,7 +19,7 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     num_homes = 50
     solar_capacity_home = 5  # kW
     solar_capacity_school = 25  # kW
-    wind_capacity = 100  # kW
+    wind_capacity = 1000  # kW
     n_batteries = num_batteries
     battery_capacity = 500  # kWh
     battery_power = 500  # kW max charge/discharge
@@ -47,8 +47,8 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     solar_prod = generate_solar_panel_data(df, parameters={"rated_power": solar_capacity_home,})
 
     # total_demand = total_demand.values[:, 1]
-    solar_prod = solar_prod.values[:, 1]
-    wind_prod = wind_prod.values[:, 1]
+    solar_prod = solar_prod.values[:, 1] * num_homes
+    wind_prod = wind_prod.values[:, 2]
 
     model = pyo.ConcreteModel()
     model.T = pyo.RangeSet(0, T-1)
@@ -111,9 +111,12 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     plt.plot(solar_prod[:T], label="Solar Production")
     plt.plot(wind_prod[:T], label="Wind Production")
     plt.plot(solar_prod[:T] + wind_prod[:T], label="Total Renewable Production")
+    # Add battery SoC to the plot
+    for i in range(n_batteries):
+        plt.plot(model.battery_soc[i].value[:-1], label=f"Battery {i} SoC", linestyle="--")
     plt.xlabel("Hour")
     plt.ylabel("kWh")
-    plt.title("Demand and Production Profiles")
+    plt.title("Demand and Production, and Battery SoC Profiles")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -211,9 +214,12 @@ def solve_microgrid_pyomo_with_mock_data(time_intervals=24, num_batteries=1):
     plt.plot(solar_prod[:T], label="Solar Production")
     plt.plot(wind_prod[:T], label="Wind Production")
     plt.plot(solar_prod[:T] + wind_prod[:T], label="Total Renewable Production")
+    # Add battery SoC to the plot
+    for i in range(n_batteries):
+        plt.plot(model.battery_soc[i].value[:-1], label=f"Battery {i} SoC", linestyle="--")
     plt.xlabel("Hour")
     plt.ylabel("kWh")
-    plt.title("Demand and Production Profiles")
+    plt.title("Demand and Production, and Battery SoC Profiles")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -224,4 +230,4 @@ def solve_microgrid_pyomo_with_mock_data(time_intervals=24, num_batteries=1):
 
 if __name__ == "__main__":
     # Benchmark.run(solve_microgrid_pyomo, runs=1)
-    Benchmark.run(solve_microgrid_pyomo, 24, 3, runs=1)
+    Benchmark.run(solve_microgrid_pyomo, 48, 3, runs=3)

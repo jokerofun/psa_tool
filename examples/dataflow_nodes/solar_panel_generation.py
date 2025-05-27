@@ -18,7 +18,7 @@ def generate_solar_panel_data(dataframe : dict, parameters: dict = {"rated_power
     pd.DataFrame
         Dataframe with solar panel data.
     """
-    irradation_df = dataframe["solar_irradation"]
+    irradation_df = dataframe["solar_irradiation"]
     # convert to kW/m2
     irradation_df["direct_irradiation"] = irradation_df["direct_irradiation"] / 1000
 
