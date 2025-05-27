@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../..')))
 
 
-def predict_consumer_data(dataframe=None, hours=24, model_name="consumer_model"):
+def predict_consumer_data(dataframe={}, parameters = {"hours": 24, "model_name":"consumer_model"}):
     """
     Predict consumer data using a trained PyCaret model.
 
@@ -29,7 +29,7 @@ def predict_consumer_data(dataframe=None, hours=24, model_name="consumer_model")
 
     # Create a dataframe containing datetime index, hour, dayofweek, and month features for the next n hours
     df = pd.DataFrame({
-        'datetime': pd.date_range(start=pd.Timestamp.now().normalize(), periods=hours, freq='H')
+        'datetime': pd.date_range(start=pd.Timestamp.now().normalize(), periods=parameters["hours"], freq='H')
     })
     df.set_index('datetime', inplace=True)
     df['hour'] = df.index.hour
@@ -38,20 +38,23 @@ def predict_consumer_data(dataframe=None, hours=24, model_name="consumer_model")
 
     # Load the trained model
     try:
-        model = load_model(model_name)
+        model = load_model(parameters["model_name"])
     except FileNotFoundError:
         model = None
 
     if model is None:
-        train_consumer_model(dataframe=None, model_name=model_name)
-        model = load_model(model_name)
+        train_consumer_model(dataframe=None, model_name=parameters["model_name"])
+        model = load_model(parameters["model_name"])
 
     # Make predictions
     predictions = predict_model(model, data=df)
 
     predictions = predictions[['prediction_label']].rename(
         columns={'prediction_label': 'consumption_kWh'})
-    return predictions
+    
+    dataframe["gen_consumption"] = predictions
+
+    return dataframe
 
 
 def train_consumer_model(dataframe=None, model_name="consumer_model"):

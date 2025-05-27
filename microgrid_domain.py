@@ -22,7 +22,7 @@ class Consumer(Resource):
         return 0
     
     def assign(self, t):
-        self.consumption_kWh = self.dataflow.results["gen_consumption"]["consumption"].tail(t).values
+        self.consumption_kWh = self.dataflow.results["gen_consumption"]["consumption_kWh"].head(t).values
     
 class Producer(Resource):
     def __init__(self, name, max_power_output_kW=[]):
@@ -67,7 +67,7 @@ class SolarPanel(Producer):
         return {self.name : {"production_schedule" : self.c.value}}
     
     def assign(self, t):
-        self.max_power_output_kW = self.dataflow.results["gen_solar_data"]["energy_generated"].tail(t).values
+        self.max_power_output_kW = self.dataflow.results["gen_solar_data"]["energy_generated"].head(t).values
 
 class WindTurbine(Producer):
     def __init__(self, name, max_power_output_kW=[]):
@@ -91,7 +91,7 @@ class WindTurbine(Producer):
         return {self.name : {"production_schedule" : self.max_power_output_kW}}
     
     def assign(self, t):
-        self.max_power_output_kW = self.dataflow.results["gen_wind_data"]["energy_generated"].tail(t).values
+        self.max_power_output_kW = self.dataflow.results["gen_wind_data"]["energy_generated"].head(t).values
     
 class Battery(Resource):
     def __init__(self, name, charging_power_kW, discharging_power_kW, capacity_kWh, efficiency):
