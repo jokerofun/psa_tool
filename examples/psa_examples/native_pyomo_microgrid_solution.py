@@ -2,10 +2,10 @@ import os
 import sys
 from matplotlib import pyplot as plt
 import numpy as np
-from examples.dataflow_nodes.consumer_data_pred import predict_consumer_data
 import pyomo.environ as pyo
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from examples.dataflow_nodes.consumer_data_pred import predict_consumer_data
 from examples.dataflow_nodes.consumer_mock_data_gen import generate_consumption_data
 from examples.dataflow_nodes.openmeteo_irradiation import get_irradiation_data
 from examples.dataflow_nodes.openmeteo_wind import get_wind_data
