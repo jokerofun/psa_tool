@@ -28,7 +28,7 @@ def get_wind_data(dataframe = None, parameters: dict = {"latitude": 0, "longitud
     params = {
         "latitude": parameters["latitude"],
         "longitude": parameters["longitude"],
-        "hourly": "wind_speed_10m",
+        "hourly": "wind_speed_100m",
         "wind_speed_unit": "ms"
     }
     responses = openmeteo_client.get_openmeteo_client().weather_api(url, params=params)
