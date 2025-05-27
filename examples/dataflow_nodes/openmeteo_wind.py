@@ -45,8 +45,10 @@ def get_wind_data(dataframe = None, parameters: dict = {"latitude": 0, "longitud
     hourly_data["wind_speed_10m"] = hourly_wind_speed_10m
 
     hourly_dataframe = pd.DataFrame(data = hourly_data)
+
+    dataframe["get_wind_data"] = hourly_dataframe
     
-    return hourly_dataframe
+    return dataframe
 
 ## example usage
 if __name__ == "__main__":

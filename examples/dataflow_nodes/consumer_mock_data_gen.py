@@ -29,8 +29,9 @@ def generate_consumption_data(dataframe = None, parameters: dict = {"A0" : 0, "A
     
     # Generate consumption data using the parameters
     df["consumption"] = A0 + A1 * (np.sin((df.index-phi0)* 2*np.pi/12) + 1) + A2 * (np.sin((df.index-phi0)* 2*np.pi/24) + 1)
-    
-    return df
+    dataframe["gen_consumption"] = df
+
+    return dataframe
 
 ## example usage
 if __name__ == "__main__":

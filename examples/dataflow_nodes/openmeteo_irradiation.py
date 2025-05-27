@@ -42,7 +42,9 @@ def get_irradiation_data(dataframe = None, parameters: dict = {"latitude": 0, "l
 
     hourly_dataframe = pd.DataFrame(data = hourly_data)
     
-    return hourly_dataframe
+    dataframe["get_solar_data"] = hourly_dataframe
+
+    return dataframe
 
 ## example usage
 if __name__ == "__main__":

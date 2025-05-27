@@ -58,6 +58,9 @@ class GraphProblemClass():
         # fetch dataflows from nodes and execute them
         self.fetch_dataflows()
         self._dataflow_manager.execute()
+        # assign result values from dataflows to parameters in nodes 
+        for node in self._nodes:
+            node.assign(self.time_length)
         
         # set time length for all nodes (which basically initializes the decision variables for nodes)
         self.set_time_length()

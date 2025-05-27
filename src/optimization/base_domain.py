@@ -46,3 +46,6 @@ class Node():
     @property
     def cost(self):
         pass
+
+    def assign(self, t):
+        pass

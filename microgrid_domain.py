@@ -21,8 +21,11 @@ class Consumer(Resource):
     def cost(self):
         return 0
     
+    def assign(self, t):
+        self.consumption_kWh = self.dataflow.results["gen_consumption"]["consumption"].tail(t).values
+    
 class Producer(Resource):
-    def __init__(self, name, max_power_output_kW):
+    def __init__(self, name, max_power_output_kW=[]):
         super().__init__(name)
         self.max_power_output_kW = max_power_output_kW
 
@@ -32,6 +35,9 @@ class Producer(Resource):
     @property
     def cost(self):
         return 0
+    
+    def assign(self, t):
+        pass
 
 class SolarPanel(Producer):
     def __init__(self, name, max_power_output_kW=[]):
@@ -59,9 +65,12 @@ class SolarPanel(Producer):
     def variables(self):
         # return {self.name : {"production_schedule" : self.c.value * self.max_power_output_kW}}
         return {self.name : {"production_schedule" : self.c.value}}
+    
+    def assign(self, t):
+        self.max_power_output_kW = self.dataflow.results["gen_solar_data"]["energy_generated"].tail(t).values
 
 class WindTurbine(Producer):
-    def __init__(self, name, max_power_output_kW):
+    def __init__(self, name, max_power_output_kW=[]):
         super().__init__(name, max_power_output_kW)
 
     def constraints(self, t):
@@ -80,6 +89,9 @@ class WindTurbine(Producer):
     @property
     def variables(self):
         return {self.name : {"production_schedule" : self.max_power_output_kW}}
+    
+    def assign(self, t):
+        self.max_power_output_kW = self.dataflow.results["gen_wind_data"]["energy_generated"].tail(t).values
     
 class Battery(Resource):
     def __init__(self, name, charging_power_kW, discharging_power_kW, capacity_kWh, efficiency):
@@ -134,6 +146,9 @@ class Battery(Resource):
     @property
     def variables(self):
         return {self.name : {"SOC" : self.SoC.value, "powerFlow":  self.discharge.value - self.charge.value}}
+    
+    def assign(self, t):
+        pass
 
 class Grid(Resource):
     def __init__(self, name):
@@ -156,3 +171,6 @@ class Grid(Resource):
     @property
     def variables(self):
         return {self.name : {"powerFlow" : self.energy_import.value}}
+    
+    def assign(self, t):
+        pass

@@ -18,7 +18,7 @@ def generate_solar_panel_data(dataframe : dict, parameters: dict = {"rated_power
     pd.DataFrame
         Dataframe with solar panel data.
     """
-    irradation_df = dataframe["solar_irradation"]
+    irradation_df = pd.DataFrame(dataframe["get_solar_data"])
     # convert to kW/m2
     irradation_df["direct_irradiation"] = irradation_df["direct_irradiation"] / 1000
 
@@ -27,7 +27,9 @@ def generate_solar_panel_data(dataframe : dict, parameters: dict = {"rated_power
     # drop direct_irradiation column
     irradation_df.drop(columns=["direct_irradiation"], inplace=True)
     
-    return irradation_df
+    dataframe["gen_solar_data"] = irradation_df
+
+    return dataframe
 
 # example usage
 if __name__ == "__main__":

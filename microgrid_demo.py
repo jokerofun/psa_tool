@@ -50,17 +50,17 @@ if __name__ == "__main__":
     batteries = [Battery(f"battery_{i+1}", battery_power, battery_power, battery_capacity, battery_efficiency) for i in range(no_batteries)]
     
     for household in household_consumers:
-        household.dataflow.task("gen_consumption", DataProcessingTask, process_func=generate_consumption_data, parameters={"A0": 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9})
-    school.dataflow.task("gen_consumption", DataProcessingTask, process_func=generate_consumption_data, parameters={"A0": 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9})
+        household.dataflow.task("gen_consumption", DataProcessingTask, process_func=generate_consumption_data, parameters={"A0": 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9}, final=True)
+    school.dataflow.task("gen_consumption", DataProcessingTask, process_func=generate_consumption_data, parameters={"A0": 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9}, final=True)
     for solar_panel in solar_panels_household:
         task1 = solar_panel.dataflow.task("get_solar_data", DataProcessingTask, process_func=get_irradiation_data, parameters={"latitude": 57.0488, "longitude": 9.9217})
-        task2 = solar_panel.dataflow.task("gen_solar_data", DataProcessingTask, process_func=generate_solar_panel_data, parameters={"rated_power": solar_capacity_household})
+        task2 = solar_panel.dataflow.task("gen_solar_data", DataProcessingTask, process_func=generate_solar_panel_data, parameters={"rated_power": solar_capacity_household}, final=True)
         task1 >> task2
     school_task1 = solar_panel_school.dataflow.task("get_solar_data", DataProcessingTask, process_func=get_irradiation_data, parameters={"latitude": 57.0488, "longitude": 9.9217}) 
-    school_task2 = solar_panel_school.dataflow.task("gen_solar_data", DataProcessingTask, process_func=generate_solar_panel_data, parameters={"rated_power": solar_capacity_school})
+    school_task2 = solar_panel_school.dataflow.task("gen_solar_data", DataProcessingTask, process_func=generate_solar_panel_data, parameters={"rated_power": solar_capacity_school}, final=True)
     school_task1 >> school_task2
     wind_task1 = wind_turbine.dataflow.task("get_wind_data", DataProcessingTask, process_func=get_wind_data, parameters={"latitude": 57.0488, "longitude": 9.9217})
-    wind_task2 = wind_turbine.dataflow.task("gen_wind_data", DataProcessingTask, process_func=generate_wind_turbine_data, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed": 14, "cut_out_speed": 25})
+    wind_task2 = wind_turbine.dataflow.task("gen_wind_data", DataProcessingTask, process_func=generate_wind_turbine_data, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed": 14, "cut_out_speed": 25}, final=True)
     wind_task1 >> wind_task2
 
     # add components to the problem class
@@ -77,13 +77,13 @@ if __name__ == "__main__":
     balance.connect_nodes([grid, school, solar_panel_school, wind_turbine])
     balance.connect_nodes(batteries)
 
-    # result = problemClass.solve(objective="minimize", value="cost")
+    result = problemClass.solve(objective="minimize", value="cost")
 
-    PE_dataflow = DataflowManager.getInstance().new_dataflow(wind_turbine)
+    # PE_dataflow = DataflowManager.getInstance().new_dataflow(wind_turbine)
 
-    PE_dataflow.task("csv_prices", DataFetchingFromFileTask, "data/test_data/pricesEUR.csv") >> PE_dataflow.task(name="prepoc", process_func=procFunc1)
-    PE_dataflow.task("csv_prices_dkk", DataFetchingFromFileTask, "data/test_data/pricesDKK.csv") >> PE_dataflow.task(name="prepoc")
-    PE_dataflow.task(name="prepoc") >> PE_dataflow.task(name="training", process_func=trainFunc1, final=True)
+    # PE_dataflow.task("csv_prices", DataFetchingFromFileTask, "data/test_data/pricesEUR.csv") >> PE_dataflow.task(name="prepoc", process_func=procFunc1)
+    # PE_dataflow.task("csv_prices_dkk", DataFetchingFromFileTask, "data/test_data/pricesDKK.csv") >> PE_dataflow.task(name="prepoc")
+    # PE_dataflow.task(name="prepoc") >> PE_dataflow.task(name="training", process_func=trainFunc1, final=True)
 
-    PE_dataflow.execute()
-    print(PE_dataflow.results)
+    # PE_dataflow.execute()
+    # print(PE_dataflow.results)

@@ -41,7 +41,7 @@ class DataflowTask:
             input_dfs.update(task.get_results())
 
         print(f"{self.name} task is running...")
-        self.process(input_dfs, self._parameters)
+        self.process(input_dfs)
         self._results = input_dfs
 
     def process(self, dfs: Dict[str, pd.DataFrame]) -> Dict[str, pd.DataFrame]:

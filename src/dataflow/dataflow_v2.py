@@ -7,7 +7,7 @@ class Dataflow:
         self.name = name
         self.object = object
         self.tasks = {}
-        self.results = {}
+        self.result = None
         
     # also include optional arguments for the constructor    
     def task(self, name: str, task_node_type: DataflowTask = None, *args, **kwargs) -> DataflowTask:
