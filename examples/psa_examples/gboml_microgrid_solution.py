@@ -11,33 +11,45 @@ from examples.dataflow_nodes.openmeteo_wind import get_wind_data
 from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_data
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
 
-T = 24 # time segments
-no_households = 50
-solar_capacity_home = 5 # kW
-solar_capacity_school = 25 # kW
-wind_capacity = 1000 # kW
-no_batteries = 3
-battery_capacity = 500 # kWh
-battery_power = 500 # kW
-battery_efficiency = 0.9 # in %
+def run_gboml_microgrid(T, no_households, solar_capacity_home, solar_capacity_school, wind_capacity, 
+                        no_batteries, battery_capacity, battery_power, battery_efficiency):
+    demand = predict_consumer_data()["gen_consumption"]["consumption_kWh"].values * no_households
+    wind_data = get_wind_data(dataframe={}, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    solar_data = get_irradiation_data(dataframe={}, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    wind_prod = generate_wind_turbine_data(wind_data, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
+    solar_prod = generate_solar_panel_data(solar_data, parameters={"rated_power": solar_capacity_home,})
 
-demand = predict_consumer_data()["gen_consumption"]["consumption_kWh"].values * no_households
-wind_dict = {}
-solar_dict = {}
-wind_data = get_wind_data(dataframe={}, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
-solar_data = get_irradiation_data(dataframe={}, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
-wind_prod = generate_wind_turbine_data(wind_data, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
-solar_prod = generate_solar_panel_data(solar_data, parameters={"rated_power": solar_capacity_home,})
+    np.savetxt("data/demand.csv", demand)
+    np.savetxt("data/gen_wind.csv", wind_prod["gen_wind_data"]["energy_generated"][:T].values)
+    np.savetxt("data/gen_solar.csv", solar_prod["gen_solar_data"]["energy_generated"][:T].values)
 
-np.savetxt("data/demand.csv", demand)
-np.savetxt("data/gen_wind.csv", wind_prod["gen_wind_data"]["energy_generated"].values)
-np.savetxt("data/gen_solar.csv", solar_prod["gen_solar_data"]["energy_generated"].values)
+    gboml_model = GbomlGraph(T)
+    nodes, edges, _ = gboml_model.import_all_nodes_and_edges("examples/psa_examples/microgrid.txt")
+    gboml_model.add_nodes_in_model(*nodes)
+    gboml_model.add_hyperedges_in_model(*edges)
+    gboml_model.build_model()
 
-gboml_model = GbomlGraph(T)
-nodes, edges, _ = gboml_model.import_all_nodes_and_edges("examples/psa_examples/microgrid.txt")
-gboml_model.add_nodes_in_model(*nodes)
-gboml_model.add_hyperedges_in_model(*edges)
-gboml_model.build_model()
+    solution = gboml_model.solve_gurobi()
+    details = gboml_model.turn_solution_to_dictionary(
+        solver_data=solution[3], status=solution[2], 
+        solution=solution[0], objective=solution[1])
 
-solution = gboml_model.solve_clp()
-print(solution)
+    return (solution, details)
+
+if __name__ == "__main__":
+    T = 24 # time segments
+    no_households = 1
+    solar_capacity_home = 5 # kW
+    solar_capacity_school = 25 # kW
+    wind_capacity = 1000 # kW
+    no_batteries = 3
+    battery_capacity = 500 # kWh
+    battery_power = 500 # kW
+    battery_efficiency = 0.9 # in %
+
+    (result, details) = run_gboml_microgrid(T=T, no_households=no_households, solar_capacity_home=solar_capacity_home, 
+                        solar_capacity_school=solar_capacity_school, wind_capacity=wind_capacity, 
+                        no_batteries=no_batteries, battery_capacity=battery_capacity, battery_power=battery_power,
+                        battery_efficiency=battery_efficiency)
+    print(result)
+
