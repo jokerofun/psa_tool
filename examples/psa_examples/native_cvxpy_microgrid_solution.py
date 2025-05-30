@@ -20,7 +20,7 @@ from benchmark.benchmark import Benchmark
 
 def solve_microgrid(time_intervals=24, num_batteries=1):
     T = time_intervals
-    num_homes = 50
+    num_homes = 500
     solar_capacity_home = 5  # kW
     solar_capacity_school = 25  # kW
     wind_capacity = 1000  # kW
@@ -31,6 +31,7 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     
     # Actual data
     df: dict = {}
+    df2: dict = {}
 
     # NOTE Using predicted consumer data
     demand = predict_consumer_data(dataframe=None, hours=T)
@@ -43,15 +44,17 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     # total_demand = demand
     # df["total_demand"] = total_demand
 
-    wind_data = get_wind_data(df)
-    irradiation_data = get_irradiation_data(df)
+    wind_data = get_wind_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    irradiation_data = get_irradiation_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
     df["wind_data"] = wind_data
-    df["solar_irradation"] = irradiation_data
+    df["solar_irradiation"] = irradiation_data
+    df2["solar_irradiation"] = irradiation_data.copy()
     wind_prod = generate_wind_turbine_data(df, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
+    wind_prod = wind_prod.values[:, 2]
     solar_prod = generate_solar_panel_data(df, parameters={"rated_power": solar_capacity_home,})
-
-    solar_prod = solar_prod.values[:, 1]
-    wind_prod = wind_prod.values[:, 1]
+    solar_prod = (solar_prod.values[:, 1] * num_homes)
+    solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": solar_capacity_school,})
+    solar_prod = solar_prod + solar_prod_school.values[:, 1]
 
     # Decision variables
     grid_import = cp.Variable(T, nonneg=True)
@@ -124,9 +127,12 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     plt.plot(solar_prod[:T], label="Solar Production")
     plt.plot(wind_prod[:T], label="Wind Production")
     plt.plot(solar_prod[:T] + wind_prod[:T], label="Total Renewable Production")
+    # Add battery SoC to the plot
+    for i in range(n_batteries):
+        plt.plot(battery_soc[i][:T].value[:-1], label=f"Battery {i} SoC", linestyle="--")
     plt.xlabel("Hour")
     plt.ylabel("kWh")
-    plt.title("Demand and Production Profiles")
+    plt.title("Demand and Production, and Battery SoC Profiles")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()
@@ -236,9 +242,12 @@ def solve_microgrid_with_mock_data(time_intervals=24, num_batteries=1):
     plt.plot(solar_prod, label="Solar Production")
     plt.plot(wind_prod, label="Wind Production")
     plt.plot(solar_prod + wind_prod, label="Total Renewable Production")
+    # Add battery SoC to the plot
+    for i in range(n_batteries):
+        plt.plot(battery_soc[i].value[:-1], label=f"Battery {i} SoC", linestyle="--")
     plt.xlabel("Hour")
     plt.ylabel("kWh")
-    plt.title("Demand and Production Profiles")
+    plt.title("Demand and Production, and Battery SoC Profiles")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()

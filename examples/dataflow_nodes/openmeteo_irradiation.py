@@ -30,7 +30,13 @@ def get_irradiation_data(dataframe = None, parameters: dict = {"latitude": 0, "l
     responses = openmeteo_client.get_openmeteo_client().weather_api(url, params=params)
     response = responses[0]
     hourly = response.Hourly()
-    hourly_irradiation = hourly.Variables(0).ValuesAsNumpy() 
+    hourly_irradiation = hourly.Variables(0).ValuesAsNumpy()
+
+    # Make a writable copy to allow modification
+    hourly_irradiation = hourly_irradiation.copy()
+    # Set negative values to 0 if any
+    hourly_irradiation[hourly_irradiation < 0] = 0
+
     hourly_data = {"date": pd.date_range(
         start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
         end = pd.to_datetime(hourly.TimeEnd(), unit = "s", utc = True),
