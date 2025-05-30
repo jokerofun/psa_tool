@@ -172,3 +172,4 @@ cython_debug/
 *.api
 
 .cache.sqlite
+data/household_power_consumption.txt
