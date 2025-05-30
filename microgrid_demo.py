@@ -34,12 +34,12 @@ def plot_results(t, total_consumption, wind_production, solar_production, batter
 if __name__ == "__main__":
     # Define the parameters for the microgrid
     T = 24 # time segments
-    no_households = 1
-    solar_capacity_home = 5 # kW
-    solar_capacity_school = 25 # kW
-    wind_capacity = 1000 # kW
-    no_batteries = 1
-    battery_capacity = 500 # kWh
+    no_households = 50
+    solar_capacity_household = 50 # kW
+    solar_capacity_school = 250 # kW
+    wind_capacity = 50 # kW
+    no_batteries = 3
+    battery_capacity = 5000 # kWh
     battery_power = 500 # kW
     battery_efficiency = 0.9 # in %
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     # school.dataflow.task("gen_consumption", DataProcessingTask, process_func=generate_consumption_data, parameters={"A0": 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9}, final=True)
     for solar_panel in solar_panels_household:
         task1 = solar_panel.dataflow.task("get_solar_data", DataProcessingTask, process_func=get_irradiation_data, parameters={"latitude": 57.0488, "longitude": 9.9217})
-        task2 = solar_panel.dataflow.task("gen_solar_data", DataProcessingTask, process_func=generate_solar_panel_data, parameters={"rated_power": solar_capacity_home}, final=True)
+        task2 = solar_panel.dataflow.task("gen_solar_data", DataProcessingTask, process_func=generate_solar_panel_data, parameters={"rated_power": solar_capacity_household}, final=True)
         task1 >> task2
     solar_school_task1 = solar_panel_school.dataflow.task("get_solar_data", DataProcessingTask, process_func=get_irradiation_data, parameters={"latitude": 57.0488, "longitude": 9.9217}) 
     solar_school_task2 = solar_panel_school.dataflow.task("gen_solar_data", DataProcessingTask, process_func=generate_solar_panel_data, parameters={"rated_power": solar_capacity_school}, final=True)

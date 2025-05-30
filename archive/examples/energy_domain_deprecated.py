@@ -1,3 +1,8 @@
+
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from dataflow_manager.dataflow_manager import DataFlowManager
 from archive.solver_classes_deprecated import Node, ConnectingNode, GraphProblemClass, DeviceNode
 import cvxpy as cp
 
@@ -114,7 +119,7 @@ class Prosumer(DeviceNode):
 
 class PowerExchange(Prosumer):
     _prices = []
-
+    
     def __init__(self, problem_class, production_capacity, consumption_capacity, name):
         super().__init__(problem_class, production_capacity, consumption_capacity)
         self.name = name
@@ -127,6 +132,8 @@ class PowerExchange(Prosumer):
 
     @property
     def prices(self):
+        self._prices = DataFlowManager.getInstance().getData(self.__class__, self._parameters)
+        print(self._prices)
         return self._prices
 
     @prices.setter
@@ -141,7 +148,7 @@ class PowerExchange(Prosumer):
 
     @property
     def cost(self):
-        return cp.sum(self._prices @ self.powerFlow)
+        return cp.sum(self.prices @ self.powerFlow)
 
     @property
     def variables(self):

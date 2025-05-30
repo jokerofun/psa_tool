@@ -49,6 +49,7 @@ class SolarPanel(Producer):
 
     def powerflow(self, t):
         return self.c[t] * self.max_power_output_kW[t]
+        # return  self.max_power_output_kW[t]
     
     def constraints(self, t):
         return [self.c[t] >= 0,
@@ -117,10 +118,6 @@ class Battery(Resource):
 
     def constraints(self, t):
         constraints = [
-            self.charge[t] >= 0,
-            self.discharge[t] >= 0,
-            self.SoC[t] >= 0,
-            self.capacity_kWh >= 0,
             self.SoC[t] <= self.capacity_kWh,
             self.charge[t] <= self.charging_power_kW, # * self.mode[t],
             self.discharge[t] <= self.discharging_power_kW, # * (1 - self.mode[t]),
@@ -129,11 +126,9 @@ class Battery(Resource):
         if t == 0:
             constraints.append(
                 self.SoC[t] == self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])
-            constraints.append(self.SoC[t] == 0)
         else:
             constraints.append(
-                self.SoC[t] == self.SoC[t-1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])
-        
+                self.SoC[t] == self.SoC[t-1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])        
         return constraints
     
     def powerflow(self, t):
@@ -153,6 +148,8 @@ class Battery(Resource):
 class Grid(Resource):
     def __init__(self, name):
         super().__init__(name)
+        self.connect_nodes([self])
+
         # self.init_variables(self)
     
     # def init_variables(self):
