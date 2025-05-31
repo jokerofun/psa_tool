@@ -1,4 +1,4 @@
-from src.optimization.energy_domain import Resource
+from src.optimization.energy_domain import Resource, ConnectingNode
 
 import cvxpy as cp
 
@@ -148,7 +148,7 @@ class Battery(Resource):
 class Grid(Resource):
     def __init__(self, name):
         super().__init__(name)
-        self.connect_nodes([self])
+        # self.connect_nodes([self])
 
         # self.init_variables(self)
     

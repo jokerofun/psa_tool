@@ -99,7 +99,7 @@ if __name__ == "__main__":
     balance.connect_nodes([grid])
     # balance.connect_nodes(batteries)
 
-    result = problemClass.solve(solver=cp.CPLEX,objective="minimize", value="cost")
+    result = problemClass.solve(solver=cp.CBC,objective="minimize", value="cost")
 
     # total_consumption = school.consumption_kWh + sum(household.consumption_kWh for household in household_consumers)
     total_consumption = sum(household.consumption_kWh for household in household_consumers)
