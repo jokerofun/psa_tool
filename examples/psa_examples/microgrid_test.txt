@@ -1,6 +1,6 @@
 
 #TIMEHORIZON
-T = 24;
+T = 25;
 
 
 #NODE DEMAND
@@ -662,6 +662,19 @@ electricity[t] >= 0;
 electricity[t] == c[t] * max_power_output_kW[t];
 
 
+#NODE BIG_SOLAR_PV_1
+#PARAMETERS
+max_power_output_kW = import "../../data/gen_big_solar.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
 #NODE WIND_TURBINE_1
 #PARAMETERS
 max_power_output_kW = import "../../data/gen_wind.csv";
@@ -751,4 +764,4 @@ min: power_import[t];
 
 #HYPEREDGE POWER_BALANCE
 #CONSTRAINTS
-GRID.power_import[t] + SOLAR_PV_1.electricity[t] + SOLAR_PV_2.electricity[t] + SOLAR_PV_3.electricity[t] + SOLAR_PV_4.electricity[t] + SOLAR_PV_5.electricity[t] + SOLAR_PV_6.electricity[t] + SOLAR_PV_7.electricity[t] + SOLAR_PV_8.electricity[t] + SOLAR_PV_9.electricity[t] + SOLAR_PV_10.electricity[t] + SOLAR_PV_11.electricity[t] + SOLAR_PV_12.electricity[t] + SOLAR_PV_13.electricity[t] + SOLAR_PV_14.electricity[t] + SOLAR_PV_15.electricity[t] + SOLAR_PV_16.electricity[t] + SOLAR_PV_17.electricity[t] + SOLAR_PV_18.electricity[t] + SOLAR_PV_19.electricity[t] + SOLAR_PV_20.electricity[t] + SOLAR_PV_21.electricity[t] + SOLAR_PV_22.electricity[t] + SOLAR_PV_23.electricity[t] + SOLAR_PV_24.electricity[t] + SOLAR_PV_25.electricity[t] + SOLAR_PV_26.electricity[t] + SOLAR_PV_27.electricity[t] + SOLAR_PV_28.electricity[t] + SOLAR_PV_29.electricity[t] + SOLAR_PV_30.electricity[t] + SOLAR_PV_31.electricity[t] + SOLAR_PV_32.electricity[t] + SOLAR_PV_33.electricity[t] + SOLAR_PV_34.electricity[t] + SOLAR_PV_35.electricity[t] + SOLAR_PV_36.electricity[t] + SOLAR_PV_37.electricity[t] + SOLAR_PV_38.electricity[t] + SOLAR_PV_39.electricity[t] + SOLAR_PV_40.electricity[t] + SOLAR_PV_41.electricity[t] + SOLAR_PV_42.electricity[t] + SOLAR_PV_43.electricity[t] + SOLAR_PV_44.electricity[t] + SOLAR_PV_45.electricity[t] + SOLAR_PV_46.electricity[t] + SOLAR_PV_47.electricity[t] + SOLAR_PV_48.electricity[t] + SOLAR_PV_49.electricity[t] + SOLAR_PV_50.electricity[t] + WIND_TURBINE_1.electricity[t] + BATTERY_1.discharge[t] + BATTERY_2.discharge[t] + BATTERY_3.discharge[t] == DEMAND.consumption[t] + BATTERY_1.charge[t] + BATTERY_2.charge[t] + BATTERY_3.charge[t];
+GRID.power_import[t] + SOLAR_PV_1.electricity[t] + SOLAR_PV_2.electricity[t] + SOLAR_PV_3.electricity[t] + SOLAR_PV_4.electricity[t] + SOLAR_PV_5.electricity[t] + SOLAR_PV_6.electricity[t] + SOLAR_PV_7.electricity[t] + SOLAR_PV_8.electricity[t] + SOLAR_PV_9.electricity[t] + SOLAR_PV_10.electricity[t] + SOLAR_PV_11.electricity[t] + SOLAR_PV_12.electricity[t] + SOLAR_PV_13.electricity[t] + SOLAR_PV_14.electricity[t] + SOLAR_PV_15.electricity[t] + SOLAR_PV_16.electricity[t] + SOLAR_PV_17.electricity[t] + SOLAR_PV_18.electricity[t] + SOLAR_PV_19.electricity[t] + SOLAR_PV_20.electricity[t] + SOLAR_PV_21.electricity[t] + SOLAR_PV_22.electricity[t] + SOLAR_PV_23.electricity[t] + SOLAR_PV_24.electricity[t] + SOLAR_PV_25.electricity[t] + SOLAR_PV_26.electricity[t] + SOLAR_PV_27.electricity[t] + SOLAR_PV_28.electricity[t] + SOLAR_PV_29.electricity[t] + SOLAR_PV_30.electricity[t] + SOLAR_PV_31.electricity[t] + SOLAR_PV_32.electricity[t] + SOLAR_PV_33.electricity[t] + SOLAR_PV_34.electricity[t] + SOLAR_PV_35.electricity[t] + SOLAR_PV_36.electricity[t] + SOLAR_PV_37.electricity[t] + SOLAR_PV_38.electricity[t] + SOLAR_PV_39.electricity[t] + SOLAR_PV_40.electricity[t] + SOLAR_PV_41.electricity[t] + SOLAR_PV_42.electricity[t] + SOLAR_PV_43.electricity[t] + SOLAR_PV_44.electricity[t] + SOLAR_PV_45.electricity[t] + SOLAR_PV_46.electricity[t] + SOLAR_PV_47.electricity[t] + SOLAR_PV_48.electricity[t] + SOLAR_PV_49.electricity[t] + SOLAR_PV_50.electricity[t] + BIG_SOLAR_PV_1.electricity[t] + WIND_TURBINE_1.electricity[t] + BATTERY_1.discharge[t] + BATTERY_2.discharge[t] + BATTERY_3.discharge[t] == DEMAND.consumption[t] + BATTERY_1.charge[t] + BATTERY_2.charge[t] + BATTERY_3.charge[t];

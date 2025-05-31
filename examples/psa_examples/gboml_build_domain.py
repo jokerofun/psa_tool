@@ -1,5 +1,6 @@
 def build_microgrid(time_length = 24, 
                     solar_panels_no = 1,
+                    big_solar_panels_no = 1,
                     batteries_no = 1,
                     wind_turbines_no = 1,
                     battery_charging_power = 500,
@@ -9,6 +10,7 @@ def build_microgrid(time_length = 24,
                     battery_soc = 0,
                     demand_file_path = "../../data/demand.csv",
                     solar_gen_file_path = "../../data/gen_solar.csv",
+                    big_solar_gen_file_path = "../../data/gen_big_solar.csv",
                     wind_gen_file_path = "../../data/gen_wind.csv",
                     file_path="examples/psa_examples/microgrid_test.txt"):
     time_horizon_template = '''
@@ -30,6 +32,20 @@ consumption[t] == total_demand[t];
 #NODE SOLAR_PV_{i}
 #PARAMETERS
 max_power_output_kW = import "{solar_csv}";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+'''
+
+    big_solar_panel_template = '''
+#NODE BIG_SOLAR_PV_{i}
+#PARAMETERS
+max_power_output_kW = import "{big_solar_csv}";
 #VARIABLES
 internal: c[T];
 external: electricity[T];
@@ -95,6 +111,9 @@ min: power_import[t];
     for i in range(1, solar_panels_no + 1):
         power_balance_template += f" + SOLAR_PV_{i}.electricity[t]"
 
+    for i in range(1, big_solar_panels_no + 1):
+        power_balance_template += f" + BIG_SOLAR_PV_{i}.electricity[t]"
+    
     for i in range(1, wind_turbines_no + 1):
         power_balance_template += f" + WIND_TURBINE_{i}.electricity[t]"
 
@@ -117,6 +136,10 @@ min: power_import[t];
 
         for i in range(1, solar_panels_no + 1):
             block = solar_panel_tepmlate.format(i=i, solar_csv=solar_gen_file_path)
+            f.write(block + "\n")
+
+        for i in range(1, big_solar_panels_no + 1):
+            block = big_solar_panel_template.format(i=i, big_solar_csv=big_solar_gen_file_path)
             f.write(block + "\n")
 
         for i in range(1, wind_turbines_no + 1):

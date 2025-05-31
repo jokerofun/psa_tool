@@ -42,21 +42,16 @@ class Producer(Resource):
 class SolarPanel(Producer):
     def __init__(self, name, max_power_output_kW=[]):
         super().__init__(name, max_power_output_kW)
-        # self.init_variables(self)
 
     def set_time_length(self, t):
-        self.c = cp.Variable(t, nonneg=True) # control variable c
+        self.c = cp.Variable(t, nonneg=True)
 
     def powerflow(self, t):
         return self.c[t] * self.max_power_output_kW[t]
-        # return  self.max_power_output_kW[t]
     
     def constraints(self, t):
         return [self.c[t] >= 0,
                 self.c[t] <= 1]
-
-    # def init_variables(self):
-    #     self.add_variable(self.c) # control variable c
     
     @property
     def cost(self):
@@ -102,14 +97,6 @@ class Battery(Resource):
         self.capacity_kWh = capacity_kWh
         self.efficiency = efficiency
 
-        # self.init_variables(self)
-
-    # def init_variables(self):
-    #     self.add_variable(self.charge)
-    #     self.add_variable(self.discharge)
-    #     self.add_variable(self.SoC)
-    #     self.add_variable(self.mode) # control variable mode
-
     def set_time_length(self, t):
         self.charge = cp.Variable(t, nonneg=True)
         self.discharge = cp.Variable(t, nonneg=True)
@@ -149,11 +136,6 @@ class Grid(Resource):
     def __init__(self, name):
         super().__init__(name)
         # self.connect_nodes([self])
-
-        # self.init_variables(self)
-    
-    # def init_variables(self):
-    #     self.add_variable(self.energy_import)
 
     def set_time_length(self, t):
         self.energy_import = cp.Variable(t, nonneg=True)
