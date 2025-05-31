@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../..')))
 
 
-def predict_consumer_data(dataframe={}, parameters = {"hours": 24, "model_name":"consumer_model"}):
+def predict_consumer_data(dataframe={}, parameters = {"hours": 24, "model_name":"consumer_model", "factor": 1}):
     """
     Predict consumer data using a trained PyCaret model.
 
@@ -52,6 +52,7 @@ def predict_consumer_data(dataframe={}, parameters = {"hours": 24, "model_name":
     predictions = predictions[['prediction_label']].rename(
         columns={'prediction_label': 'consumption_kWh'})
     
+    predictions['consumption_kWh'] *= parameters["factor"]
     dataframe["gen_consumption"] = predictions
 
     return dataframe

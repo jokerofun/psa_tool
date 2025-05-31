@@ -27,10 +27,12 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
 
     # Actual data
     df: dict = {}
+    df2: dict = {}
 
     # NOTE Using predicted consumer data
-    demand = predict_consumer_data(dataframe=None, hours=T)
-    df["total_demand"] = demand["consumption_kWh"] * num_homes
+    home_demand = predict_consumer_data(dataframe=df, parameters={"hours": 24, "model_name":"consumer_model", "factor": 1})
+    school_demand = predict_consumer_data(dataframe=df2, parameters={"hours": 24, "model_name":"consumer_model", "factor": 100})
+    df["total_demand"] = home_demand["gen_consumption"]["consumption_kWh"] * num_homes + school_demand["gen_consumption"]["consumption_kWh"]
     total_demand = df["total_demand"].values
 
     # NOTE Using mock data
@@ -39,16 +41,15 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     # total_demand = demand
     # df["total_demand"] = total_demand
 
-    wind_data = get_wind_data(df)
-    irradiation_data = get_irradiation_data(df)
-    df["wind_data"] = wind_data
-    df["solar_irradation"] = irradiation_data
+    get_wind_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    get_irradiation_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    df2 = df.copy()
     wind_prod = generate_wind_turbine_data(df, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
+    wind_prod = wind_prod["gen_wind_data"]["energy_generated"].values
     solar_prod = generate_solar_panel_data(df, parameters={"rated_power": solar_capacity_home,})
-
-    # total_demand = total_demand.values[:, 1]
-    solar_prod = solar_prod.values[:, 1] * num_homes
-    wind_prod = wind_prod.values[:, 2]
+    solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values * num_homes)
+    solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": solar_capacity_school,})
+    solar_prod = solar_prod + solar_prod_school["gen_solar_data"]["energy_generated"].values
 
     model = pyo.ConcreteModel()
     model.T = pyo.RangeSet(0, T-1)
@@ -113,7 +114,8 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     plt.plot(solar_prod[:T] + wind_prod[:T], label="Total Renewable Production")
     # Add battery SoC to the plot
     for i in range(n_batteries):
-        plt.plot(model.battery_soc[i].value[:-1], label=f"Battery {i} SoC", linestyle="--")
+        soc_values = [pyo.value(model.battery_soc[i, t]) for t in range(T+1)]
+        plt.plot(soc_values[:-1], label=f"Battery {i} SoC", linestyle="--")
     plt.xlabel("Hour")
     plt.ylabel("kWh")
     plt.title("Demand and Production, and Battery SoC Profiles")
@@ -230,4 +232,4 @@ def solve_microgrid_pyomo_with_mock_data(time_intervals=24, num_batteries=1):
 
 if __name__ == "__main__":
     # Benchmark.run(solve_microgrid_pyomo, runs=1)
-    Benchmark.run(solve_microgrid_pyomo, 48, 3, runs=3)
+    Benchmark.run(solve_microgrid_pyomo, 24, 3, runs=1)

@@ -20,7 +20,7 @@ from benchmark.benchmark import Benchmark
 
 def solve_microgrid(time_intervals=24, num_batteries=1):
     T = time_intervals
-    num_homes = 500
+    num_homes = 50
     solar_capacity_home = 5  # kW
     solar_capacity_school = 25  # kW
     wind_capacity = 1000  # kW
@@ -34,8 +34,9 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     df2: dict = {}
 
     # NOTE Using predicted consumer data
-    demand = predict_consumer_data(dataframe=None, hours=T)
-    df["total_demand"] = demand["consumption_kWh"] * num_homes
+    home_demand = predict_consumer_data(dataframe=df, parameters={"hours": 24, "model_name":"consumer_model", "factor": 1})
+    school_demand = predict_consumer_data(dataframe=df2, parameters={"hours": 24, "model_name":"consumer_model", "factor": 100})
+    df["total_demand"] = home_demand["gen_consumption"]["consumption_kWh"] * num_homes + school_demand["gen_consumption"]["consumption_kWh"]
     total_demand = df["total_demand"].values
 
     # NOTE Using mock data
@@ -44,17 +45,15 @@ def solve_microgrid(time_intervals=24, num_batteries=1):
     # total_demand = demand
     # df["total_demand"] = total_demand
 
-    wind_data = get_wind_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
-    irradiation_data = get_irradiation_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
-    df["wind_data"] = wind_data
-    df["solar_irradiation"] = irradiation_data
-    df2["solar_irradiation"] = irradiation_data.copy()
+    get_wind_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    get_irradiation_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    df2 = df.copy()
     wind_prod = generate_wind_turbine_data(df, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
-    wind_prod = wind_prod.values[:, 2]
+    wind_prod = wind_prod["gen_wind_data"]["energy_generated"].values
     solar_prod = generate_solar_panel_data(df, parameters={"rated_power": solar_capacity_home,})
-    solar_prod = (solar_prod.values[:, 1] * num_homes)
+    solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values * num_homes)
     solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": solar_capacity_school,})
-    solar_prod = solar_prod + solar_prod_school.values[:, 1]
+    solar_prod = solar_prod + solar_prod_school["gen_solar_data"]["energy_generated"].values
 
     # Decision variables
     grid_import = cp.Variable(T, nonneg=True)
