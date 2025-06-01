@@ -1,0 +1,11 @@
+@startuml packages_complete_microgrid
+set namespaceSeparator none
+package "microgrid_domain" as microgrid_domain {
+}
+package "src.optimization.base_domain" as src.optimization.base_domain {
+}
+package "src.optimization.energy_domain" as src.optimization.energy_domain {
+}
+microgrid_domain --> src.optimization.energy_domain
+src.optimization.energy_domain --> src.optimization.base_domain
+@enduml

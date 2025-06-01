@@ -1,0 +1,250 @@
+@startuml classes_complete_microgrid
+set namespaceSeparator none
+class "Battery" as microgrid_domain.Battery {
+  SoC
+  capacity_kWh
+  charge
+  charging_power_kW
+  cost
+  discharge
+  discharging_power_kW
+  efficiency
+  variables
+  {abstract}assign(t)
+  constraints(t)
+  powerflow(t)
+  set_time_length(t)
+}
+class "Canonical" as cvxpy.utilities.canonical.Canonical {
+  canonical_form
+  expr
+  id : int
+  atoms()
+  constants()
+  copy(args, id_objects)
+  get_data() -> None
+  parameters()
+  tree_copy(id_objects)
+  variables()
+}
+class "ConnectingNode" as src.optimization.energy_domain.ConnectingNode {
+  connected_nodes : list
+  name
+  time_len
+  connect(node)
+  connect_nodes(nodes)
+  constraints(t)
+  set_time_length(time_length)
+}
+class "Consumer" as microgrid_domain.Consumer {
+  consumption_kWh : list
+  cost
+  variables
+  assign(t)
+  powerflow(t)
+  {abstract}set_time_length(t)
+}
+class "Dataflow" as src.dataflow.dataflow_v2.Dataflow {
+  name
+  object
+  result : NoneType
+  results
+  tasks : dict
+  default_workflow(source: str, select_func, cleanup_func, format_func, ml_func)
+  execute() -> None
+  get_data(task_name)
+  get_final_task() -> DataflowTask
+  get_tasks(names) -> List[DataflowTask]
+  task(name: str, task_node_type: DataflowTask) -> DataflowTask
+}
+class "Expression" as cvxpy.expressions.expression.Expression {
+  H
+  T
+  curvature
+  curvatures
+  domain
+  expr
+  grad
+  is_imag
+  log_log_curvature
+  ndim
+  shape
+  sign
+  size
+  value
+  broadcast(lh_expr: 'Expression', rh_expr: 'Expression')
+  cast_to_const(expr: 'Expression')
+  conj()
+  conjugate()
+  cumsum(axis)
+  flatten(order: Literal['F', 'C', None])
+  has_quadratic_term() -> bool
+  is_affine() -> bool
+  {abstract}is_complex() -> bool
+  {abstract}is_concave() -> bool
+  is_constant() -> bool
+  {abstract}is_convex() -> bool
+  is_dcp(dpp: bool) -> bool
+  is_dgp(dpp: bool) -> bool
+  {abstract}is_dpp(context: str) -> bool
+  is_dqcp() -> bool
+  is_hermitian() -> bool
+  is_log_log_affine() -> bool
+  {abstract}is_log_log_concave() -> bool
+  is_log_log_constant() -> bool
+  {abstract}is_log_log_convex() -> bool
+  is_matrix() -> bool
+  {abstract}is_nonneg() -> bool
+  {abstract}is_nonpos() -> bool
+  is_nsd() -> bool
+  is_psd() -> bool
+  is_pwl() -> bool
+  is_qpwa() -> bool
+  is_quadratic() -> bool
+  is_quasiconcave() -> bool
+  is_quasiconvex() -> bool
+  is_quasilinear() -> bool
+  is_real() -> bool
+  is_scalar() -> bool
+  is_skew_symmetric() -> bool
+  is_symmetric() -> bool
+  is_vector() -> bool
+  is_zero() -> bool
+  max(axis)
+  mean(axis)
+  min(axis)
+  {abstract}name() -> str
+  prod(axis)
+  ptp(axis)
+  reshape(shape, order: Literal['F', 'C', None])
+  std(axis)
+  sum(axis)
+  trace()
+  var()
+}
+class "Grid" as microgrid_domain.Grid {
+  cost
+  energy_import
+  variables
+  {abstract}assign(t)
+  powerflow(t)
+  set_time_length(t)
+}
+class "Leaf" as cvxpy.expressions.leaf.Leaf {
+  args : list
+  attributes : dict
+  boolean_idx : bool, list, tuple
+  bounds
+  domain
+  integer_idx : bool, list, tuple
+  shape
+  sparse_idx : list, tuple
+  value
+  atoms() -> list[Atom]
+  constants() -> list[Constant]
+  copy(args, id_objects)
+  {abstract}get_data() -> None
+  has_quadratic_term() -> bool
+  is_complex() -> bool
+  is_concave() -> bool
+  is_convex() -> bool
+  is_diag() -> bool
+  is_dpp(context: str) -> bool
+  is_hermitian() -> bool
+  is_imag() -> bool
+  is_log_log_concave() -> bool
+  is_log_log_convex() -> bool
+  is_neg() -> bool
+  is_nonneg() -> bool
+  is_nonpos() -> bool
+  is_nsd() -> bool
+  is_pos() -> bool
+  is_psd() -> bool
+  is_pwl() -> bool
+  is_quadratic() -> bool
+  is_symmetric() -> bool
+  parameters() -> list[Parameter]
+  project(val)
+  project_and_assign(val) -> None
+  save_value(val) -> None
+  variables() -> list[Variable]
+}
+class "Node" as src.optimization.base_domain.Node {
+  cost
+  dataflow
+  name
+  variables
+  {abstract}assign(t)
+  constraints(t)
+  get_attr(attr)
+  get_attributes()
+  get_class_name()
+}
+class "Producer" as microgrid_domain.Producer {
+  cost
+  max_power_output_kW : list
+  {abstract}assign(t)
+  {abstract}set_time_length(t)
+}
+class "Resource" as src.optimization.energy_domain.Resource {
+  connected_nodes : list
+  connecting_node : NoneType
+  cost
+  variables
+  getConnectingNode()
+  powerflow()
+  setConnectingNode(connecting_node)
+}
+class "SolarPanel" as microgrid_domain.SolarPanel {
+  c
+  cost
+  max_power_output_kW
+  variables
+  assign(t)
+  constraints(t)
+  powerflow(t)
+  set_time_length(t)
+}
+class "Variable" as cvxpy.expressions.variable.Variable {
+  delta : NoneType
+  grad
+  gradient : NoneType
+  id : int
+  attributes_were_lowered() -> bool
+  canonicalize() -> Tuple[Expression, list[Constraint]]
+  is_constant() -> bool
+  name() -> str
+  set_variable_of_provenance(variable: Variable) -> None
+  variable_of_provenance() -> Optional[Variable]
+  variables() -> list[Variable]
+}
+class "WindTurbine" as microgrid_domain.WindTurbine {
+  cost
+  max_power_output_kW
+  time_length
+  variables
+  assign(t)
+  constraints(t)
+  powerflow(t)
+  set_time_length(t)
+}
+cvxpy.expressions.expression.Expression --|> cvxpy.utilities.canonical.Canonical
+cvxpy.expressions.leaf.Leaf --|> cvxpy.expressions.expression.Expression
+cvxpy.expressions.variable.Variable --|> cvxpy.expressions.leaf.Leaf
+microgrid_domain.Battery --|> src.optimization.energy_domain.Resource
+microgrid_domain.Consumer --|> src.optimization.energy_domain.Resource
+microgrid_domain.Grid --|> src.optimization.energy_domain.Resource
+microgrid_domain.Producer --|> src.optimization.energy_domain.Resource
+microgrid_domain.SolarPanel --|> microgrid_domain.Producer
+microgrid_domain.WindTurbine --|> microgrid_domain.Producer
+src.optimization.energy_domain.ConnectingNode --|> src.optimization.base_domain.Node
+src.optimization.energy_domain.Resource --|> src.optimization.base_domain.Node
+cvxpy.expressions.variable.Variable --* microgrid_domain.Battery : charge
+cvxpy.expressions.variable.Variable --* microgrid_domain.Battery : discharge
+cvxpy.expressions.variable.Variable --* microgrid_domain.Battery : SoC
+cvxpy.expressions.variable.Variable --* microgrid_domain.Grid : energy_import
+cvxpy.expressions.variable.Variable --* microgrid_domain.SolarPanel : c
+src.dataflow.dataflow_v2.Dataflow --* src.optimization.base_domain.Node : dataflow
+src.optimization.energy_domain.ConnectingNode --* src.optimization.energy_domain.Resource : connecting_node
+cvxpy.expressions.variable.Variable --o cvxpy.expressions.variable.Variable : _variable_with_attributes
+@enduml
