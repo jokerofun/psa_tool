@@ -33,3 +33,30 @@
   "status": "optimal",
   "result": 235.26978675035184
 }
+{
+  "implementation": "Pyomo",
+  "solver": "gurobi",
+  "parameters": 0,
+  "constraints": 387,
+  "variables": 1443,
+  "status": "optimal",
+  "result": 235.26978675035184
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 2719.687307055281
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2719.6873070552806
+}

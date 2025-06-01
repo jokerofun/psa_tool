@@ -1,6 +1,6 @@
 from src.optimization.graph_problem_class import GraphProblemClass
 from src.optimization.energy_domain import ConnectingNode
-from microgrid_domain import Consumer, Grid, SolarPanel, Battery, WindTurbine
+from microgrid_domain import Consumer, MeteringPoint, SolarPanel, Battery, WindTurbine
 from src.dataflow.dataflow_classes_v2 import DataFetchingFromFileTask, DataProcessingTask
 from src.dataflow.dataflow_manager_v2 import DataflowManager
 from src.dataflow.dataflow_v2 import Dataflow
@@ -38,7 +38,7 @@ def run(setup: MicrogridSetup):
     problemClass = GraphProblemClass("microgrid_problem", time_length=setup.T)
 
     # Create microgrid models/components
-    grid = Grid("grid1")
+    metering_point = MeteringPoint("grid1")
     household_consumers = [Consumer(f"household_{i+1}") for i in range(setup.no_homes)]
     school = Consumer("school")
     solar_panels_household = [SolarPanel(f"solar_panel_{i+1}") for i in range(setup.no_homes)]
@@ -67,13 +67,13 @@ def run(setup: MicrogridSetup):
     problemClass.add_nodes(solar_panels_household)
     problemClass.add_nodes([school, solar_panel_school, wind_turbine])
     problemClass.add_nodes(batteries)
-    problemClass.add_node(grid)
+    problemClass.add_node(metering_point)
     problemClass.add_node(balance)
 
     balance.connect_nodes(household_consumers)
     balance.connect_nodes(solar_panels_household)
     balance.connect_nodes([school, solar_panel_school, wind_turbine])
-    balance.connect_nodes([grid])
+    balance.connect_nodes([metering_point])
     balance.connect_nodes(batteries)
 
     result = problemClass.solve(solver=cp.CBC,objective="minimize", value="cost")
@@ -91,7 +91,7 @@ def run(setup: MicrogridSetup):
     # total_consumption = school.consumption_kWh + sum(household.consumption_kWh for household in household_consumers)
     # solar_production = sum(solar_panel.max_power_output_kW for solar_panel in solar_panels_household) + solar_panel_school.max_power_output_kW
 
-    # print("Total grid import:", sum(grid.energy_import.value))
+    # print("Total grid import:", sum(metering_point.energy_import.value))
     
     # plot_results(
     #     setup.T,

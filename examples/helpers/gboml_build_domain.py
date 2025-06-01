@@ -86,8 +86,8 @@ energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;
 energy[0] == SoC;
 '''
 
-    grid_template = '''
-#NODE GRID
+    metering_point_template = '''
+#NODE METERING_POINT
 //#PARAMETERS
 //electricity_price = 0.05;
 #VARIABLES
@@ -103,7 +103,7 @@ min: power_import[t];
 #CONSTRAINTS
 '''
 
-    power_balance_template += "GRID.power_import[t]"
+    power_balance_template += "METERING_POINT.power_import[t]"
     for i in range(1, setup.no_solar_panels + 1):
         power_balance_template += f" + SOLAR_PV_{i}.electricity[t]"
 
@@ -151,7 +151,7 @@ min: power_import[t];
                                             soc=setup.battery_SoC)
             f.write(block + "\n")
         
-        block = grid_template
+        block = metering_point_template
         f.write(block + "\n")
 
         block = power_balance_template.format()
