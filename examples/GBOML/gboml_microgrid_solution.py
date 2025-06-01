@@ -14,8 +14,8 @@ from examples.helpers.microgrid_setup import MicrogridSetup
 import examples.helpers.gboml_build_domain as gboml_domain
 from examples.helpers.file_writer import write
 
-def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid_test.txt"):
-    gboml_domain.build_microgrid(setup=setup)
+def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"):
+    gboml_domain.build_microgrid(setup=setup, file_path=microgrid_file_path)
 
     home_predicted_consumption = {}
     for _ in range(setup.no_homes):

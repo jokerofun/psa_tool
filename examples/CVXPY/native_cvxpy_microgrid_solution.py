@@ -106,6 +106,7 @@ def solve_microgrid(setup:MicrogridSetup):
     prob.solve(solver=cp.CBC, verbose=False)
 
     stats = {
+        "implementation": "CVXPY",
         "solver": prob.solver_stats.solver_name,
         "parameters": sum(p.size for p in prob.parameters()),
         "constraints": len(prob.constraints),

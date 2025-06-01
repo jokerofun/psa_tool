@@ -69,5 +69,5 @@ def measure_lines_of_code(folders):
         print("-"*100)
 
 if __name__ == "__main__":
-    # measure_execution_time()
-    measure_lines_of_code(folders=["GBOML", "Pyomo", "CVXPY"])
+    measure_execution_time()
+    # measure_lines_of_code(folders=["GBOML", "Pyomo", "CVXPY"])
