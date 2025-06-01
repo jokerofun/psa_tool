@@ -10,6 +10,9 @@ import examples.GBOML.gboml_microgrid_solution as gboml_microgrid_demo
 from examples.helpers.file_writer import empty
 from benchmark import Benchmark
 
+from pygount import ProjectSummary, SourceAnalysis
+from glob import glob
+
 def plot_execution_time(results={}):
     import matplotlib.pyplot as plt
 
@@ -28,8 +31,7 @@ def plot_execution_time(results={}):
     plt.show()
 
 
-
-if __name__ == "__main__":
+def measure_execution_time():
     setup = MicrogridSetup()
     gboml_setup = MicrogridSetup()
     gboml_setup.T = 25
@@ -46,3 +48,26 @@ if __name__ == "__main__":
                          "CVXPY": cvxpy_result["average_time"],
                          "Pyomo": pyomo_result["average_time"]
                          })
+
+def measure_lines_of_code(folders):
+    for folder in folders:
+        project_summary = ProjectSummary()
+        source_paths = glob(f"examples/{folder}/*.py") + glob(f"examples/{folder}/*.txt")
+        for source_path in source_paths:
+            source_analysis = SourceAnalysis.from_file(source_path, "gboml_test")
+            project_summary.add(source_analysis)
+
+        print(folder)
+        print("-"*100)
+        print(f"Code Count: {project_summary.total_code_count}")
+        print(f"Documentation Count: {project_summary.total_documentation_count}")
+        print(f"Empty Lines Count: {project_summary.total_empty_count}")
+        print(f"Total: {project_summary._total_line_count}")
+        print("-"*100)
+        for language_summary in project_summary.language_to_language_summary_map.values():
+            print(language_summary)
+        print("-"*100)
+
+if __name__ == "__main__":
+    # measure_execution_time()
+    measure_lines_of_code(folders=["GBOML", "Pyomo", "CVXPY"])
