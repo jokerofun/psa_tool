@@ -32,18 +32,15 @@ def plot_results(t, total_consumption, wind_production, solar_production, batter
     plt.show()
     # plt.savefig("microgrid_result.png")
 
-if __name__ == "__main__":
-    # Define the parameters for the microgrid
-    setup = MicrogridSetup()
-
+def run(setup: MicrogridSetup):
     # Create optimization problem class
     problemClass = GraphProblemClass("microgrid_problem", time_length=setup.T)
 
     # Create microgrid models/components
     grid = Grid("grid1")
-    household_consumers = [Consumer(f"household_{i+1}") for i in range(setup.no_households)]
+    household_consumers = [Consumer(f"household_{i+1}") for i in range(setup.no_homes)]
     school = Consumer("school")
-    solar_panels_household = [SolarPanel(f"solar_panel_{i+1}") for i in range(setup.no_households)]
+    solar_panels_household = [SolarPanel(f"solar_panel_{i+1}") for i in range(setup.no_homes)]
     solar_panel_school = SolarPanel("solar_panel_school")
     wind_turbine = WindTurbine("wind_turbine")
     balance = ConnectingNode("balance")
@@ -92,3 +89,8 @@ if __name__ == "__main__":
         solar_production=solar_production,
         batteries=batteries
     )
+
+if __name__ == "__main__":
+    setup = MicrogridSetup()
+
+    run(setup=setup)

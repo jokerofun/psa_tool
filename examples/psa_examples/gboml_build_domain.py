@@ -1,13 +1,9 @@
-def build_microgrid(time_length = 24, 
-                    solar_panels_no = 1,
-                    big_solar_panels_no = 1,
-                    batteries_no = 1,
-                    wind_turbines_no = 1,
-                    battery_charging_power = 500,
-                    battery_discharging_power = 500,
-                    battery_capacity = 500,
-                    battery_efficiency = 0.9,
-                    battery_soc = 0,
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from examples.psa_examples.microgrid_setup import MicrogridSetup
+
+def build_microgrid(setup:MicrogridSetup,
                     demand_file_path = "../../data/demand.csv",
                     solar_gen_file_path = "../../data/gen_solar.csv",
                     big_solar_gen_file_path = "../../data/gen_big_solar.csv",
@@ -108,51 +104,51 @@ min: power_import[t];
 '''
 
     power_balance_template += "GRID.power_import[t]"
-    for i in range(1, solar_panels_no + 1):
+    for i in range(1, setup.no_solar_panels + 1):
         power_balance_template += f" + SOLAR_PV_{i}.electricity[t]"
 
-    for i in range(1, big_solar_panels_no + 1):
+    for i in range(1, setup.no_big_solar_panels + 1):
         power_balance_template += f" + BIG_SOLAR_PV_{i}.electricity[t]"
     
-    for i in range(1, wind_turbines_no + 1):
+    for i in range(1, setup.no_wind_turbines + 1):
         power_balance_template += f" + WIND_TURBINE_{i}.electricity[t]"
 
-    for i in range(1, batteries_no + 1):
+    for i in range(1, setup.no_batteries + 1):
         power_balance_template += f" + BATTERY_{i}.discharge[t]"
 
     power_balance_template += " == DEMAND.consumption[t]"
 
-    for i in range(1, batteries_no + 1):
+    for i in range(1, setup.no_batteries + 1):
         power_balance_template += f" + BATTERY_{i}.charge[t]"
 
     power_balance_template += ";"
 
     with open(file_path, "w") as f:
-        block = time_horizon_template.format(t=time_length)
+        block = time_horizon_template.format(t=setup.T)
         f.write(block + "\n")
 
         block = demand_template.format(demand_csv=demand_file_path)
         f.write(block + "\n")
 
-        for i in range(1, solar_panels_no + 1):
+        for i in range(1, setup.no_solar_panels + 1):
             block = solar_panel_tepmlate.format(i=i, solar_csv=solar_gen_file_path)
             f.write(block + "\n")
 
-        for i in range(1, big_solar_panels_no + 1):
+        for i in range(1, setup.no_big_solar_panels + 1):
             block = big_solar_panel_template.format(i=i, big_solar_csv=big_solar_gen_file_path)
             f.write(block + "\n")
 
-        for i in range(1, wind_turbines_no + 1):
+        for i in range(1, setup.no_wind_turbines + 1):
             block = wind_turbine_template.format(i=i, wind_csv=wind_gen_file_path)
             f.write(block + "\n")
 
-        for i in range(1, batteries_no + 1):
+        for i in range(1, setup.no_batteries + 1):
             block = battery_template.format(i=i, 
-                                            charging=battery_charging_power, 
-                                            discharging=battery_discharging_power,
-                                            capacity=battery_capacity,
-                                            efficiency=battery_efficiency,
-                                            soc=battery_soc)
+                                            charging=setup.battery_power, 
+                                            discharging=setup.battery_power,
+                                            capacity=setup.battery_capacity,
+                                            efficiency=setup.battery_efficiency,
+                                            soc=setup.battery_SoC)
             f.write(block + "\n")
         
         block = grid_template
