@@ -3,6 +3,7 @@ import sys
 from matplotlib import pyplot as plt
 import numpy as np
 import pyomo.environ as pyo
+from pyomo.environ import Var, Constraint, Param, value
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from examples.dataflow_nodes.consumer_data_pred import predict_consumer_data
@@ -11,55 +12,47 @@ from examples.dataflow_nodes.openmeteo_irradiation import get_irradiation_data
 from examples.dataflow_nodes.openmeteo_wind import get_wind_data
 from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_data
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
+from examples.psa_examples.microgrid_setup import MicrogridSetup
+from examples.helpers.file_writer import write
 
 from benchmark.benchmark import Benchmark
 
-def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
-    T = time_intervals
-    num_homes = 50
-    solar_capacity_home = 5  # kW
-    solar_capacity_school = 25  # kW
-    wind_capacity = 1000  # kW
-    n_batteries = num_batteries
-    battery_capacity = 500  # kWh
-    battery_power = 500  # kW max charge/discharge
-    battery_efficiency = 0.9  # 90% efficiency
+def solve_microgrid_pyomo(setup:MicrogridSetup):
 
     # Actual data
     df: dict = {}
     df2: dict = {}
 
     # NOTE Using predicted consumer data
-    home_demand = predict_consumer_data(dataframe=df, parameters={"hours": 24, "model_name":"consumer_model", "factor": 1})
+    home_demand = {}
+    for _ in range(setup.no_homes):
+        home_demand = predict_consumer_data(dataframe=df, parameters={"hours": 24, "model_name":"consumer_model", "factor": 1})
     school_demand = predict_consumer_data(dataframe=df2, parameters={"hours": 24, "model_name":"consumer_model", "factor": 100})
-    df["total_demand"] = home_demand["gen_consumption"]["consumption_kWh"] * num_homes + school_demand["gen_consumption"]["consumption_kWh"]
+    df["total_demand"] = home_demand["gen_consumption"]["consumption_kWh"] * setup.no_homes + school_demand["gen_consumption"]["consumption_kWh"]
     total_demand = df["total_demand"].values
-
-    # NOTE Using mock data
-    # demand = generate_consumption_data(df, parameters={"A0" : 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9})
-    # demand["consumption"] = (demand["consumption"] * num_homes) / 100
-    # total_demand = demand
-    # df["total_demand"] = total_demand
 
     get_wind_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
     get_irradiation_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
     df2 = df.copy()
-    wind_prod = generate_wind_turbine_data(df, parameters={"rated_power": wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
+    wind_prod = generate_wind_turbine_data(df, parameters={"rated_power": setup.wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
     wind_prod = wind_prod["gen_wind_data"]["energy_generated"].values
-    solar_prod = generate_solar_panel_data(df, parameters={"rated_power": solar_capacity_home,})
-    solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values * num_homes)
-    solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": solar_capacity_school,})
+
+    solar_prod = {}
+    for _ in range(setup.no_homes):
+        solar_prod = generate_solar_panel_data(df, parameters={"rated_power": setup.solar_capacity_home,})
+        solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values * setup.no_homes)
+    solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": setup.solar_capacity_school,})
     solar_prod = solar_prod + solar_prod_school["gen_solar_data"]["energy_generated"].values
 
     model = pyo.ConcreteModel()
-    model.T = pyo.RangeSet(0, T-1)
-    model.B = pyo.RangeSet(0, n_batteries-1)
+    model.T = pyo.RangeSet(0, setup.T-1)
+    model.B = pyo.RangeSet(0, setup.no_batteries-1)
 
     # Variables
     model.grid_import = pyo.Var(model.T, domain=pyo.NonNegativeReals)
     model.battery_charge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
     model.battery_discharge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
-    model.battery_soc = pyo.Var(model.B, range(T+1), domain=pyo.NonNegativeReals)
+    model.battery_soc = pyo.Var(model.B, range(setup.T+1), domain=pyo.NonNegativeReals)
     model.c = pyo.Var(model.T, bounds=(0,1))
 
     # Initial SoC
@@ -76,56 +69,67 @@ def solve_microgrid_pyomo(time_intervals=24, num_batteries=1):
     model.power_balance = pyo.Constraint(model.T, rule=power_balance_rule)
 
     def battery_charge_limit_rule(m, b, t):
-        return m.battery_charge[b, t] <= battery_power
+        return m.battery_charge[b, t] <= setup.battery_power
     model.battery_charge_limit = pyo.Constraint(model.B, model.T, rule=battery_charge_limit_rule)
 
     def battery_discharge_limit_rule(m, b, t):
-        return m.battery_discharge[b, t] <= battery_power
+        return m.battery_discharge[b, t] <= setup.battery_power
     model.battery_discharge_limit = pyo.Constraint(model.B, model.T, rule=battery_discharge_limit_rule)
 
     def soc_update_rule(m, b, t):
-        return m.battery_soc[b, t+1] == m.battery_soc[b, t] + m.battery_charge[b, t] * battery_efficiency - m.battery_discharge[b, t] / battery_efficiency
-    model.soc_update = pyo.Constraint(model.B, range(T), rule=soc_update_rule)
+        return m.battery_soc[b, t+1] == m.battery_soc[b, t] + m.battery_charge[b, t] * setup.battery_efficiency - m.battery_discharge[b, t] / setup.battery_efficiency
+    model.soc_update = pyo.Constraint(model.B, range(setup.T), rule=soc_update_rule)
 
     def soc_min_rule(m, b, t):
         return m.battery_soc[b, t+1] >= 0
-    model.soc_min = pyo.Constraint(model.B, range(T), rule=soc_min_rule)
+    model.soc_min = pyo.Constraint(model.B, range(setup.T), rule=soc_min_rule)
 
     def soc_max_rule(m, b, t):
-        return m.battery_soc[b, t+1] <= battery_capacity
-    model.soc_max = pyo.Constraint(model.B, range(T), rule=soc_max_rule)
+        return m.battery_soc[b, t+1] <= setup.battery_capacity
+    model.soc_max = pyo.Constraint(model.B, range(setup.T), rule=soc_max_rule)
 
     # Objective: minimize total grid import
     model.obj = pyo.Objective(expr=sum(model.grid_import[t] for t in model.T), sense=pyo.minimize)
 
     # Solve
     solver = pyo.SolverFactory('gurobi')
-    result = solver.solve(model, tee=False)
+    result = solver.solve(model, tee=True)
 
-    grid_import = np.array([pyo.value(model.grid_import[t]) for t in model.T])
-    print("Total grid import (kWh):", np.sum(grid_import))
-    print("Grid import per hour:", grid_import)
+    stats = {
+        "implementation": "Pyomo",
+        "solver": solver.name,
+        "parameters": len([1 for _ in model.component_data_objects(Param, active=True)]),
+        "constraints": len([1 for _ in model.component_data_objects(Constraint, active=True)]),
+        "variables": len([1 for _ in model.component_data_objects(Var, active=True)]),
+        "status": result.solver.termination_condition,
+        "result": value(model.obj)
+    }
+    write(setup.output_path, stats)
 
-    # Plot demand and production
-    plt.figure(figsize=(12, 6))
-    plt.plot(total_demand[:T], label="Total Demand")
-    plt.plot(solar_prod[:T], label="Solar Production")
-    plt.plot(wind_prod[:T], label="Wind Production")
-    plt.plot(solar_prod[:T] + wind_prod[:T], label="Total Renewable Production")
-    # Add battery SoC to the plot
-    for i in range(n_batteries):
-        soc_values = [pyo.value(model.battery_soc[i, t]) for t in range(T+1)]
-        plt.plot(soc_values[:-1], label=f"Battery {i} SoC", linestyle="--")
-    plt.xlabel("Hour")
-    plt.ylabel("kWh")
-    plt.title("Demand and Production, and Battery SoC Profiles")
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-    plt.savefig("demand_production_profiles.png")
+    # grid_import = np.array([pyo.value(model.grid_import[t]) for t in model.T])
+    # print("Total grid import (kWh):", np.sum(grid_import))
+    # print("Grid import per hour:", grid_import)
 
-    return grid_import
+    # # Plot demand and production
+    # plt.figure(figsize=(12, 6))
+    # plt.plot(total_demand[:setup.T], label="Total Demand")
+    # plt.plot(solar_prod[:setup.T], label="Solar Production")
+    # plt.plot(wind_prod[:setup.T], label="Wind Production")
+    # plt.plot(solar_prod[:setup.T] + wind_prod[:setup.T], label="Total Renewable Production")
+    # # Add battery SoC to the plot
+    # for i in range(setup.no_batteries):
+    #     soc_values = [pyo.value(model.battery_soc[i, t]) for t in range(setup.T+1)]
+    #     plt.plot(soc_values[:-1], label=f"Battery {i} SoC", linestyle="--")
+    # plt.xlabel("Hour")
+    # plt.ylabel("kWh")
+    # plt.title("Demand and Production, and Battery SoC Profiles")
+    # plt.legend()
+    # plt.grid(True)
+    # plt.tight_layout()
+    # plt.show()
+    # plt.savefig("demand_production_profiles.png")
+
+    # return grid_import
 
 
 def solve_microgrid_pyomo_with_mock_data(time_intervals=24, num_batteries=1):
@@ -231,5 +235,6 @@ def solve_microgrid_pyomo_with_mock_data(time_intervals=24, num_batteries=1):
     return grid_import
 
 if __name__ == "__main__":
+    setup = MicrogridSetup()
     # Benchmark.run(solve_microgrid_pyomo, runs=1)
-    Benchmark.run(solve_microgrid_pyomo, 24, 3, runs=1)
+    Benchmark.run(solve_microgrid_pyomo, setup, runs=1)

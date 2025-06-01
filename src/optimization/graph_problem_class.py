@@ -88,10 +88,10 @@ class GraphProblemClass():
             print(f"Result: {problem.value}")
 
         # print values of decision variables of the nodes in the GraphProblemClass
-        print("-" * 50)
-        self.print_results()
-        print("-" * 50)
-        print("END")
+        # print("-" * 50)
+        # self.print_results()
+        # print("-" * 50)
+        # print("END")
 
         return problem
 

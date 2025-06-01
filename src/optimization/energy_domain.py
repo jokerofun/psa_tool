@@ -18,6 +18,10 @@ class ConnectingNode(Node):
 
     def constraints(self, t):
         return [cp.sum([node.powerflow(t) for node in self.connected_nodes]) == 0]
+    
+    @property
+    def cost(self):
+        return 0
 
 class Resource(Node):
     def __init__(self, name):
@@ -30,7 +34,7 @@ class Resource(Node):
     
     @property
     def cost(self):
-        return 
+        return 0
     
     @property
     def variables(self):
