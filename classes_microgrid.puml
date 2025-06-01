@@ -1,0 +1,62 @@
+@startuml classes_microgrid
+set namespaceSeparator none
+class "Battery" as microgrid_domain.Battery {
+  SoC : Variable
+  capacity_kWh
+  charge : Variable
+  charging_power_kW
+  cost
+  discharge : Variable
+  discharging_power_kW
+  efficiency
+  variables
+  {abstract}assign(t)
+  constraints(t)
+  powerflow(t)
+  set_time_length(t)
+}
+class "Consumer" as microgrid_domain.Consumer {
+  consumption_kWh : list
+  cost
+  variables
+  assign(t)
+  powerflow(t)
+  {abstract}set_time_length(t)
+}
+class "Grid" as microgrid_domain.Grid {
+  cost
+  energy_import : Variable
+  variables
+  {abstract}assign(t)
+  powerflow(t)
+  set_time_length(t)
+}
+class "Producer" as microgrid_domain.Producer {
+  cost
+  max_power_output_kW : list
+  {abstract}assign(t)
+  {abstract}set_time_length(t)
+}
+class "SolarPanel" as microgrid_domain.SolarPanel {
+  c : Variable
+  cost
+  max_power_output_kW
+  variables
+  assign(t)
+  constraints(t)
+  powerflow(t)
+  set_time_length(t)
+}
+class "WindTurbine" as microgrid_domain.WindTurbine {
+  cost
+  max_power_output_kW
+  time_length
+  variables
+  assign(t)
+  constraints(t)
+  powerflow(t)
+  set_time_length(t)
+}
+microgrid_domain.SolarPanel --|> microgrid_domain.Producer
+microgrid_domain.WindTurbine --|> microgrid_domain.Producer
+@enduml
