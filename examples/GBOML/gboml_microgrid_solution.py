@@ -10,11 +10,11 @@ from examples.dataflow_nodes.openmeteo_irradiation import get_irradiation_data
 from examples.dataflow_nodes.openmeteo_wind import get_wind_data
 from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_data
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
-from examples.psa_examples.microgrid_setup import MicrogridSetup
-import examples.psa_examples.gboml_build_domain as gboml_domain
+from examples.helpers.microgrid_setup import MicrogridSetup
+import examples.helpers.gboml_build_domain as gboml_domain
 from examples.helpers.file_writer import write
 
-def run(setup:MicrogridSetup, microgrid_file_path="examples/psa_examples/microgrid_test.txt"):
+def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid_test.txt"):
     gboml_domain.build_microgrid(setup=setup)
 
     home_predicted_consumption = {}

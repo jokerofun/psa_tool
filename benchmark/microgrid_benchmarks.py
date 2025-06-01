@@ -2,13 +2,13 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from benchmark.benchmark import Benchmark
-from psa_examples.microgrid_setup import MicrogridSetup
-import examples.psa_examples.native_cvxpy_microgrid_solution as cvxpy_microgrid_demo
-import examples.psa_examples.native_pyomo_microgrid_solution as pyomo_microgrid_demo
-import examples.psa_examples.gboml_microgrid_solution as gboml_microgrid_demo
 import microgrid_demo
+from examples.helpers.microgrid_setup import MicrogridSetup
+import examples.CVXPY.native_cvxpy_microgrid_solution as cvxpy_microgrid_demo
+import examples.Pyomo.native_pyomo_microgrid_solution as pyomo_microgrid_demo
+import examples.GBOML.gboml_microgrid_solution as gboml_microgrid_demo
 from examples.helpers.file_writer import empty
+from benchmark import Benchmark
 
 def plot_execution_time(results={}):
     import matplotlib.pyplot as plt
@@ -24,7 +24,7 @@ def plot_execution_time(results={}):
         plt.text(i, v + 0.02, f"{v:.2f}", ha='center')
 
     plt.tight_layout()
-    plt.savefig("figure/execution_time_comparison.png")
+    plt.savefig("figures/execution_time_comparison.png")
     plt.show()
 
 

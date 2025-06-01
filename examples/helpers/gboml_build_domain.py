@@ -1,14 +1,14 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from examples.psa_examples.microgrid_setup import MicrogridSetup
+from examples.helpers.microgrid_setup import MicrogridSetup
 
 def build_microgrid(setup:MicrogridSetup,
                     demand_file_path = "../../data/demand.csv",
                     solar_gen_file_path = "../../data/gen_solar.csv",
                     big_solar_gen_file_path = "../../data/gen_big_solar.csv",
                     wind_gen_file_path = "../../data/gen_wind.csv",
-                    file_path="examples/psa_examples/microgrid_test.txt"):
+                    file_path="examples/GBOML/microgrid.txt"):
     time_horizon_template = '''
 #TIMEHORIZON
 T = {t};

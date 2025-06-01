@@ -12,10 +12,10 @@ from examples.dataflow_nodes.openmeteo_irradiation import get_irradiation_data
 from examples.dataflow_nodes.openmeteo_wind import get_wind_data
 from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_data
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
-from examples.psa_examples.microgrid_setup import MicrogridSetup
+from examples.helpers.microgrid_setup import MicrogridSetup
 from examples.helpers.file_writer import write
 
-from benchmark.benchmark import Benchmark
+# from benchmark.benchmark import Benchmark
 
 def solve_microgrid_pyomo(setup:MicrogridSetup):
 
@@ -237,4 +237,5 @@ def solve_microgrid_pyomo_with_mock_data(time_intervals=24, num_batteries=1):
 if __name__ == "__main__":
     setup = MicrogridSetup()
     # Benchmark.run(solve_microgrid_pyomo, runs=1)
-    Benchmark.run(solve_microgrid_pyomo, setup, runs=1)
+    # Benchmark.run(solve_microgrid_pyomo, setup, runs=1)
+    solve_microgrid_pyomo(setup=setup)

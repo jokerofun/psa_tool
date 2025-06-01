@@ -14,10 +14,9 @@ from examples.dataflow_nodes.openmeteo_irradiation import get_irradiation_data
 from examples.dataflow_nodes.openmeteo_wind import get_wind_data
 from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_data
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
-from examples.psa_examples.microgrid_setup import MicrogridSetup
+from examples.helpers.microgrid_setup import MicrogridSetup
 from examples.helpers.file_writer import write
-
-from benchmark.benchmark import Benchmark
+# from benchmark.benchmark import Benchmark
 
 
 def solve_microgrid(setup:MicrogridSetup):    
