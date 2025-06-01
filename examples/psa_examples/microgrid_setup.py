@@ -12,4 +12,5 @@ class MicrogridSetup:
     battery_SoC = 0
     no_big_solar_panels = 1
     no_wind_turbines = 1
+    output_path = "figures/output.txt"
 
