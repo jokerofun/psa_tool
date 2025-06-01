@@ -57,7 +57,7 @@ def solve_microgrid(setup:MicrogridSetup):
     battery_discharge = [cp.Variable(setup.T, nonneg=True)
                          for _ in range(setup.no_batteries)]
     battery_soc = [cp.Variable(setup.T+1, nonneg=True) for _ in range(setup.no_batteries)]
-    c = cp.Variable(setup.T, nonneg=True)
+    c = [cp.Variable(setup.T, nonneg=True) for _ in range(setup.no_homes)]
 
     # Constraints
     constraints = []
@@ -69,7 +69,8 @@ def solve_microgrid(setup:MicrogridSetup):
 
     for t in range(setup.T):
         # Control variable for solar panel activation
-        constraints.append(c[t] <= 1)
+        for i in range(setup.no_homes):
+            constraints.append(c[i][t] <= 1)
 
         # Power balance: sum all battery charge/discharge and grid import
         total_battery_discharge = sum(
@@ -265,5 +266,5 @@ def solve_microgrid_with_mock_data(time_intervals=24, num_batteries=1):
 if __name__ == "__main__":
     setup = MicrogridSetup()
     # Benchmark.run(solve_microgrid, runs=1)
-    # Benchmark.run(solve_microgrid, setup, runs=1)
-    solve_microgrid(setup)
+    Benchmark.run(solve_microgrid, setup, runs=3)
+    # solve_microgrid(setup)

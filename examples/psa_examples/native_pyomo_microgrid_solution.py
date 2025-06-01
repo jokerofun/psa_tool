@@ -47,13 +47,14 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     model = pyo.ConcreteModel()
     model.T = pyo.RangeSet(0, setup.T-1)
     model.B = pyo.RangeSet(0, setup.no_batteries-1)
+    model.H = pyo.RangeSet(0, setup.no_homes-1)
 
     # Variables
     model.grid_import = pyo.Var(model.T, domain=pyo.NonNegativeReals)
     model.battery_charge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
     model.battery_discharge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
     model.battery_soc = pyo.Var(model.B, range(setup.T+1), domain=pyo.NonNegativeReals)
-    model.c = pyo.Var(model.T, bounds=(0,1))
+    model.c = pyo.Var(model.H, model.T, bounds=(0,1))
 
     # Initial SoC
     def soc_init_rule(m, b):
@@ -64,8 +65,9 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     def power_balance_rule(m, t):
         total_battery_discharge = sum(m.battery_discharge[b, t] for b in model.B)
         total_battery_charge = sum(m.battery_charge[b, t] for b in model.B)
+        total_c = sum(m.c[h, t] for h in model.H)
         return (m.grid_import[t] + total_battery_discharge - total_battery_charge ==
-                total_demand[t] - ((solar_prod[t] * m.c[t]) + wind_prod[t]))
+                total_demand[t] - ((solar_prod[t] * total_c) + wind_prod[t]))
     model.power_balance = pyo.Constraint(model.T, rule=power_balance_rule)
 
     def battery_charge_limit_rule(m, b, t):
