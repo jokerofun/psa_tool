@@ -16,7 +16,7 @@ from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
 from examples.helpers.microgrid_setup import MicrogridSetup
 from examples.helpers.file_writer import write
-# from benchmark.benchmark import Benchmark
+from benchmark.benchmark import Benchmark
 
 
 def solve_microgrid(setup:MicrogridSetup):    
@@ -27,8 +27,8 @@ def solve_microgrid(setup:MicrogridSetup):
     # NOTE Using predicted consumer data
     home_demand = {}
     for _ in range(setup.no_homes):
-        home_demand = predict_consumer_data(dataframe=df, parameters={"hours": 24, "model_name":"consumer_model", "factor": 1})
-    school_demand = predict_consumer_data(dataframe=df2, parameters={"hours": 24, "model_name":"consumer_model", "factor": 100})
+        home_demand = predict_consumer_data(dataframe=df, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 1})
+    school_demand = predict_consumer_data(dataframe=df2, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 100})
     df["total_demand"] = home_demand["gen_consumption"]["consumption_kWh"] * setup.no_homes + school_demand["gen_consumption"]["consumption_kWh"]
     total_demand = df["total_demand"].values
 
@@ -56,7 +56,7 @@ def solve_microgrid(setup:MicrogridSetup):
     battery_discharge = [cp.Variable(setup.T, nonneg=True)
                          for _ in range(setup.no_batteries)]
     battery_soc = [cp.Variable(setup.T+1, nonneg=True) for _ in range(setup.no_batteries)]
-    c = [cp.Variable(setup.T, nonneg=True) for _ in range(setup.no_homes)]
+    c = [cp.Variable(setup.T, nonneg=True) for _ in range(setup.no_homes+setup.no_big_solar_panels)]
 
     # Constraints
     constraints = []
@@ -68,7 +68,7 @@ def solve_microgrid(setup:MicrogridSetup):
 
     for t in range(setup.T):
         # Control variable for solar panel activation
-        for i in range(setup.no_homes):
+        for i in range(setup.no_homes+setup.no_big_solar_panels):
             constraints.append(c[i][t] <= 1)
 
         # Power balance: sum all battery charge/discharge and grid import
@@ -95,7 +95,6 @@ def solve_microgrid(setup:MicrogridSetup):
             )
 
             # Battery SoC limits
-            constraints.append(battery_soc[i][t+1] >= 0)
             constraints.append(battery_soc[i][t+1] <= setup.battery_capacity)
 
     # Objective: minimize total grid import
@@ -265,6 +264,6 @@ def solve_microgrid_with_mock_data(time_intervals=24, num_batteries=1):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    # Benchmark.run(solve_microgrid, runs=1)
-    Benchmark.run(solve_microgrid, setup, runs=3)
-    # solve_microgrid(setup)
+    setup.T = 24
+    # Benchmark.run(solve_microgrid, setup, runs=1)
+    solve_microgrid(setup)

@@ -1,0 +1,9 @@
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 4611,
+  "variables": 4395,
+  "status": "optimal",
+  "result": 3331.984563693569
+}

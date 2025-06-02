@@ -8,18 +8,18 @@ from src.optimization.base_domain import Node
 class DataflowManager:
     __instance = None
 
-    @staticmethod
-    def getInstance() -> DataflowManager:
-        if DataflowManager.__instance == None:
-            DataflowManager()
-        return DataflowManager.__instance
+    # @staticmethod
+    # def getInstance() -> DataflowManager:
+    #     if DataflowManager.__instance == None:
+    #         DataflowManager()
+    #     return DataflowManager.__instance
 
     def __init__(self) -> None:
-        if DataflowManager.__instance != None:
-            raise Exception("This class is a singleton!")
-        else:
-            DataflowManager.__instance = self
-            self.dataflows = {}
+        # if DataflowManager.__instance != None:
+        #     raise Exception("This class is a singleton!")
+        # else:
+        #     DataflowManager.__instance = self
+        self.dataflows = {}
     
     def new_dataflow(self, object, dataflow = None) -> Dataflow:
         if object is None:

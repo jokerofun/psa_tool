@@ -49,8 +49,8 @@ def run(setup: MicrogridSetup):
     
     for household in household_consumers:
         # household.dataflow.task("gen_consumption", DataProcessingTask, process_func=generate_consumption_data, parameters={"A0": 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9}, final=True)
-        household.dataflow.task("gen_consumption", DataProcessingTask, process_func=predict_consumer_data, parameters={"hours": 24, "model_name":"consumer_model", "factor": 1}, final=True)
-    school.dataflow.task("gen_consumption", DataProcessingTask, process_func=predict_consumer_data, parameters={"hours": 24, "model_name":"consumer_model", "factor": 100}, final=True)
+        household.dataflow.task("gen_consumption", DataProcessingTask, process_func=predict_consumer_data, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 1}, final=True)
+    school.dataflow.task("gen_consumption", DataProcessingTask, process_func=predict_consumer_data, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 100}, final=True)
     for solar_panel in solar_panels_household:
         task1 = solar_panel.dataflow.task("get_solar_data", DataProcessingTask, process_func=get_irradiation_data, parameters={"latitude": 57.0488, "longitude": 9.9217})
         task2 = solar_panel.dataflow.task("gen_solar_data", DataProcessingTask, process_func=generate_solar_panel_data, parameters={"rated_power": setup.solar_capacity_home}, final=True)
@@ -77,6 +77,7 @@ def run(setup: MicrogridSetup):
     balance.connect_nodes(batteries)
 
     result = problemClass.solve(solver=cp.CBC,objective="minimize", value="cost")
+
     stats = {
         "implementation": "our microgrid demo",
         "solver": result.solver_stats.solver_name,
@@ -103,5 +104,5 @@ def run(setup: MicrogridSetup):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-
+    setup.T = 48
     run(setup=setup)

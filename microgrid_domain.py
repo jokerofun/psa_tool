@@ -22,7 +22,7 @@ class Consumer(Resource):
         return 0
     
     def assign(self, t):
-        self.consumption_kWh = self.dataflow.results["gen_consumption"]["consumption_kWh"].head(t).values
+        self.consumption_kWh = self.dataflow.results["gen_consumption"]["consumption_kWh"][:t].values
     
 class Producer(Resource):
     def __init__(self, name, max_power_output_kW=[]):
@@ -44,14 +44,13 @@ class SolarPanel(Producer):
         super().__init__(name, max_power_output_kW)
 
     def set_time_length(self, t):
-        self.c = cp.Variable(t, nonneg=True)
+        self.c = cp.Variable(t, nonneg=True, name=f"{self.name}_var_c")
 
     def powerflow(self, t):
         return self.c[t] * self.max_power_output_kW[t]
     
     def constraints(self, t):
-        return [self.c[t] >= 0,
-                self.c[t] <= 1]
+        return [self.c[t] <= 1]
     
     @property
     def cost(self):
@@ -63,7 +62,7 @@ class SolarPanel(Producer):
         return {self.name : {"production_schedule" : self.c.value}}
     
     def assign(self, t):
-        self.max_power_output_kW = self.dataflow.results["gen_solar_data"]["energy_generated"].head(t).values
+        self.max_power_output_kW = self.dataflow.results["gen_solar_data"]["energy_generated"][:t].values
 
 class WindTurbine(Producer):
     def __init__(self, name, max_power_output_kW=[]):
@@ -87,22 +86,26 @@ class WindTurbine(Producer):
         return {self.name : {"production_schedule" : self.max_power_output_kW}}
     
     def assign(self, t):
-        self.max_power_output_kW = self.dataflow.results["gen_wind_data"]["energy_generated"].head(t).values
+        self.max_power_output_kW = self.dataflow.results["gen_wind_data"]["energy_generated"][:t].values
     
 class Battery(Resource):
-    def __init__(self, name, charging_power_kW, discharging_power_kW, capacity_kWh, efficiency):
+    def __init__(self, name, charging_power_kW, discharging_power_kW, capacity_kWh, efficiency, SoC_initial = 0):
         super().__init__(name)
         self.charging_power_kW = charging_power_kW
         self.discharging_power_kW = discharging_power_kW
         self.capacity_kWh = capacity_kWh
         self.efficiency = efficiency
+        self.SoC_initial = SoC_initial
 
     def set_time_length(self, t):
-        self.charge = cp.Variable(t, nonneg=True)
-        self.discharge = cp.Variable(t, nonneg=True)
+        self.charge = cp.Variable(t, nonneg=True, name=f"{self.name}_var_charge")
+        self.discharge = cp.Variable(t, nonneg=True, name=f"{self.name}_var_discharge")
         # self.mode = cp.Variable(time_len, boolean=True)
-        self.SoC = cp.Variable(shape = (t), nonneg=True)
+        self.SoC = cp.Variable(shape = (t+1), nonneg=True, name=f"{self.name}_var_SoC")
 
+    def const_constraints(self):
+        return [self.SoC[0] == 0]
+    
     def constraints(self, t):
         constraints = [
             self.SoC[t] <= self.capacity_kWh,
@@ -110,12 +113,13 @@ class Battery(Resource):
             self.discharge[t] <= self.discharging_power_kW, # * (1 - self.mode[t]),
         ]
         
-        if t == 0:
-            constraints.append(
-                self.SoC[t] == self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])
-        else:
-            constraints.append(
-                self.SoC[t] == self.SoC[t-1] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])        
+        # if t == 0:
+        #     constraints.append(
+        #         self.SoC[t] == self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])
+        # else:
+        constraints.append(
+            self.SoC[t+1] == self.SoC[t] + self.efficiency * self.charge[t] - (1 / self.efficiency) * self.discharge[t])        
+        
         return constraints
     
     def powerflow(self, t):
@@ -138,7 +142,7 @@ class MeteringPoint(Resource):
         # self.connect_nodes([self])
 
     def set_time_length(self, t):
-        self.energy_import = cp.Variable(t, nonneg=True)
+        self.energy_import = cp.Variable(t, nonneg=True, name=f"{self.name}_var_energy_import")
 
     def powerflow(self, t):
         return self.energy_import[t]

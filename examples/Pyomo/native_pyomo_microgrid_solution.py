@@ -26,8 +26,8 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     # NOTE Using predicted consumer data
     home_demand = {}
     for _ in range(setup.no_homes):
-        home_demand = predict_consumer_data(dataframe=df, parameters={"hours": 24, "model_name":"consumer_model", "factor": 1})
-    school_demand = predict_consumer_data(dataframe=df2, parameters={"hours": 24, "model_name":"consumer_model", "factor": 100})
+        home_demand = predict_consumer_data(dataframe=df, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 1})
+    school_demand = predict_consumer_data(dataframe=df2, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 100})
     df["total_demand"] = home_demand["gen_consumption"]["consumption_kWh"] * setup.no_homes + school_demand["gen_consumption"]["consumption_kWh"]
     total_demand = df["total_demand"].values
 
@@ -40,21 +40,28 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     solar_prod = {}
     for _ in range(setup.no_homes):
         solar_prod = generate_solar_panel_data(df, parameters={"rated_power": setup.solar_capacity_home,})
-        solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values * setup.no_homes)
+        solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values)
     solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": setup.solar_capacity_school,})
-    solar_prod = solar_prod + solar_prod_school["gen_solar_data"]["energy_generated"].values
+    solar_prod_school = solar_prod_school["gen_solar_data"]["energy_generated"].values
+    # solar_prod = solar_prod + solar_prod_school
+    print(total_demand[:setup.T])
+    print(wind_prod[:setup.T])
+    print(solar_prod[:setup.T])
 
     model = pyo.ConcreteModel()
     model.T = pyo.RangeSet(0, setup.T-1)
     model.B = pyo.RangeSet(0, setup.no_batteries-1)
     model.H = pyo.RangeSet(0, setup.no_homes-1)
+    model.S = pyo.RangeSet(0, setup.no_big_solar_panels-1)
 
     # Variables
     model.grid_import = pyo.Var(model.T, domain=pyo.NonNegativeReals)
     model.battery_charge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
     model.battery_discharge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
     model.battery_soc = pyo.Var(model.B, range(setup.T+1), domain=pyo.NonNegativeReals)
-    model.c = pyo.Var(model.H, model.T, bounds=(0,1))
+    # model.c = pyo.Var(model.T, bounds=(0,1))
+    model.c_home = pyo.Var(model.H, model.T, domain=pyo.NonNegativeReals)
+    model.c_school = pyo.Var(model.T, domain=pyo.NonNegativeReals)
 
     # Initial SoC
     def soc_init_rule(m, b):
@@ -65,9 +72,11 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     def power_balance_rule(m, t):
         total_battery_discharge = sum(m.battery_discharge[b, t] for b in model.B)
         total_battery_charge = sum(m.battery_charge[b, t] for b in model.B)
-        total_c = sum(m.c[h, t] for h in model.H)
-        return (m.grid_import[t] + total_battery_discharge - total_battery_charge ==
-                total_demand[t] - ((solar_prod[t] * total_c) + wind_prod[t]))
+        # total_hourly_solar_prod = m.c[t] * solar_prod[t]
+        total_hourly_solar_prod = sum(m.c_home[h, t] * solar_prod[t] for h in model.H)
+        hourly_solar_prod_school = m.c_school[t] * solar_prod_school[t]
+        return (m.grid_import[t] + total_hourly_solar_prod + hourly_solar_prod_school + wind_prod[t] + total_battery_discharge == 
+                total_battery_charge + total_demand[t])
     model.power_balance = pyo.Constraint(model.T, rule=power_balance_rule)
 
     def battery_charge_limit_rule(m, b, t):
@@ -82,20 +91,28 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
         return m.battery_soc[b, t+1] == m.battery_soc[b, t] + m.battery_charge[b, t] * setup.battery_efficiency - m.battery_discharge[b, t] / setup.battery_efficiency
     model.soc_update = pyo.Constraint(model.B, range(setup.T), rule=soc_update_rule)
 
-    def soc_min_rule(m, b, t):
-        return m.battery_soc[b, t+1] >= 0
-    model.soc_min = pyo.Constraint(model.B, range(setup.T), rule=soc_min_rule)
+    # def soc_min_rule(m, b, t):
+    #     return m.battery_soc[b, t+1] >= 0
+    # model.soc_min = pyo.Constraint(model.B, range(setup.T), rule=soc_min_rule)
 
     def soc_max_rule(m, b, t):
         return m.battery_soc[b, t+1] <= setup.battery_capacity
     model.soc_max = pyo.Constraint(model.B, range(setup.T), rule=soc_max_rule)
 
+    def c_home_max_rule(m, h, t):
+        return m.c_home[h, t] <= 1
+    model.c_home_max = pyo.Constraint(model.H, range(setup.T), rule=c_home_max_rule)
+
+    def c_school_max_rule(m, t):
+        return m.c_school[t] <= 1
+    model.c_school_max = pyo.Constraint(range(setup.T), rule=c_school_max_rule)
+
     # Objective: minimize total grid import
     model.obj = pyo.Objective(expr=sum(model.grid_import[t] for t in model.T), sense=pyo.minimize)
 
     # Solve
-    solver = pyo.SolverFactory('gurobi')
-    result = solver.solve(model, tee=True)
+    solver = pyo.SolverFactory('cbc', executable="C:/Users/samue/Downloads/cbc/bin/cbc.exe")
+    result = solver.solve(model, tee=False)
 
     stats = {
         "implementation": "Pyomo",
@@ -128,8 +145,8 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     # plt.legend()
     # plt.grid(True)
     # plt.tight_layout()
+    # plt.savefig("figures/demand_production_profiles.png")
     # plt.show()
-    # plt.savefig("demand_production_profiles.png")
 
     # return grid_import
 
@@ -238,6 +255,7 @@ def solve_microgrid_pyomo_with_mock_data(time_intervals=24, num_batteries=1):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
+    setup.T = 48
     # Benchmark.run(solve_microgrid_pyomo, runs=1)
     # Benchmark.run(solve_microgrid_pyomo, setup, runs=1)
     solve_microgrid_pyomo(setup=setup)

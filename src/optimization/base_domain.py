@@ -37,6 +37,9 @@ class Node():
     
     def constraints(self, t):
         return []
+    
+    def const_constraints(self):
+        return []
 
     @property
     def variables(self):

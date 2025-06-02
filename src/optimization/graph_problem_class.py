@@ -4,13 +4,13 @@ from .selector import Selector
 # from persistence.db_manager import DBManager
 
 class GraphProblemClass():
-    def __init__(self, name, time_length=24):
+    def __init__(self, name, time_length):
         self.name = name
         self.time_length = time_length
         self._nodes = []
         self._objective = ""
         self._selector = None
-        self._dataflow_manager = DataflowManager.getInstance()
+        self._dataflow_manager = DataflowManager()
 
     def __repr__(self):
         return f"GraphProblemClass(name={self.name},nodes={self._nodes},objective={self._objective})"
@@ -45,6 +45,13 @@ class GraphProblemClass():
         
         return constraints
     
+    def collect_const_constraints(self):
+        constraints = []
+        for node in self._nodes:
+            constraints.extend(node.const_constraints())
+
+        return constraints
+    
     # objective function builder, with minimize or maximize
     def get_objective_function(self, objective : str = "minimize"):
         self._objective = objective.lower()
@@ -77,12 +84,13 @@ class GraphProblemClass():
 
         # collect all constraints from the nodes
         constraints = []
+        constraints.extend(self.collect_const_constraints())
         for t in range(self.time_length):
             constraints.extend(self.collect_constraints(t))
         
         # build and solve the optimization problem
         problem = cp.Problem(objective, constraints)
-        problem.solve(solver=solver, verbose=True)
+        problem.solve(solver=solver, verbose=False)
 
         if problem.status == cp.OPTIMAL:
             print(f"Result: {problem.value}")
