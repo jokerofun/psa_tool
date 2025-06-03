@@ -1,74 +1,20 @@
 {
-  "implementation": "GBOML",
-  "solver": "clp",
-  "parameters": 68,
-  "constraints": 233,
-  "variables": 114,
-  "status": "optimal",
-  "result": 934.9894129815282
-}
-{
-  "implementation": "our microgrid demo",
-  "solver": "CBC",
+  "implementation": "Pyomo",
+  "solver": "cbc",
   "parameters": 0,
   "constraints": 1539,
   "variables": 1467,
   "status": "optimal",
-  "result": 934.9894129815284
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 1539,
-  "variables": 1467,
-  "status": "optimal",
-  "result": 934.9893961497726
+  "result": 537.453963
 }
 {
   "implementation": "Pyomo",
-  "solver": "gurobi",
+  "solver": "cbc",
   "parameters": 0,
   "constraints": 1539,
   "variables": 1467,
   "status": "optimal",
-  "result": 934.9894164679292
-}
-{
-  "implementation": "our microgrid demo",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 1539,
-  "variables": 1467,
-  "status": "optimal",
-  "result": 934.9894129815284
-}
-{
-  "implementation": "our microgrid demo",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 1539,
-  "variables": 1467,
-  "status": "optimal",
-  "result": 934.9894129815284
-}
-{
-  "implementation": "GBOML",
-  "solver": "clp",
-  "parameters": 68,
-  "constraints": 233,
-  "variables": 114,
-  "status": "optimal",
-  "result": 934.9894129815282
-}
-{
-  "implementation": "our microgrid demo",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 1539,
-  "variables": 1467,
-  "status": "optimal",
-  "result": 934.9894129815284
+  "result": 537.453963
 }
 {
   "implementation": "our microgrid demo",
@@ -77,7 +23,7 @@
   "constraints": 3075,
   "variables": 2931,
   "status": "optimal",
-  "result": 1552.365059827243
+  "result": 2331.9341034252598
 }
 {
   "implementation": "Pyomo",
@@ -86,16 +32,16 @@
   "constraints": 3075,
   "variables": 2931,
   "status": "optimal",
-  "result": 1552.3650650000002
+  "result": 2331.934126
 }
 {
-  "implementation": "GBOML",
-  "solver": "clp",
-  "parameters": 68,
-  "constraints": 233,
-  "variables": 114,
+  "implementation": "Pyomo",
+  "solver": "cbc",
+  "parameters": 0,
+  "constraints": 3075,
+  "variables": 2931,
   "status": "optimal",
-  "result": 984.7297555343791
+  "result": 2331.934126
 }
 {
   "implementation": "CVXPY",
@@ -104,97 +50,25 @@
   "constraints": 3075,
   "variables": 2931,
   "status": "optimal",
-  "result": 1552.365030485962
+  "result": 2008.9212076870167
 }
 {
-  "implementation": "CVXPY",
-  "solver": "CBC",
+  "implementation": "Pyomo",
+  "solver": "cbc",
   "parameters": 0,
-  "constraints": 3203,
-  "variables": 3053,
+  "constraints": 3075,
+  "variables": 2931,
   "status": "optimal",
-  "result": 1552.365030485962
+  "result": 2008.9212020000004
 }
 {
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 3203,
-  "variables": 3053,
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 23,
+  "constraints": 53,
+  "variables": 24,
   "status": "optimal",
-  "result": 1552.365030485962
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 1539,
-  "variables": 1467,
-  "status": "optimal",
-  "result": 934.9893961497726
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 3203,
-  "variables": 3053,
-  "status": "optimal",
-  "result": 1552.365030485962
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 3203,
-  "variables": 3053,
-  "status": "optimal",
-  "result": 1552.365030485962
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 2563,
-  "variables": 2443,
-  "status": "optimal",
-  "result": 1552.365030485962
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 2051,
-  "variables": 1955,
-  "status": "optimal",
-  "result": 1396.375975301662
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 1539,
-  "variables": 1467,
-  "status": "optimal",
-  "result": 934.9893961497726
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 1539,
-  "variables": 1467,
-  "status": "optimal",
-  "result": 934.9894129815282
-}
-{
-  "implementation": "CVXPY",
-  "solver": "CBC",
-  "parameters": 0,
-  "constraints": 4611,
-  "variables": 4395,
-  "status": "optimal",
-  "result": 3331.984563693569
+  "result": 1154.905140097801
 }
 {
   "implementation": "GBOML",
@@ -203,50 +77,5 @@
   "constraints": 233,
   "variables": 114,
   "status": "optimal",
-  "result": 573.273320169145
-}
-{
-  "implementation": "GBOML",
-  "solver": "clp",
-  "parameters": 68,
-  "constraints": 233,
-  "variables": 114,
-  "status": "optimal",
-  "result": 2529.2528960313853
-}
-{
-  "implementation": "GBOML",
-  "solver": "clp",
-  "parameters": 68,
-  "constraints": 233,
-  "variables": 114,
-  "status": "optimal",
-  "result": 2529.2528960313853
-}
-{
-  "implementation": "GBOML",
-  "solver": "clp",
-  "parameters": 68,
-  "constraints": 233,
-  "variables": 114,
-  "status": "optimal",
-  "result": 4522.416286795625
-}
-{
-  "implementation": "GBOML",
-  "solver": "clp",
-  "parameters": 68,
-  "constraints": 233,
-  "variables": 114,
-  "status": "optimal",
-  "result": 4522.416286795625
-}
-{
-  "implementation": "GBOML",
-  "solver": "clp",
-  "parameters": 68,
-  "constraints": 233,
-  "variables": 114,
-  "status": "optimal",
-  "result": 2529.2528960313853
+  "result": 2008.9212076870165
 }

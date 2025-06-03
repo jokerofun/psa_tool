@@ -19,7 +19,7 @@ def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"
     gboml_setup = setup
     gboml_setup.T = setup.T + 1
     gboml_domain.build_microgrid(setup=gboml_setup, file_path=microgrid_file_path)
-
+    
     home_predicted_consumption = {}
     for _ in range(gboml_setup.no_homes):
         home_predicted_consumption = predict_consumer_data(parameters={"hours": gboml_setup.T, "model_name":"consumer_model", "factor": 1})["gen_consumption"]["consumption_kWh"].values
@@ -28,19 +28,19 @@ def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"
     wind_data = get_wind_data(dataframe={}, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
     
     solar_prod = {}
-    for _ in range(gboml_setup.no_solar_panels):
+    for i in range(1, gboml_setup.no_solar_panels + 1):
         solar_data = get_irradiation_data(dataframe={}, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
         solar_prod = generate_solar_panel_data(solar_data, parameters={"rated_power": gboml_setup.solar_capacity_home,})
+        np.savetxt(f"data/gboml_data/gen_solar_{i}.csv", solar_prod["gen_solar_data"]["energy_generated"][:gboml_setup.T].values)
 
     wind_prod = generate_wind_turbine_data(wind_data, parameters={"rated_power": gboml_setup.wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
 
     solar_data = get_irradiation_data(dataframe={}, parameters={"latitude": 57.0488, "longitude": 9.9217})
     big_solar_prod = generate_solar_panel_data(solar_data, parameters={"rated_power": gboml_setup.solar_capacity_school})
 
-    np.savetxt("data/demand.csv", demand)
-    np.savetxt("data/gen_wind.csv", wind_prod["gen_wind_data"]["energy_generated"][:gboml_setup.T].values)
-    np.savetxt("data/gen_solar.csv", solar_prod["gen_solar_data"]["energy_generated"][:gboml_setup.T].values)
-    np.savetxt("data/gen_big_solar.csv", big_solar_prod["gen_solar_data"]["energy_generated"][:gboml_setup.T].values)
+    np.savetxt("data/gboml_data/demand.csv", demand)
+    np.savetxt("data/gboml_data/gen_wind.csv", wind_prod["gen_wind_data"]["energy_generated"][:gboml_setup.T].values)
+    np.savetxt("data/gboml_data/gen_big_solar.csv", big_solar_prod["gen_solar_data"]["energy_generated"][:gboml_setup.T].values)
 
     gboml_model = GbomlGraph(gboml_setup.T)
     nodes, edges, global_params = gboml_model.import_all_nodes_and_edges(microgrid_file_path)
@@ -82,10 +82,8 @@ def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 72
-    
-    run(setup=setup)
     setup.T = 48
+    
     run(setup=setup)
     # (result, details) = run(setup=setup)
     # print(result)

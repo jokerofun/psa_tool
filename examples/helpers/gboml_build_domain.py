@@ -4,10 +4,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')
 from examples.helpers.microgrid_setup import MicrogridSetup
 
 def build_microgrid(setup:MicrogridSetup,
-                    demand_file_path = "../../data/demand.csv",
-                    solar_gen_file_path = "../../data/gen_solar.csv",
-                    big_solar_gen_file_path = "../../data/gen_big_solar.csv",
-                    wind_gen_file_path = "../../data/gen_wind.csv",
+                    demand_file_path = "../../data/gboml_data/demand.csv",
+                    solar_gen_file_path = "../../data/gboml_data/gen_solar.csv",
+                    big_solar_gen_file_path = "../../data/gboml_data/gen_big_solar.csv",
+                    wind_gen_file_path = "../../data/gboml_data/gen_wind.csv",
                     file_path="examples/GBOML/microgrid.txt"):
     time_horizon_template = '''
 #TIMEHORIZON
@@ -131,7 +131,7 @@ min: power_import[t];
         f.write(block + "\n")
 
         for i in range(1, setup.no_solar_panels + 1):
-            block = solar_panel_tepmlate.format(i=i, solar_csv=solar_gen_file_path)
+            block = solar_panel_tepmlate.format(i=i, solar_csv=f"../../data/gboml_data/gen_solar_{i}.csv")
             f.write(block + "\n")
 
         for i in range(1, setup.no_big_solar_panels + 1):

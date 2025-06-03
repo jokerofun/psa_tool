@@ -25,32 +25,27 @@ def solve_microgrid(setup:MicrogridSetup):
     df2: dict = {}
 
     # NOTE Using predicted consumer data
-    home_demand = {}
+    home_demands = []
     for _ in range(setup.no_homes):
-        home_demand = predict_consumer_data(dataframe=df, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 1})
-    school_demand = predict_consumer_data(dataframe=df2, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 100})
-    df["total_demand"] = home_demand["gen_consumption"]["consumption_kWh"] * setup.no_homes + school_demand["gen_consumption"]["consumption_kWh"]
+        home_demands.append(predict_consumer_data(dataframe={}, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 1})["gen_consumption"]["consumption_kWh"])
+    school_demand = predict_consumer_data(dataframe={}, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 100})
+    df["total_demand"] = [sum(group) for group in zip(*home_demands)] + school_demand["gen_consumption"]["consumption_kWh"]
     total_demand = df["total_demand"].values
 
-    # NOTE Using mock data
-    # demand = generate_consumption_data(df, parameters={"A0" : 1, "A1": 3, "A2": 2, "phi0": 3, "phi1": 9})
-    # demand["consumption"] = (demand["consumption"] * num_homes) / 100
-    # total_demand = demand
-    # df["total_demand"] = total_demand
-
-    get_wind_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
-    get_irradiation_data(df, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
-    df2 = df.copy()
-    wind_prod = generate_wind_turbine_data(df, parameters={"rated_power": setup.wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
+    wind_data_dict = get_wind_data({}, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    wind_prod = generate_wind_turbine_data(wind_data_dict, parameters={"rated_power": setup.wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
     wind_prod = wind_prod["gen_wind_data"]["energy_generated"].values
 
-    solar_prod = {}
-    for _ in range(setup.no_homes):
-        solar_prod = generate_solar_panel_data(df, parameters={"rated_power": setup.solar_capacity_home,})
-        solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values)
-    solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": setup.solar_capacity_school,})
+    school_solar_dict = get_irradiation_data({}, parameters={"latitude": 57.0488, "longitude": 9.9217})  # Aalborg, Denmark
+    solar_prod_school = generate_solar_panel_data(school_solar_dict, parameters={"rated_power": setup.solar_capacity_school,})
     solar_prod_school = solar_prod_school["gen_solar_data"]["energy_generated"].values
-    # solar_prod = solar_prod + solar_prod_school
+
+    solar_prods = []
+    for _ in range(setup.no_solar_panels):
+        solar_data_dict =  get_irradiation_data({}, parameters={"latitude": 57.0488, "longitude": 9.9217})
+        solar_prod = generate_solar_panel_data(solar_data_dict, parameters={"rated_power": setup.solar_capacity_home,})
+        solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values)
+        solar_prods.append(solar_prod)
 
     # Decision variables
     grid_import = cp.Variable(setup.T, nonneg=True)
@@ -76,15 +71,13 @@ def solve_microgrid(setup:MicrogridSetup):
         constraints.append(c_school[t] <= 1)
 
         # Power balance: sum all battery charge/discharge and grid import
-        total_battery_discharge = sum(
-            battery_discharge[i][t] for i in range(setup.no_batteries))
-        total_battery_charge = sum(
-            battery_charge[i][t] for i in range(setup.no_batteries))
-        total_hourly_solar_prod_homes = sum(c_homes[i][t] * solar_prod[t] for i in range(setup.no_solar_panels))
+        total_hourly_battery_discharge = sum(battery_discharge[i][t] for i in range(setup.no_batteries))
+        total_hourly_battery_charge = sum(battery_charge[i][t] for i in range(setup.no_batteries))
+        total_hourly_solar_prod_homes = sum(c_homes[i][t] * solar_prods[i][t] for i in range(setup.no_solar_panels))
         total_hourly_solar_prod_school = c_school[t] * solar_prod_school[t]
         constraints.append(
-            grid_import[t] + total_battery_discharge + total_hourly_solar_prod_homes + total_hourly_solar_prod_school + wind_prod[t]
-            == total_battery_charge + total_demand[t]
+            grid_import[t] + total_hourly_battery_discharge + total_hourly_solar_prod_homes + total_hourly_solar_prod_school + wind_prod[t]
+            == total_hourly_battery_charge + total_demand[t]
         )
 
         for i in range(setup.no_batteries):
@@ -269,6 +262,6 @@ def solve_microgrid_with_mock_data(time_intervals=24, num_batteries=1):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 72
+    setup.T = 48
     # Benchmark.run(solve_microgrid, setup, runs=1)
     solve_microgrid(setup)
