@@ -1,5 +1,4 @@
-import os
-import sys
+import os, sys
 import numpy as np
 import pyomo.environ as pyo
 from pyomo.environ import Var, Constraint, Param, value
@@ -26,21 +25,21 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     school_demand_dict = predict_consumer_data(dataframe={}, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 100})
     school_demand = school_demand_dict["gen_consumption"]["consumption_kWh"]
     df["total_demand"] = [sum(group) for group in zip(*home_demands)] + school_demand
-    total_demand = df["total_demand"].values
+    total_demand = df["total_demand"]
 
     wind_data_dict = get_wind_data({}, parameters={"latitude": 57.0488, "longitude": 9.9217})
     wind_prod_dict = generate_wind_turbine_data(wind_data_dict, parameters={"rated_power": setup.wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
-    wind_prod = wind_prod_dict["gen_wind_data"]["energy_generated"].values
+    wind_prod = wind_prod_dict["gen_wind_data"]["energy_generated"]
 
     solar_data_dict = get_irradiation_data({}, parameters={"latitude": 57.0488, "longitude": 9.9217})
     solar_prod_school_dict = generate_solar_panel_data(solar_data_dict, parameters={"rated_power": setup.solar_capacity_school})
-    solar_prod_school = solar_prod_school_dict["gen_solar_data"]["energy_generated"].values
+    solar_prod_school = solar_prod_school_dict["gen_solar_data"]["energy_generated"]
 
     solar_prods = []
     for _ in range(setup.no_solar_panels):
         solar_data_dict =  get_irradiation_data({}, parameters={"latitude": 57.0488, "longitude": 9.9217})
         solar_prod_dict = generate_solar_panel_data(solar_data_dict, parameters={"rated_power": setup.solar_capacity_home,})
-        solar_prod = solar_prod_dict["gen_solar_data"]["energy_generated"].values
+        solar_prod = solar_prod_dict["gen_solar_data"]["energy_generated"]
         solar_prods.append(solar_prod)
 
     model = pyo.ConcreteModel()

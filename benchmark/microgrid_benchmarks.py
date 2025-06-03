@@ -19,8 +19,8 @@ def measure_execution_time(setup:MicrogridSetup, microgrid_file_path):
     benchmark = Benchmark()
     empty(setup.output_path)
     demo_result = benchmark.run(microgrid_demo.run, setup, runs=1)
-    cvxpy_result = benchmark.run(cvxpy_microgrid_demo.solve_microgrid, setup, runs=1)
-    pyomo_result = benchmark.run(pyomo_microgrid_demo.solve, setup, runs=1)
+    cvxpy_result = benchmark.run(cvxpy_microgrid_demo.solve_microgrid_cvxpy, setup, runs=1)
+    pyomo_result = benchmark.run(pyomo_microgrid_demo.solve_microgrid_pyomo, setup, runs=1)
     gboml_result = benchmark.run(gboml_microgrid_demo.run, setup, microgrid_file_path, runs=1)
 
     return {

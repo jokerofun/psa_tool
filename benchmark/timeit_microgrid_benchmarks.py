@@ -42,7 +42,7 @@ def run_memory_usage_experiments(setup: MicrogridSetup, microgrid_file_path="", 
     empty(setup.output_path)
 
     demo_memory_usage = memory_usage((lambda: microgrid_demo.run(setup=setup)), max_iterations=runs)
-    cvxpy_memory_usage = memory_usage((lambda: cvxpy_microgrid_demo.solve_microgrid(setup)), max_iterations=runs)
+    cvxpy_memory_usage = memory_usage((lambda: cvxpy_microgrid_demo.solve_microgrid_cvxpy(setup)), max_iterations=runs)
     pyomo_memory_usage = memory_usage((lambda: pyomo_microgrid_demo.solve_microgrid_pyomo(setup)), max_iterations=runs)
     gboml_memory_usage = memory_usage((lambda: gboml_microgrid_demo.run(setup, microgrid_file_path)), max_iterations=runs)
     
