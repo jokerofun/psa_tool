@@ -18,8 +18,8 @@ from examples.helpers.file_writer import write
 
 def plot_results(t, total_consumption, wind_production, solar_production, batteries):
     import matplotlib.pyplot as plt
-    # for battery in batteries:
-    #     plt.plot(battery.SoC[:t].value[:-1], label=f'Battery {battery.name} SoC', linestyle='--')
+    for battery in batteries:
+        plt.plot(battery.SoC[:t].value[:-1], label=f'Battery {battery.name} SoC', linestyle='--')
     plt.plot(total_consumption[:t], label='Total Consumption', color='red')
     plt.plot(wind_production[:t], label='Wind Production', color='blue')
     plt.plot(solar_production[:t], label='Solar Production', color='orange')
@@ -89,20 +89,20 @@ def run(setup: MicrogridSetup):
     }
     write(setup.output_path, stats)
     
-    # total_consumption = school.consumption_kWh + sum(household.consumption_kWh for household in household_consumers)
-    # solar_production = sum(solar_panel.max_power_output_kW for solar_panel in solar_panels_household) + solar_panel_school.max_power_output_kW
+    total_consumption = school.consumption_kWh + sum(household.consumption_kWh for household in household_consumers)
+    solar_production = sum(solar_panel.max_power_output_kW for solar_panel in solar_panels_household) + solar_panel_school.max_power_output_kW
 
-    # print("Total grid import:", sum(metering_point.energy_import.value))
+    print("Total grid import:", sum(metering_point.energy_import.value))
     
-    # plot_results(
-    #     setup.T,
-    #     total_consumption=total_consumption,
-    #     wind_production=wind_turbine.max_power_output_kW,
-    #     solar_production=solar_production,
-    #     batteries=batteries
-    # )
+    plot_results(
+        setup.T,
+        total_consumption=total_consumption,
+        wind_production=wind_turbine.max_power_output_kW,
+        solar_production=solar_production,
+        batteries=batteries
+    )
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 48
+    setup.T = 24
     run(setup=setup)

@@ -114,33 +114,33 @@ def solve_microgrid(setup:MicrogridSetup):
     write(setup.output_path, stats)
 
     # Round results
-    # grid_import.value = np.round(grid_import.value, 2)
+    grid_import.value = np.round(grid_import.value, 2)
     
-    # print("Total grid import (kWh):", np.sum(grid_import.value))
-    # print("Grid import per hour:", grid_import.value)
+    print("Total grid import (kWh):", np.sum(grid_import.value))
+    print("Grid import per hour:", grid_import.value)
 
-    # for i in range(setup.no_batteries):
-    #     # print(f"Battery {i} charge:", np.round(battery_charge[i].value, 2))
-    #     # print(f"Battery {i} discharge:", np.round(battery_discharge[i].value, 2))
-    #     print(f"Battery {i} SoC:", np.round(battery_soc[i].value, 2))
+    for i in range(setup.no_batteries):
+        # print(f"Battery {i} charge:", np.round(battery_charge[i].value, 2))
+        # print(f"Battery {i} discharge:", np.round(battery_discharge[i].value, 2))
+        print(f"Battery {i} SoC:", np.round(battery_soc[i].value, 2))
 
-    # # Plot demand and production
-    # plt.figure(figsize=(12, 6))
-    # plt.plot(total_demand[:setup.T], label="Total Demand")
-    # plt.plot(solar_prod[:setup.T], label="Solar Production")
-    # plt.plot(wind_prod[:setup.T], label="Wind Production")
-    # plt.plot(solar_prod[:setup.T] + wind_prod[:setup.T], label="Total Renewable Production")
-    # # Add battery SoC to the plot
-    # for i in range(setup.no_batteries):
-    #     plt.plot(battery_soc[i][:setup.T].value[:-1], label=f"Battery {i} SoC", linestyle="--")
-    # plt.xlabel("Hour")
-    # plt.ylabel("kWh")
-    # plt.title("Demand and Production, and Battery SoC Profiles")
-    # plt.legend()
-    # plt.grid(True)
-    # plt.tight_layout()
-    # plt.show()
-    # plt.savefig("demand_production_profiles.png")
+    # Plot demand and production
+    plt.figure(figsize=(12, 6))
+    plt.plot(total_demand[:setup.T], label="Total Demand")
+    plt.plot(solar_prod[:setup.T], label="Solar Production")
+    plt.plot(wind_prod[:setup.T], label="Wind Production")
+    plt.plot(solar_prod[:setup.T] + wind_prod[:setup.T], label="Total Renewable Production")
+    # Add battery SoC to the plot
+    for i in range(setup.no_batteries):
+        plt.plot(battery_soc[i][:setup.T].value[:-1], label=f"Battery {i} SoC", linestyle="--")
+    plt.xlabel("Hour")
+    plt.ylabel("kWh")
+    plt.title("Demand and Production, and Battery SoC Profiles")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+    plt.savefig("demand_production_profiles.png")
 
     # return grid_import.value
 
@@ -262,6 +262,6 @@ def solve_microgrid_with_mock_data(time_intervals=24, num_batteries=1):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 48
+    setup.T = 24
     # Benchmark.run(solve_microgrid, setup, runs=1)
     solve_microgrid(setup)
