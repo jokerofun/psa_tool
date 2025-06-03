@@ -16,7 +16,7 @@ from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
 from examples.helpers.microgrid_setup import MicrogridSetup
 from examples.helpers.file_writer import write
-from benchmark.benchmark import Benchmark
+# from benchmark.benchmark import Benchmark
 
 
 def solve_microgrid(setup:MicrogridSetup):    
@@ -43,12 +43,14 @@ def solve_microgrid(setup:MicrogridSetup):
     df2 = df.copy()
     wind_prod = generate_wind_turbine_data(df, parameters={"rated_power": setup.wind_capacity, "cut_in_speed": 3.5, "rated_speed" : 14, "cut_out_speed": 25})
     wind_prod = wind_prod["gen_wind_data"]["energy_generated"].values
+
     solar_prod = {}
     for _ in range(setup.no_homes):
         solar_prod = generate_solar_panel_data(df, parameters={"rated_power": setup.solar_capacity_home,})
-        solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values * setup.no_homes)
+        solar_prod = (solar_prod["gen_solar_data"]["energy_generated"].values)
     solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": setup.solar_capacity_school,})
-    solar_prod = solar_prod + solar_prod_school["gen_solar_data"]["energy_generated"].values
+    solar_prod_school = solar_prod_school["gen_solar_data"]["energy_generated"].values
+    # solar_prod = solar_prod + solar_prod_school
 
     # Decision variables
     grid_import = cp.Variable(setup.T, nonneg=True)
@@ -56,7 +58,8 @@ def solve_microgrid(setup:MicrogridSetup):
     battery_discharge = [cp.Variable(setup.T, nonneg=True)
                          for _ in range(setup.no_batteries)]
     battery_soc = [cp.Variable(setup.T+1, nonneg=True) for _ in range(setup.no_batteries)]
-    c = [cp.Variable(setup.T, nonneg=True) for _ in range(setup.no_homes+setup.no_big_solar_panels)]
+    c_homes = [cp.Variable(setup.T, nonneg=True) for _ in range(setup.no_homes)]
+    c_school = cp.Variable(setup.T, nonneg=True)
 
     # Constraints
     constraints = []
@@ -68,18 +71,20 @@ def solve_microgrid(setup:MicrogridSetup):
 
     for t in range(setup.T):
         # Control variable for solar panel activation
-        for i in range(setup.no_homes+setup.no_big_solar_panels):
-            constraints.append(c[i][t] <= 1)
+        for i in range(setup.no_homes):
+            constraints.append(c_homes[i][t] <= 1)
+        constraints.append(c_school[t] <= 1)
 
         # Power balance: sum all battery charge/discharge and grid import
         total_battery_discharge = sum(
             battery_discharge[i][t] for i in range(setup.no_batteries))
         total_battery_charge = sum(
             battery_charge[i][t] for i in range(setup.no_batteries))
+        total_hourly_solar_prod_homes = sum(c_homes[i][t] * solar_prod[t] for i in range(setup.no_solar_panels))
+        total_hourly_solar_prod_school = c_school[t] * solar_prod_school[t]
         constraints.append(
-            grid_import[t] + total_battery_discharge -
-            total_battery_charge == total_demand[t] -
-            ((solar_prod[t] * c[t]) + wind_prod[t])
+            grid_import[t] + total_battery_discharge + total_hourly_solar_prod_homes + total_hourly_solar_prod_school + wind_prod[t]
+            == total_battery_charge + total_demand[t]
         )
 
         for i in range(setup.no_batteries):
@@ -102,7 +107,7 @@ def solve_microgrid(setup:MicrogridSetup):
 
     # Solve
     prob = cp.Problem(objective, constraints)
-    prob.solve(solver=cp.CBC, verbose=False)
+    prob.solve(solver=cp.CBC, verbose=True)
 
     stats = {
         "implementation": "CVXPY",
@@ -228,7 +233,7 @@ def solve_microgrid_with_mock_data(time_intervals=24, num_batteries=1):
 
     # Solve
     prob = cp.Problem(objective, constraints)
-    prob.solve(solver=cp.CBC, verbose=False)
+    prob.solve(solver=cp.CBC, verbose=True)
 
     # Round results
     grid_import.value = np.round(grid_import.value, 2)
@@ -264,6 +269,6 @@ def solve_microgrid_with_mock_data(time_intervals=24, num_batteries=1):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 24
+    setup.T = 72
     # Benchmark.run(solve_microgrid, setup, runs=1)
     solve_microgrid(setup)

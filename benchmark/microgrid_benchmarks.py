@@ -30,7 +30,7 @@ from glob import glob
 #     plt.savefig("figures/execution_time_comparison.png")
 #     plt.show()
 
-def plot_execution_time(results={}):
+def plot_execution_time(results={}, x_label="", output_path=""):
     import matplotlib.pyplot as plt
     import numpy as np
 
@@ -38,38 +38,39 @@ def plot_execution_time(results={}):
     flat_results = {}
     for scenario, impl_times in results.items():
         for impl, time in impl_times.items():
-            flat_results[(str(scenario), impl)] = time
+            flat_results[(scenario, impl)] = time
 
-    scenarios = sorted(set(k[0] for k in flat_results.keys()))
+    # Sort scenarios numerically if possible
+    scenarios = sorted(set(k[0] for k in flat_results.keys()), key=lambda x: float(x) if isinstance(x, (int, float, str)) and str(x).replace('.','',1).isdigit() else str(x))
     implementations = sorted(set(k[1] for k in flat_results.keys()))
 
     # Prepare data for grouped bar plot
     bar_width = 0.2
     x = np.arange(len(scenarios))
-    fig, ax = plt.subplots(figsize=(10, 6))
+    _, ax = plt.subplots(figsize=(10, 6))
 
     for idx, impl in enumerate(implementations):
-        times = [flat_results.get((str(scenario), impl), 0) for scenario in scenarios]
+        times = [flat_results.get((scenario, impl), 0) for scenario in scenarios]
         ax.bar(x + idx * bar_width, times, width=bar_width, label=impl)
 
-    ax.set_xlabel("Scenario (T or no_homes)")
+    ax.set_xlabel(x_label)
     ax.set_ylabel("Average execution time in seconds")
-    ax.set_title("Average Execution Time for Different Microgrid Implementations")
+    ax.set_title("Average execution time for different microgrid implementations")
     ax.set_xticks(x + bar_width * (len(implementations)-1)/2)
-    ax.set_xticklabels(scenarios)
+    ax.set_xticklabels([str(s) for s in scenarios])
     ax.legend()
     ax.grid(axis="y", linestyle="--", alpha=0.7)
     plt.tight_layout()
-    plt.savefig("figures/execution_time_comparison.png")
+    plt.savefig(output_path)
     plt.show()
 
-def measure_execution_time(setup:MicrogridSetup):
+def measure_execution_time(setup:MicrogridSetup, microgrid_file_path):
     benchmark = Benchmark()
     empty(setup.output_path)
     demo_result = benchmark.run(microgrid_demo.run, setup, runs=1)
     cvxpy_result = benchmark.run(cvxpy_microgrid_demo.solve_microgrid, setup, runs=1)
     pyomo_result = benchmark.run(pyomo_microgrid_demo.solve_microgrid_pyomo, setup, runs=1)
-    gboml_result = benchmark.run(gboml_microgrid_demo.run, setup, runs=1)
+    gboml_result = benchmark.run(gboml_microgrid_demo.run, setup, microgrid_file_path, runs=1)
 
     return {
             "demo": demo_result["average_time"], 
@@ -106,14 +107,19 @@ if __name__ == "__main__":
         setup = MicrogridSetup()
         setup.T = t
         setup.output_path = f"figures/output_T{t}.txt"
-        results[t] = measure_execution_time(setup=setup)
+        microgrid_file_path = f"examples/GBOML/microgrid_T{t}.txt"
+        results[t] = measure_execution_time(setup=setup, microgrid_file_path=microgrid_file_path)
 
-    # for n in no_homes:
-    #     setup = MicrogridSetup()
-    #     setup.no_homes = n
-    #     setup.no_solar_panels = n
-    #     setup.output_path = f"figures/output_homes{n}.txt"
-    #     results[n] = measure_execution_time(setup=setup)
+    plot_execution_time(results=results, x_label="Time length in hours", output_path="figures/exec_time_comparison_scaleT.png")
 
-    plot_execution_time(results=results)
+    results = {}
+    for n in no_homes:
+        setup = MicrogridSetup()
+        setup.no_homes = n
+        setup.no_solar_panels = n
+        setup.output_path = f"figures/output_homes{n}.txt"
+        microgrid_file_path = f"examples/GBOML/microgrid_homes{n}.txt"
+        results[n] = measure_execution_time(setup=setup, microgrid_file_path=microgrid_file_path)
+
+    plot_execution_time(results=results, x_label="Number of homes and solar panels", output_path="figures/exec_time_comparison_scaleHomes.png")
     # measure_lines_of_code(folders=["GBOML", "Pyomo", "CVXPY"])

@@ -44,9 +44,6 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     solar_prod_school = generate_solar_panel_data(df2, parameters={"rated_power": setup.solar_capacity_school,})
     solar_prod_school = solar_prod_school["gen_solar_data"]["energy_generated"].values
     # solar_prod = solar_prod + solar_prod_school
-    print(total_demand[:setup.T])
-    print(wind_prod[:setup.T])
-    print(solar_prod[:setup.T])
 
     model = pyo.ConcreteModel()
     model.T = pyo.RangeSet(0, setup.T-1)

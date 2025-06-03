@@ -2,8 +2,35 @@
   "implementation": "our microgrid demo",
   "solver": "CBC",
   "parameters": 0,
-  "constraints": 4611,
-  "variables": 4395,
+  "constraints": 1371,
+  "variables": 1155,
   "status": "optimal",
-  "result": 3331.984563693569
+  "result": 3056.6897540229274
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1371,
+  "variables": 1155,
+  "status": "optimal",
+  "result": 3056.689754022927
+}
+{
+  "implementation": "Pyomo",
+  "solver": "cbc",
+  "parameters": 0,
+  "constraints": 1371,
+  "variables": 1155,
+  "status": "optimal",
+  "result": 3056.6897522999993
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 23,
+  "constraints": 53,
+  "variables": 24,
+  "status": "optimal",
+  "result": 3056.6897540229265
 }

@@ -17,7 +17,7 @@ from examples.helpers.file_writer import write
 def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"):
     gboml_setup = MicrogridSetup()
     gboml_setup = setup
-    gboml_setup.T += 1
+    gboml_setup.T = setup.T + 1
     gboml_domain.build_microgrid(setup=gboml_setup, file_path=microgrid_file_path)
 
     home_predicted_consumption = {}
@@ -82,8 +82,10 @@ def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 25
+    setup.T = 72
     
+    run(setup=setup)
+    setup.T = 48
     run(setup=setup)
     # (result, details) = run(setup=setup)
     # print(result)

@@ -1,0 +1,182 @@
+
+#TIMEHORIZON
+T = 49;
+
+
+#NODE DEMAND
+#PARAMETERS
+total_demand = import "../../data/demand.csv";
+#VARIABLES
+external: consumption[T];
+#CONSTRAINTS
+consumption[t] == total_demand[t];
+
+
+#NODE SOLAR_PV_1
+#PARAMETERS
+max_power_output_kW = import "../../data/gen_solar.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_2
+#PARAMETERS
+max_power_output_kW = import "../../data/gen_solar.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_3
+#PARAMETERS
+max_power_output_kW = import "../../data/gen_solar.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_4
+#PARAMETERS
+max_power_output_kW = import "../../data/gen_solar.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_5
+#PARAMETERS
+max_power_output_kW = import "../../data/gen_solar.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE BIG_SOLAR_PV_1
+#PARAMETERS
+max_power_output_kW = import "../../data/gen_big_solar.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE WIND_TURBINE_1
+#PARAMETERS
+max_power_output_kW = import "../../data/gen_wind.csv";
+#VARIABLES
+external: electricity[T];
+#CONSTRAINTS
+electricity[t] >= 0;
+electricity[t] == max_power_output_kW[t];
+
+
+#NODE BATTERY_1
+#PARAMETERS
+charging_power_kW = 500;
+discharging_power_kW = 500;
+capacity_kWh = 500;
+efficiency = 0.9;
+SoC = 0;
+#VARIABLES
+internal: energy[T];
+external: charge[T];
+external: discharge[T];
+#CONSTRAINTS
+energy[t] >= 0;
+charge[t] >= 0;
+discharge[t] >= 0;
+energy[t] <= capacity_kWh;
+charge[t] <= charging_power_kW;
+discharge[t] <= discharging_power_kW;
+energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;
+energy[0] == SoC;
+
+
+#NODE BATTERY_2
+#PARAMETERS
+charging_power_kW = 500;
+discharging_power_kW = 500;
+capacity_kWh = 500;
+efficiency = 0.9;
+SoC = 0;
+#VARIABLES
+internal: energy[T];
+external: charge[T];
+external: discharge[T];
+#CONSTRAINTS
+energy[t] >= 0;
+charge[t] >= 0;
+discharge[t] >= 0;
+energy[t] <= capacity_kWh;
+charge[t] <= charging_power_kW;
+discharge[t] <= discharging_power_kW;
+energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;
+energy[0] == SoC;
+
+
+#NODE BATTERY_3
+#PARAMETERS
+charging_power_kW = 500;
+discharging_power_kW = 500;
+capacity_kWh = 500;
+efficiency = 0.9;
+SoC = 0;
+#VARIABLES
+internal: energy[T];
+external: charge[T];
+external: discharge[T];
+#CONSTRAINTS
+energy[t] >= 0;
+charge[t] >= 0;
+discharge[t] >= 0;
+energy[t] <= capacity_kWh;
+charge[t] <= charging_power_kW;
+discharge[t] <= discharging_power_kW;
+energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;
+energy[0] == SoC;
+
+
+#NODE METERING_POINT
+//#PARAMETERS
+//electricity_price = 0.05;
+#VARIABLES
+external: power_import[T];
+#CONSTRAINTS
+power_import[t] >= 0;
+#OBJECTIVES
+min: power_import[t];
+
+
+#HYPEREDGE POWER_BALANCE
+#CONSTRAINTS
+METERING_POINT.power_import[t] + SOLAR_PV_1.electricity[t] + SOLAR_PV_2.electricity[t] + SOLAR_PV_3.electricity[t] + SOLAR_PV_4.electricity[t] + SOLAR_PV_5.electricity[t] + BIG_SOLAR_PV_1.electricity[t] + WIND_TURBINE_1.electricity[t] + BATTERY_1.discharge[t] + BATTERY_2.discharge[t] + BATTERY_3.discharge[t] == DEMAND.consumption[t] + BATTERY_1.charge[t] + BATTERY_2.charge[t] + BATTERY_3.charge[t];

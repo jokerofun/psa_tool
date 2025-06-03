@@ -133,3 +133,120 @@
   "status": "optimal",
   "result": 934.9893961497726
 }
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3203,
+  "variables": 3053,
+  "status": "optimal",
+  "result": 1552.365030485962
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3203,
+  "variables": 3053,
+  "status": "optimal",
+  "result": 1552.365030485962
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2563,
+  "variables": 2443,
+  "status": "optimal",
+  "result": 1552.365030485962
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2051,
+  "variables": 1955,
+  "status": "optimal",
+  "result": 1396.375975301662
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 934.9893961497726
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 934.9894129815282
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 4611,
+  "variables": 4395,
+  "status": "optimal",
+  "result": 3331.984563693569
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 573.273320169145
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 2529.2528960313853
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 2529.2528960313853
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 4522.416286795625
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 4522.416286795625
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 2529.2528960313853
+}
