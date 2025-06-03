@@ -47,7 +47,10 @@ class Node():
     
     @property
     def cost(self):
-        pass
+        return 0
 
     def assign(self, t):
+        pass
+
+    def set_time_length(self, t):
         pass

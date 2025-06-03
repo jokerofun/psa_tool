@@ -5,8 +5,8 @@ import statistics
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import microgrid_demo
 from examples.helpers.microgrid_setup import MicrogridSetup
+import examples.our_tool.microgrid_demo as microgrid_demo
 import examples.CVXPY.native_cvxpy_microgrid_solution as cvxpy_microgrid_demo
 import examples.Pyomo.native_pyomo_microgrid_solution as pyomo_microgrid_demo
 import examples.GBOML.gboml_microgrid_solution as gboml_microgrid_demo
@@ -20,7 +20,7 @@ from glob import glob
 def run_exec_time_experiments(setup:MicrogridSetup, microgrid_file_path="", runs=1):
     empty(setup.output_path)
 
-    demo_exec_time = timeit.timeit(lambda: microgrid_demo.run(setup), number=runs)
+    demo_exec_time = timeit.timeit(lambda: microgrid_demo.solve_microgrid(setup), number=runs)
     cvxpy_exec_time = timeit.timeit(lambda: pyomo_microgrid_demo.solve_microgrid_pyomo(setup), number=runs)
     pyomo_exec_time = timeit.timeit(lambda: pyomo_microgrid_demo.solve_microgrid_pyomo(setup), number=runs)
     gboml_exec_time = timeit.timeit(lambda: gboml_microgrid_demo.run(setup, microgrid_file_path), number=runs)

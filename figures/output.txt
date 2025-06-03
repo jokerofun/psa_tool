@@ -241,3 +241,12 @@
   "status": "optimal",
   "result": 533.2531072953286
 }
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 533.2531072953286
+}
