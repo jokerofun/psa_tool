@@ -12,3 +12,31 @@
   "dataflow_time": 6.234741926193237,
   "optimizer_time": 0.15521574020385742
 }
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 690.9548576865986,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0010268688201904297,
+  "dataflow_time": 4.952643871307373,
+  "optimizer_time": 0.2418534755706787
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 690.9548576865986,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0014655590057373047,
+  "dataflow_time": 5.308838844299316,
+  "optimizer_time": 1.2933743000030518
+}

@@ -27,8 +27,8 @@ def plot_segmented_bar_chart(results, title, x_label, y_label, output_path):
                 data[i, j, k] = values[k]
 
     bar_width = 0.18
-    bar_spacing = 0.10  # space between bars within a group
-    group_spacing = 0.40  # more space between groups
+    bar_spacing = 0.30  # space between bars within a group
+    group_spacing = 0.60  # more space between groups
     group_width = n_bars * bar_width + (n_bars - 1) * bar_spacing + group_spacing
     x = np.arange(n_groups) * group_width
 
@@ -92,7 +92,7 @@ def plot_bar_chart(results, title, x_label, y_label, output_path):
             data[i, j] = value
 
     bar_width = 0.18
-    bar_spacing = 0.10  # space between bars within a group
+    bar_spacing = 0.20  # space between bars within a group
     group_spacing = 0.40  # more space between groups
     group_width = n_bars * bar_width + (n_bars - 1) * bar_spacing + group_spacing
     x = np.arange(n_groups) * group_width
@@ -107,7 +107,7 @@ def plot_bar_chart(results, title, x_label, y_label, output_path):
         # Add name and value above each bar (2 lines)
         for i in range(n_groups):
             bar_height = data[i, j]
-            label_text = f"{bar}\n{bar_height:.2f}"
+            label_text = f"{bar_height:.1f}"
             ax.text(x[i] + j * (bar_width + bar_spacing), bar_height + 0.5, label_text,
                     ha='center', va='bottom', fontsize=9, rotation=0, fontweight='bold')
 
