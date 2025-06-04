@@ -89,4 +89,8 @@ def solve_microgrid(setup: MicrogridSetup):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
+    setup.T = 24
+    n = 50
+    setup.no_homes = n
+    setup.no_solar_panels = n
     solve_microgrid(setup=setup)

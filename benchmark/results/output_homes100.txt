@@ -1,0 +1,42 @@
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2739,
+  "variables": 2667,
+  "status": "optimal",
+  "result": 1558.7973511138075,
+  "T": 24,
+  "no_homes": 100,
+  "setup_time": 0.0,
+  "dataflow_time": 11.314756393432617,
+  "optimizer_time": 1.9871854782104492
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2739,
+  "variables": 2667,
+  "status": "optimal",
+  "result": 1558.7973511138075,
+  "T": 24,
+  "no_homes": 100,
+  "setup_time": 0.0,
+  "dataflow_time": 11.226957321166992,
+  "optimizer_time": 1.945582389831543
+}
+{
+  "implementation": "Pyomo",
+  "solver": "cbc",
+  "parameters": 0,
+  "constraints": 2739,
+  "variables": 2667,
+  "status": "optimal",
+  "result": 1558.797346,
+  "T": 24,
+  "no_homes": 100,
+  "setup_time": 0.0,
+  "dataflow_time": 11.334388732910156,
+  "optimizer_time": 0.1403357982635498
+}

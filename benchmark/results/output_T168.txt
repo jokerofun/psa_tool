@@ -1,0 +1,28 @@
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10755,
+  "variables": 10251,
+  "status": "infeasible",
+  "result": Infinity,
+  "T": 168,
+  "no_homes": 50,
+  "setup_time": 0.0,
+  "dataflow_time": 6.019193649291992,
+  "optimizer_time": 6.085777044296265
+}
+{
+  "implementation": "CVXPY",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10755,
+  "variables": 10251,
+  "status": "infeasible",
+  "result": Infinity,
+  "T": 168,
+  "no_homes": 50,
+  "setup_time": 0.0,
+  "dataflow_time": 5.935086965560913,
+  "optimizer_time": 5.96929144859314
+}

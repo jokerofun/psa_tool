@@ -22,12 +22,12 @@ def run_exec_time_experiments(setup:MicrogridSetup, microgrid_file_path="", runs
     demo_exec_time = timeit.timeit(lambda: microgrid_demo.solve_microgrid(setup), number=runs)
     cvxpy_exec_time = timeit.timeit(lambda: cvxpy_microgrid_demo.solve_microgrid_cvxpy(setup), number=runs)
     pyomo_exec_time = timeit.timeit(lambda: pyomo_microgrid_demo.solve_microgrid_pyomo(setup), number=runs)
-    gboml_exec_time = timeit.timeit(lambda: gboml_microgrid_demo.run(setup, microgrid_file_path), number=runs)
+    # gboml_exec_time = timeit.timeit(lambda: gboml_microgrid_demo.run(setup, microgrid_file_path), number=runs)
     
     result = { 
         f"execution_time_T{setup.T}Homes{setup.no_homes}": {
             "demo": round(demo_exec_time / runs, 2), 
-            "GBOML": round(gboml_exec_time / runs, 2),
+            # "GBOML": round(gboml_exec_time / runs, 2),
             "CVXPY": round(cvxpy_exec_time / runs, 2),
             "Pyomo": round(pyomo_exec_time / runs, 2)
             }
@@ -38,17 +38,17 @@ def run_exec_time_experiments(setup:MicrogridSetup, microgrid_file_path="", runs
     return result
 
 def run_memory_usage_experiments(setup: MicrogridSetup, microgrid_file_path="", runs=1):
-    empty(setup.output_path)
+    # empty(setup.output_path)
 
     demo_memory_usage = memory_usage((lambda: microgrid_demo.solve_microgrid(setup=setup)), max_iterations=runs)
     cvxpy_memory_usage = memory_usage((lambda: cvxpy_microgrid_demo.solve_microgrid_cvxpy(setup)), max_iterations=runs)
     pyomo_memory_usage = memory_usage((lambda: pyomo_microgrid_demo.solve_microgrid_pyomo(setup)), max_iterations=runs)
-    gboml_memory_usage = memory_usage((lambda: gboml_microgrid_demo.run(setup, microgrid_file_path)), max_iterations=runs)
+    # gboml_memory_usage = memory_usage((lambda: gboml_microgrid_demo.run(setup, microgrid_file_path)), max_iterations=runs)
     
     result = { 
         f"memory_usage_T{setup.T}Homes{setup.no_homes}": {
             "demo": round(statistics.mean(demo_memory_usage), 2), 
-            "GBOML": round(statistics.mean(gboml_memory_usage), 2),
+            # "GBOML": round(statistics.mean(gboml_memory_usage), 2),
             "CVXPY": round(statistics.mean(cvxpy_memory_usage), 2),
             "Pyomo": round(statistics.mean(pyomo_memory_usage), 2)
             }
@@ -59,7 +59,7 @@ def run_memory_usage_experiments(setup: MicrogridSetup, microgrid_file_path="", 
     return result
 
 if __name__ == "__main__":
-    time_periods = [24*1, 24*2, 24*3, 24*5, 24*7]
+    time_periods = [24*1, 24*2, 24*3, 24*5]
     no_homes = [50, 100, 200, 500, 1000]
     results_exec_time = {}
     results_memory_usage = {}
