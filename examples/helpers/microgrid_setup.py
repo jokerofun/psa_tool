@@ -13,5 +13,5 @@ class MicrogridSetup:
     no_big_solar_panels = 1
     no_wind_turbines = 1
     output_path = "figures/output.txt"
-    benchmark_output_path = "benchmark/results.txt"
+    benchmark_output_path = "benchmark/results/results.txt"
 

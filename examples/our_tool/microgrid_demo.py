@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')
 from src.optimization.energy_domain import ConnectingNode
 from src.optimization.graph_problem_class import GraphProblemClass
 from src.optimization.energy_domain import ConnectingNode
-from microgrid_domain import Consumer, MeteringPoint, SolarPanel, Battery, WindTurbine
+from examples.our_tool.microgrid_domain import Consumer, MeteringPoint, SolarPanel, Battery, WindTurbine
 from src.dataflow.dataflow_classes_v2 import DataProcessingTask
 from src.dataflow.default_tasks import *
 from examples.dataflow_nodes.consumer_data_pred import predict_consumer_data
@@ -89,5 +89,4 @@ def solve_microgrid(setup: MicrogridSetup):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 24*30
     solve_microgrid(setup=setup)
