@@ -88,8 +88,6 @@ energy[0] == SoC;
 
     metering_point_template = '''
 #NODE METERING_POINT
-//#PARAMETERS
-//electricity_price = 0.05;
 #VARIABLES
 external: power_import[T];
 #CONSTRAINTS
