@@ -11,7 +11,7 @@ def build_microgrid(setup:MicrogridSetup,
                     file_path="examples/GBOML/microgrid.txt"):
     time_horizon_template = '''
 #TIMEHORIZON
-T = {t}+1;
+T = {t};
 '''
 
     demand_template = '''
