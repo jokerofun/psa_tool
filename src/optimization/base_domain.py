@@ -1,10 +1,12 @@
 import abc
+# import src.dataflow.dataflow_factory as dataflow_factory
 from src.dataflow.dataflow_v2 import Dataflow
 
 class Node():
     def __init__(self, name):
         self.name = name
         self.dataflow = Dataflow(f"{self.name}_dataflow", self)
+        # self.dataflow = dataflow_factory.get_dataflow_constructor(self.name, self)
     
     def __repr__(self):
         return f"Node(name={self.name})"

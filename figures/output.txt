@@ -33,3 +33,2661 @@
   "status": "optimal",
   "result": 2720.7806777258083
 }
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2720.7806761070947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 6571.388638935983
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 6571.388638935983
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 6571.388638935983
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 6571.388638935983
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "OSQP",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 6571.3959815153385
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "OSQP",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 2719.7373903683683
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "OSQP",
+  "parameters": 0,
+  "constraints": 19320,
+  "variables": 10248,
+  "status": "optimal",
+  "result": 9691.561597730903
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 533.2531072953286
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 6751.856810951607
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 15987.61887119513
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 15521.81996863598,
+  "setup_time": 0.0014448165893554688,
+  "dataflow_time": 1.0114049911499023,
+  "optimizer_time": 11.177579164505005
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 15521.81996863598,
+  "setup_time": 0.0013053417205810547,
+  "dataflow_time": 1.0041630268096924,
+  "optimizer_time": 13.863649129867554
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 15521.81996863598,
+  "setup_time": 0.005582094192504883,
+  "dataflow_time": 0.6805965900421143,
+  "optimizer_time": 13.552610158920288
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0017504692077636719,
+  "dataflow_time": 0.1059865951538086,
+  "optimizer_time": 0.9585437774658203
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0009694099426269531,
+  "dataflow_time": 0.22294235229492188,
+  "optimizer_time": 2.564095973968506
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0010290145874023438,
+  "dataflow_time": 0.19777250289916992,
+  "optimizer_time": 2.490184783935547
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0005140304565429688,
+  "dataflow_time": 0.11310267448425293,
+  "optimizer_time": 1.037320852279663
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0021255016326904297,
+  "dataflow_time": 0.21760106086730957,
+  "optimizer_time": 3.7846179008483887
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.001230478286743164,
+  "dataflow_time": 0.20473837852478027,
+  "optimizer_time": 2.3544633388519287
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0012955665588378906,
+  "dataflow_time": 0.16501522064208984,
+  "optimizer_time": 2.2318344116210938
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0011119842529296875,
+  "dataflow_time": 84.59726166725159,
+  "optimizer_time": 2.193702459335327
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.00109100341796875,
+  "dataflow_time": 18.54905128479004,
+  "optimizer_time": 7.979544639587402
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0005033016204833984,
+  "dataflow_time": 0.09480667114257812,
+  "optimizer_time": 0.8595218658447266
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.00039839744567871094,
+  "dataflow_time": 0.0871882438659668,
+  "optimizer_time": 0.8106012344360352
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0006124973297119141,
+  "dataflow_time": 0.08555459976196289,
+  "optimizer_time": 0.840179443359375
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0004067420959472656,
+  "dataflow_time": 0.10779380798339844,
+  "optimizer_time": 0.946662425994873
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0004985332489013672,
+  "dataflow_time": 0.12428569793701172,
+  "optimizer_time": 0.8258476257324219
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0003685951232910156,
+  "dataflow_time": 0.11879587173461914,
+  "optimizer_time": 0.8274252414703369
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 3874.743640488866,
+  "setup_time": 0.0011336803436279297,
+  "dataflow_time": 0.5431160926818848,
+  "optimizer_time": 2.5594799518585205
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 10035.560277705063,
+  "setup_time": 0.003568410873413086,
+  "dataflow_time": 0.8682491779327393,
+  "optimizer_time": 5.02518105506897
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 9960,
+  "variables": 5064,
+  "status": "optimal",
+  "result": 22443.68470633034,
+  "setup_time": 0.0122833251953125,
+  "dataflow_time": 2.7715823650360107,
+  "optimizer_time": 14.164267539978027
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.00033020973205566406,
+  "dataflow_time": 0.10217475891113281,
+  "optimizer_time": 0.8162486553192139
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 3874.743640488866,
+  "setup_time": 0.0013360977172851562,
+  "dataflow_time": 0.4419982433319092,
+  "optimizer_time": 2.5823657512664795
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 10035.560277705063,
+  "setup_time": 0.0019500255584716797,
+  "dataflow_time": 0.6338644027709961,
+  "optimizer_time": 5.7099997997283936
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 9960,
+  "variables": 5064,
+  "status": "optimal",
+  "result": 22443.68470633034,
+  "setup_time": 0.003527402877807617,
+  "dataflow_time": 1.2597362995147705,
+  "optimizer_time": 9.566243410110474
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 24360,
+  "variables": 12264,
+  "status": "optimal",
+  "result": 59693.25819970663,
+  "setup_time": 0.010489702224731445,
+  "dataflow_time": 3.075531005859375,
+  "optimizer_time": 24.197853565216064
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 299.9806275624903,
+  "setup_time": 0.0003304481506347656,
+  "dataflow_time": 0.07498908042907715,
+  "optimizer_time": 1.704686164855957
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5520,
+  "variables": 2928,
+  "status": "optimal",
+  "result": 9384.29505438939,
+  "setup_time": 0.001047372817993164,
+  "dataflow_time": 0.3418564796447754,
+  "optimizer_time": 5.529993534088135
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10320,
+  "variables": 5328,
+  "status": "optimal",
+  "result": 22448.75161882954,
+  "setup_time": 0.0022881031036376953,
+  "dataflow_time": 0.6430606842041016,
+  "optimizer_time": 9.968514680862427
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 19920,
+  "variables": 10128,
+  "status": "optimal",
+  "result": 48691.88651045419,
+  "setup_time": 0.0036361217498779297,
+  "dataflow_time": 1.3302021026611328,
+  "optimizer_time": 20.590619564056396
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0004355907440185547,
+  "dataflow_time": 0.2524862289428711,
+  "optimizer_time": 0.8274686336517334
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 299.9806275624903,
+  "setup_time": 0.0003261566162109375,
+  "dataflow_time": 0.07458257675170898,
+  "optimizer_time": 1.6342573165893555
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 1431.1255385712516,
+  "setup_time": 0.0003025531768798828,
+  "dataflow_time": 0.13085365295410156,
+  "optimizer_time": 3.3512165546417236
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 6720,
+  "variables": 4032,
+  "status": "optimal",
+  "result": 1862.8650652588026,
+  "setup_time": 0.0003650188446044922,
+  "dataflow_time": 0.1446821689605713,
+  "optimizer_time": 6.8248960971832275
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0005793571472167969,
+  "dataflow_time": 0.09174966812133789,
+  "optimizer_time": 0.8419585227966309
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 299.9806275624903,
+  "setup_time": 0.0005195140838623047,
+  "dataflow_time": 0.08055806159973145,
+  "optimizer_time": 1.615947961807251
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 1431.1255385712516,
+  "setup_time": 0.0003414154052734375,
+  "dataflow_time": 0.15139293670654297,
+  "optimizer_time": 3.4662280082702637
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 6720,
+  "variables": 4032,
+  "status": "optimal",
+  "result": 1862.8650652588026,
+  "setup_time": 0.0003643035888671875,
+  "dataflow_time": 0.13247942924499512,
+  "optimizer_time": 7.600035190582275
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.00040221214294433594,
+  "dataflow_time": 0.19779515266418457,
+  "optimizer_time": 1.1088347434997559
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 299.9806275624903,
+  "setup_time": 0.00044608116149902344,
+  "dataflow_time": 0.14171051979064941,
+  "optimizer_time": 2.9058797359466553
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 1431.1255385712516,
+  "setup_time": 0.0002834796905517578,
+  "dataflow_time": 0.15250372886657715,
+  "optimizer_time": 4.002570390701294
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 6720,
+  "variables": 4032,
+  "status": "optimal",
+  "result": 1862.8650652588026,
+  "setup_time": 0.0006513595581054688,
+  "dataflow_time": 0.355100154876709,
+  "optimizer_time": 8.574158430099487
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0023543834686279297,
+  "dataflow_time": 0.20250582695007324,
+  "optimizer_time": 0.8668675422668457
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 299.9806275624903,
+  "setup_time": 0.00034809112548828125,
+  "dataflow_time": 0.1288309097290039,
+  "optimizer_time": 1.8493616580963135
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0005156993865966797,
+  "dataflow_time": 0.19875478744506836,
+  "optimizer_time": 0.9435808658599854
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 299.9806275624903,
+  "setup_time": 0.00043392181396484375,
+  "dataflow_time": 0.1425774097442627,
+  "optimizer_time": 1.8559625148773193
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 1431.1255385712516,
+  "setup_time": 0.0004532337188720703,
+  "dataflow_time": 0.2511746883392334,
+  "optimizer_time": 3.7725791931152344
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 6720,
+  "variables": 4032,
+  "status": "optimal",
+  "result": 1862.8650652588026,
+  "setup_time": 0.0005145072937011719,
+  "dataflow_time": 0.2796177864074707,
+  "optimizer_time": 7.947426795959473
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.0005323886871337891,
+  "dataflow_time": 0.1948554515838623,
+  "optimizer_time": 1.1113994121551514
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 3874.743640488866,
+  "setup_time": 0.0010142326354980469,
+  "dataflow_time": 0.32711148262023926,
+  "optimizer_time": 2.925882339477539
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 10035.560277705063,
+  "setup_time": 0.0020685195922851562,
+  "dataflow_time": 1.8568384647369385,
+  "optimizer_time": 5.358788013458252
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 9960,
+  "variables": 5064,
+  "status": "optimal",
+  "result": 22443.68470633034,
+  "setup_time": 0.00576019287109375,
+  "dataflow_time": 1.4996981620788574,
+  "optimizer_time": 12.274553060531616
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 24360,
+  "variables": 12264,
+  "status": "optimal",
+  "result": 59693.25819970663,
+  "setup_time": 0.009870052337646484,
+  "dataflow_time": 3.582869291305542,
+  "optimizer_time": 25.996334075927734
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 299.9806275624903,
+  "setup_time": 0.0005884170532226562,
+  "dataflow_time": 0.09266352653503418,
+  "optimizer_time": 2.1918981075286865
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5520,
+  "variables": 2928,
+  "status": "optimal",
+  "result": 9203.303122628473,
+  "setup_time": 0.0011091232299804688,
+  "dataflow_time": 0.35807204246520996,
+  "optimizer_time": 6.087101697921753
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10320,
+  "variables": 5328,
+  "status": "optimal",
+  "result": 22103.221566933662,
+  "setup_time": 0.0022101402282714844,
+  "dataflow_time": 0.7372853755950928,
+  "optimizer_time": 12.270452499389648
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 19920,
+  "variables": 10128,
+  "status": "optimal",
+  "result": 48017.280218288375,
+  "setup_time": 0.0035228729248046875,
+  "dataflow_time": 1.6764707565307617,
+  "optimizer_time": 21.086123943328857
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 48720,
+  "variables": 24528,
+  "status": "optimal",
+  "result": 125784.65637985281,
+  "setup_time": 0.011747121810913086,
+  "dataflow_time": 4.777019739151001,
+  "optimizer_time": 57.21670341491699
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2520,
+  "variables": 1512,
+  "status": "optimal",
+  "result": 367.95105198824064,
+  "setup_time": 0.0003349781036376953,
+  "dataflow_time": 0.09898900985717773,
+  "optimizer_time": 2.933396339416504
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 8280,
+  "variables": 4392,
+  "status": "optimal",
+  "result": 15586.11227621929,
+  "setup_time": 0.0013349056243896484,
+  "dataflow_time": 0.36219358444213867,
+  "optimizer_time": 9.95445466041565
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 15480,
+  "variables": 7992,
+  "status": "optimal",
+  "result": 35377.32237702096,
+  "setup_time": 0.0018534660339355469,
+  "dataflow_time": 0.7972583770751953,
+  "optimizer_time": 17.508654594421387
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 29880,
+  "variables": 15192,
+  "status": "optimal",
+  "result": 75073.96434136863,
+  "setup_time": 0.0037305355072021484,
+  "dataflow_time": 1.4783501625061035,
+  "optimizer_time": 32.39745306968689
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 73080,
+  "variables": 36792,
+  "status": "optimal",
+  "result": 194189.09044191177,
+  "setup_time": 0.018007993698120117,
+  "dataflow_time": 3.4110724925994873,
+  "optimizer_time": 106.99903631210327
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 1484.6125924751136,
+  "setup_time": 0.00040602684020996094,
+  "dataflow_time": 0.11869454383850098,
+  "optimizer_time": 4.102093458175659
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 22343.735678065095,
+  "setup_time": 0.0013964176177978516,
+  "dataflow_time": 0.3805966377258301,
+  "optimizer_time": 11.728818655014038
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 20640,
+  "variables": 10656,
+  "status": "optimal",
+  "result": 49191.06511950167,
+  "setup_time": 0.003640890121459961,
+  "dataflow_time": 0.8406815528869629,
+  "optimizer_time": 26.4977924823761
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 39840,
+  "variables": 20256,
+  "status": "optimal",
+  "result": 102999.94576511918,
+  "setup_time": 0.0032808780670166016,
+  "dataflow_time": 2.076580762863159,
+  "optimizer_time": 44.52812433242798
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 97440,
+  "variables": 49056,
+  "status": "optimal",
+  "result": 264451.78790947166,
+  "setup_time": 0.008712053298950195,
+  "dataflow_time": 4.6030426025390625,
+  "optimizer_time": 165.64419603347778
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 4200,
+  "variables": 2520,
+  "status": "optimal",
+  "result": 2887.6934250198274,
+  "setup_time": 0.0005929470062255859,
+  "dataflow_time": 0.09971332550048828,
+  "optimizer_time": 4.7892165184021
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 13800,
+  "variables": 7320,
+  "status": "optimal",
+  "result": 29131.997340186957,
+  "setup_time": 0.0010709762573242188,
+  "dataflow_time": 0.33423614501953125,
+  "optimizer_time": 14.417691707611084
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 25800,
+  "variables": 13320,
+  "status": "optimal",
+  "result": 62710.802818594966,
+  "setup_time": 0.0017597675323486328,
+  "dataflow_time": 0.695002555847168,
+  "optimizer_time": 28.69255256652832
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 49800,
+  "variables": 25320,
+  "status": "optimal",
+  "result": 129982.63553815536,
+  "setup_time": 0.0037565231323242188,
+  "dataflow_time": 1.439601182937622,
+  "optimizer_time": 55.9309868812561
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 121800,
+  "variables": 61320,
+  "status": "optimal",
+  "result": 331823.3339043364,
+  "setup_time": 0.014684677124023438,
+  "dataflow_time": 3.2673511505126953,
+  "optimizer_time": 239.08672833442688
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5040,
+  "variables": 3024,
+  "status": "optimal",
+  "result": 3704.232268890346,
+  "setup_time": 0.0005352497100830078,
+  "dataflow_time": 0.10051751136779785,
+  "optimizer_time": 5.798794269561768
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 16560,
+  "variables": 8784,
+  "status": "optimal",
+  "result": 34236.37126198153,
+  "setup_time": 0.0009877681732177734,
+  "dataflow_time": 0.43749380111694336,
+  "optimizer_time": 19.294137239456177
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 30960,
+  "variables": 15984,
+  "status": "optimal",
+  "result": 73961.80341608982,
+  "setup_time": 0.0021011829376220703,
+  "dataflow_time": 0.7420566082000732,
+  "optimizer_time": 33.03262209892273
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 59760,
+  "variables": 30384,
+  "status": "optimal",
+  "result": 154389.9245197534,
+  "setup_time": 0.003297567367553711,
+  "dataflow_time": 1.4938304424285889,
+  "optimizer_time": 77.07214570045471
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 146160,
+  "variables": 73584,
+  "status": "optimal",
+  "result": 397231.3734437817,
+  "setup_time": 0.012369632720947266,
+  "dataflow_time": 4.851244211196899,
+  "optimizer_time": 330.2834041118622
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5880,
+  "variables": 3528,
+  "status": "infeasible",
+  "result": Infinity,
+  "setup_time": 0.0003387928009033203,
+  "dataflow_time": 0.0791623592376709,
+  "optimizer_time": 8.272725105285645
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 19320,
+  "variables": 10248,
+  "status": "infeasible",
+  "result": Infinity,
+  "setup_time": 0.0011432170867919922,
+  "dataflow_time": 0.36896681785583496,
+  "optimizer_time": 20.932519912719727
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 36120,
+  "variables": 18648,
+  "status": "optimal",
+  "result": 76960.70077124698,
+  "setup_time": 0.001924753189086914,
+  "dataflow_time": 0.6837863922119141,
+  "optimizer_time": 42.01254630088806
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 69720,
+  "variables": 35448,
+  "status": "optimal",
+  "result": 166275.71171896474,
+  "setup_time": 0.003558635711669922,
+  "dataflow_time": 1.5308351516723633,
+  "optimizer_time": 100.99013900756836
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 170520,
+  "variables": 85848,
+  "status": "optimal",
+  "result": 447879.8373746961,
+  "setup_time": 0.012662172317504883,
+  "dataflow_time": 3.4393913745880127,
+  "optimizer_time": 424.4531829357147
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 1431.1255385712516,
+  "setup_time": 0.0006544589996337891,
+  "dataflow_time": 0.18237519264221191,
+  "optimizer_time": 4.161310434341431
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 15521.81996863598,
+  "setup_time": 0.0012812614440917969,
+  "dataflow_time": 0.6874871253967285,
+  "optimizer_time": 11.335472106933594
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 20640,
+  "variables": 10656,
+  "status": "optimal",
+  "result": 40241.862767513376,
+  "setup_time": 0.001967191696166992,
+  "dataflow_time": 1.739809513092041,
+  "optimizer_time": 22.657963037490845
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 39840,
+  "variables": 20256,
+  "status": "optimal",
+  "result": 89895.17629090662,
+  "setup_time": 0.0033028125762939453,
+  "dataflow_time": 2.662205934524536,
+  "optimizer_time": 42.49601125717163
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 97440,
+  "variables": 49056,
+  "status": "optimal",
+  "result": 238935.71465203678,
+  "setup_time": 0.01321864128112793,
+  "dataflow_time": 7.365022659301758,
+  "optimizer_time": 152.43170070648193
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 6720,
+  "variables": 4032,
+  "status": "optimal",
+  "result": 1862.8650652588026,
+  "setup_time": 0.0002961158752441406,
+  "dataflow_time": 0.13428640365600586,
+  "optimizer_time": 7.3933985233306885
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 22080,
+  "variables": 11712,
+  "status": "optimal",
+  "result": 37003.41693903308,
+  "setup_time": 0.0009758472442626953,
+  "dataflow_time": 0.6863133907318115,
+  "optimizer_time": 26.184650897979736
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 41280,
+  "variables": 21312,
+  "status": "optimal",
+  "result": 88682.34264562659,
+  "setup_time": 0.0018889904022216797,
+  "dataflow_time": 1.5395212173461914,
+  "optimizer_time": 51.587385177612305
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 79680,
+  "variables": 40512,
+  "status": "optimal",
+  "result": 192351.35527393187,
+  "setup_time": 0.004098415374755859,
+  "dataflow_time": 2.7604479789733887,
+  "optimizer_time": 118.61848664283752
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 194880,
+  "variables": 98112,
+  "status": "optimal",
+  "result": 503463.1043930132,
+  "setup_time": 0.013722419738769531,
+  "dataflow_time": 7.695545196533203,
+  "optimizer_time": 576.8046708106995
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10080,
+  "variables": 6048,
+  "status": "optimal",
+  "result": 5490.68602762719,
+  "setup_time": 0.0003437995910644531,
+  "dataflow_time": 0.1479661464691162,
+  "optimizer_time": 12.255916357040405
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 33120,
+  "variables": 17568,
+  "status": "optimal",
+  "result": 62618.19761747188,
+  "setup_time": 0.001444101333618164,
+  "dataflow_time": 0.6325252056121826,
+  "optimizer_time": 39.850571393966675
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 61920,
+  "variables": 31968,
+  "status": "optimal",
+  "result": 141842.91343237562,
+  "setup_time": 0.001753091812133789,
+  "dataflow_time": 1.471764326095581,
+  "optimizer_time": 76.88266348838806
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 119520,
+  "variables": 60768,
+  "status": "optimal",
+  "result": 300635.9976005594,
+  "setup_time": 0.00449681282043457,
+  "dataflow_time": 2.5960233211517334,
+  "optimizer_time": 225.9705376625061
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.00043201446533203125,
+  "dataflow_time": 0.20391631126403809,
+  "optimizer_time": 1.4007298946380615
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 299.9806275624904,
+  "setup_time": 0.00040340423583984375,
+  "dataflow_time": 0.10355162620544434,
+  "optimizer_time": 0.905519962310791
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 3874.743640488866,
+  "setup_time": 0.0011141300201416016,
+  "dataflow_time": 0.359926700592041,
+  "optimizer_time": 3.048149585723877
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 10035.560277705063,
+  "setup_time": 0.0028972625732421875,
+  "dataflow_time": 0.8457658290863037,
+  "optimizer_time": 6.1572654247283936
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 24360,
+  "variables": 12264,
+  "status": "optimal",
+  "result": 59693.25819970663,
+  "setup_time": 0.009093284606933594,
+  "dataflow_time": 3.49865460395813,
+  "optimizer_time": 27.298030138015747
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 299.9806275624903,
+  "setup_time": 0.0003352165222167969,
+  "dataflow_time": 0.09970355033874512,
+  "optimizer_time": 1.8168635368347168
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5520,
+  "variables": 2928,
+  "status": "optimal",
+  "result": 9203.303122628473,
+  "setup_time": 0.0016930103302001953,
+  "dataflow_time": 0.4257228374481201,
+  "optimizer_time": 6.447263956069946
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10320,
+  "variables": 5328,
+  "status": "optimal",
+  "result": 22103.221566933662,
+  "setup_time": 0.002074718475341797,
+  "dataflow_time": 0.7247285842895508,
+  "optimizer_time": 11.69836139678955
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 48720,
+  "variables": 24528,
+  "status": "optimal",
+  "result": 125784.65637985281,
+  "setup_time": 0.008935928344726562,
+  "dataflow_time": 3.4569051265716553,
+  "optimizer_time": 57.61553955078125
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 1484.6125924751136,
+  "setup_time": 0.0002684593200683594,
+  "dataflow_time": 0.09011960029602051,
+  "optimizer_time": 4.767239809036255
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 22343.735678065095,
+  "setup_time": 0.0012843608856201172,
+  "dataflow_time": 0.4136996269226074,
+  "optimizer_time": 12.906913757324219
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 20640,
+  "variables": 10656,
+  "status": "optimal",
+  "result": 49191.06511950167,
+  "setup_time": 0.011294364929199219,
+  "dataflow_time": 0.8090858459472656,
+  "optimizer_time": 23.452446699142456
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.0006508827209472656,
+  "dataflow_time": 0.3193087577819824,
+  "optimizer_time": 0.8569738864898682
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 5328.559482139608,
+  "setup_time": 0.0018019676208496094,
+  "dataflow_time": 0.3499755859375,
+  "optimizer_time": 2.8354620933532715
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 12067.661289228603,
+  "setup_time": 0.0022535324096679688,
+  "dataflow_time": 0.6126902103424072,
+  "optimizer_time": 5.257918357849121
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.00041937828063964844,
+  "dataflow_time": 0.07681918144226074,
+  "optimizer_time": 0.8365764617919922
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 5328.559482139608,
+  "setup_time": 0.0013930797576904297,
+  "dataflow_time": 0.3041267395019531,
+  "optimizer_time": 2.6972155570983887
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 12067.661289228603,
+  "setup_time": 0.0022008419036865234,
+  "dataflow_time": 0.6351151466369629,
+  "optimizer_time": 5.115154027938843
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 24360,
+  "variables": 12264,
+  "status": "optimal",
+  "result": 66091.39818014618,
+  "setup_time": 0.014496326446533203,
+  "dataflow_time": 3.2551772594451904,
+  "optimizer_time": 25.07696223258972
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 928.2785698615318,
+  "setup_time": 0.0005185604095458984,
+  "dataflow_time": 0.07178044319152832,
+  "optimizer_time": 1.8306596279144287
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.0005676746368408203,
+  "dataflow_time": 0.0822303295135498,
+  "optimizer_time": 0.7292873859405518
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 5328.559482139608,
+  "setup_time": 0.0014758110046386719,
+  "dataflow_time": 0.430164098739624,
+  "optimizer_time": 2.953127861022949
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 12067.661289228603,
+  "setup_time": 0.0023717880249023438,
+  "dataflow_time": 0.8145315647125244,
+  "optimizer_time": 8.511516094207764
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 24360,
+  "variables": 12264,
+  "status": "optimal",
+  "result": 66091.39818014618,
+  "setup_time": 0.013557910919189453,
+  "dataflow_time": 3.636522054672241,
+  "optimizer_time": 27.313312292099
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 928.2785698615318,
+  "setup_time": 0.0009357929229736328,
+  "dataflow_time": 0.20610952377319336,
+  "optimizer_time": 2.296145439147949
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5520,
+  "variables": 2928,
+  "status": "optimal",
+  "result": 11711.368635730425,
+  "setup_time": 0.0014765262603759766,
+  "dataflow_time": 0.48221802711486816,
+  "optimizer_time": 8.28519320487976
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10320,
+  "variables": 5328,
+  "status": "optimal",
+  "result": 25341.762099315893,
+  "setup_time": 0.002386808395385742,
+  "dataflow_time": 0.8352451324462891,
+  "optimizer_time": 15.355254888534546
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 48720,
+  "variables": 24528,
+  "status": "optimal",
+  "result": 134495.83224220516,
+  "setup_time": 0.013022661209106445,
+  "dataflow_time": 3.535381317138672,
+  "optimizer_time": 57.62247705459595
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 3448.0209428931184,
+  "setup_time": 0.000896453857421875,
+  "dataflow_time": 0.13805365562438965,
+  "optimizer_time": 4.00675368309021
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 25257.253699698093,
+  "setup_time": 0.0027968883514404297,
+  "dataflow_time": 0.4838550090789795,
+  "optimizer_time": 11.98612356185913
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 20640,
+  "variables": 10656,
+  "status": "optimal",
+  "result": 52675.242540889914,
+  "setup_time": 0.0038595199584960938,
+  "dataflow_time": 0.7653491497039795,
+  "optimizer_time": 21.579848051071167
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 97440,
+  "variables": 49056,
+  "status": "optimal",
+  "result": 272130.07570462977,
+  "setup_time": 0.013605594635009766,
+  "dataflow_time": 5.144158363342285,
+  "optimizer_time": 170.27204847335815
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5880,
+  "variables": 3528,
+  "status": "infeasible",
+  "result": Infinity,
+  "setup_time": 0.012095928192138672,
+  "dataflow_time": 0.344623327255249,
+  "optimizer_time": 7.672017812728882
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 19320,
+  "variables": 10248,
+  "status": "infeasible",
+  "result": Infinity,
+  "setup_time": 0.0016286373138427734,
+  "dataflow_time": 0.35838985443115234,
+  "optimizer_time": 23.06324601173401
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 36120,
+  "variables": 18648,
+  "status": "optimal",
+  "result": 77193.53803829149,
+  "setup_time": 0.0029153823852539062,
+  "dataflow_time": 0.8243656158447266,
+  "optimizer_time": 40.74604916572571
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.0005366802215576172,
+  "dataflow_time": 0.11347055435180664,
+  "optimizer_time": 0.8987517356872559
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 5328.559482139608,
+  "setup_time": 0.0016937255859375,
+  "dataflow_time": 0.39135074615478516,
+  "optimizer_time": 4.716373682022095
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 12067.661289228603,
+  "setup_time": 0.0030248165130615234,
+  "dataflow_time": 0.6509966850280762,
+  "optimizer_time": 6.521489858627319
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.0007081031799316406,
+  "dataflow_time": 0.08345508575439453,
+  "optimizer_time": 0.9063105583190918
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 5328.559482139608,
+  "setup_time": 0.0014643669128417969,
+  "dataflow_time": 0.38234615325927734,
+  "optimizer_time": 2.954043388366699
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 12067.661289228603,
+  "setup_time": 0.008313179016113281,
+  "dataflow_time": 0.7076537609100342,
+  "optimizer_time": 5.461196660995483
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 24360,
+  "variables": 12264,
+  "status": "optimal",
+  "result": 66091.39818014618,
+  "setup_time": 0.012975692749023438,
+  "dataflow_time": 3.493112087249756,
+  "optimizer_time": 27.282219409942627
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 928.2785698615318,
+  "setup_time": 0.0006058216094970703,
+  "dataflow_time": 0.09303641319274902,
+  "optimizer_time": 1.9961693286895752
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5520,
+  "variables": 2928,
+  "status": "optimal",
+  "result": 11711.368635730425,
+  "setup_time": 0.0012695789337158203,
+  "dataflow_time": 0.38504528999328613,
+  "optimizer_time": 5.902430295944214
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10320,
+  "variables": 5328,
+  "status": "optimal",
+  "result": 25341.762099315893,
+  "setup_time": 0.0024378299713134766,
+  "dataflow_time": 1.8547544479370117,
+  "optimizer_time": 10.769822120666504
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.0006191730499267578,
+  "dataflow_time": 0.11531782150268555,
+  "optimizer_time": 0.9014806747436523
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.0006678104400634766,
+  "dataflow_time": 0.14933538436889648,
+  "optimizer_time": 0.9105875492095947
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 5328.559482139608,
+  "setup_time": 0.0016827583312988281,
+  "dataflow_time": 0.4788954257965088,
+  "optimizer_time": 3.0178112983703613
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.00048041343688964844,
+  "dataflow_time": 0.09683465957641602,
+  "optimizer_time": 0.850940465927124
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 840,
+  "variables": 504,
+  "status": "optimal",
+  "result": 30.20665819896464,
+  "setup_time": 0.0008823871612548828,
+  "dataflow_time": 0.1534125804901123,
+  "optimizer_time": 0.8638112545013428
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 5328.559482139608,
+  "setup_time": 0.0013833045959472656,
+  "dataflow_time": 0.3450651168823242,
+  "optimizer_time": 3.1985979080200195
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2760,
+  "variables": 1464,
+  "status": "optimal",
+  "result": 5328.559482139608,
+  "setup_time": 0.0015959739685058594,
+  "dataflow_time": 0.8145630359649658,
+  "optimizer_time": 2.9703752994537354
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 12067.661289228603,
+  "setup_time": 0.004014015197753906,
+  "dataflow_time": 0.666419267654419,
+  "optimizer_time": 5.5284600257873535
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5160,
+  "variables": 2664,
+  "status": "optimal",
+  "result": 12067.661289228603,
+  "setup_time": 0.0028679370880126953,
+  "dataflow_time": 1.061415433883667,
+  "optimizer_time": 6.036267280578613
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 24360,
+  "variables": 12264,
+  "status": "optimal",
+  "result": 66091.39818014618,
+  "setup_time": 0.013076543807983398,
+  "dataflow_time": 3.395463705062866,
+  "optimizer_time": 26.94161629676819
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 24360,
+  "variables": 12264,
+  "status": "optimal",
+  "result": 66091.39818014618,
+  "setup_time": 0.012517690658569336,
+  "dataflow_time": 5.063828468322754,
+  "optimizer_time": 26.915813446044922
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 928.2785698615318,
+  "setup_time": 0.0008118152618408203,
+  "dataflow_time": 0.10905003547668457,
+  "optimizer_time": 2.033877372741699
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1680,
+  "variables": 1008,
+  "status": "optimal",
+  "result": 928.2785698615318,
+  "setup_time": 0.000732421875,
+  "dataflow_time": 0.14467668533325195,
+  "optimizer_time": 2.037010908126831
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5520,
+  "variables": 2928,
+  "status": "optimal",
+  "result": 11711.368635730425,
+  "setup_time": 0.001458883285522461,
+  "dataflow_time": 0.38275146484375,
+  "optimizer_time": 5.70854926109314
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5520,
+  "variables": 2928,
+  "status": "optimal",
+  "result": 11711.368635730425,
+  "setup_time": 0.0013263225555419922,
+  "dataflow_time": 0.5710070133209229,
+  "optimizer_time": 6.0226945877075195
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10320,
+  "variables": 5328,
+  "status": "optimal",
+  "result": 25341.762099315893,
+  "setup_time": 0.002290964126586914,
+  "dataflow_time": 0.9394216537475586,
+  "optimizer_time": 12.477028846740723
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 10320,
+  "variables": 5328,
+  "status": "optimal",
+  "result": 25341.762099315893,
+  "setup_time": 0.002185821533203125,
+  "dataflow_time": 0.9699194431304932,
+  "optimizer_time": 10.6927969455719
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 48720,
+  "variables": 24528,
+  "status": "optimal",
+  "result": 134495.83224220516,
+  "setup_time": 0.011878013610839844,
+  "dataflow_time": 3.6588339805603027,
+  "optimizer_time": 57.19779849052429
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 48720,
+  "variables": 24528,
+  "status": "optimal",
+  "result": 134495.83224220516,
+  "setup_time": 0.015699148178100586,
+  "dataflow_time": 5.473226308822632,
+  "optimizer_time": 57.79865646362305
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 3448.0209428931184,
+  "setup_time": 0.0005593299865722656,
+  "dataflow_time": 0.10677051544189453,
+  "optimizer_time": 3.7778842449188232
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 3448.0209428931184,
+  "setup_time": 0.0008711814880371094,
+  "dataflow_time": 0.2033376693725586,
+  "optimizer_time": 3.7331507205963135
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 25257.253699698093,
+  "setup_time": 0.0012440681457519531,
+  "dataflow_time": 0.37021732330322266,
+  "optimizer_time": 11.1802396774292
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 25257.253699698093,
+  "setup_time": 0.0020825862884521484,
+  "dataflow_time": 0.5360701084136963,
+  "optimizer_time": 13.613102436065674
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 20640,
+  "variables": 10656,
+  "status": "optimal",
+  "result": 52675.242540889914,
+  "setup_time": 0.002440929412841797,
+  "dataflow_time": 0.681647539138794,
+  "optimizer_time": 22.686973810195923
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 20640,
+  "variables": 10656,
+  "status": "optimal",
+  "result": 52675.242540889914,
+  "setup_time": 0.002429485321044922,
+  "dataflow_time": 1.028710126876831,
+  "optimizer_time": 21.296794652938843
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 97440,
+  "variables": 49056,
+  "status": "optimal",
+  "result": 272130.07570462977,
+  "setup_time": 0.01352238655090332,
+  "dataflow_time": 5.226086378097534,
+  "optimizer_time": 158.14039707183838
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 97440,
+  "variables": 49056,
+  "status": "optimal",
+  "result": 272130.07570462977,
+  "setup_time": 0.011508464813232422,
+  "dataflow_time": 5.576265096664429,
+  "optimizer_time": 162.7177858352661
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5880,
+  "variables": 3528,
+  "status": "infeasible",
+  "result": Infinity,
+  "setup_time": 0.0006909370422363281,
+  "dataflow_time": 0.13494038581848145,
+  "optimizer_time": 6.916906356811523
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5880,
+  "variables": 3528,
+  "status": "infeasible",
+  "result": Infinity,
+  "setup_time": 0.00054931640625,
+  "dataflow_time": 0.145294189453125,
+  "optimizer_time": 6.915210962295532
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 19320,
+  "variables": 10248,
+  "status": "infeasible",
+  "result": Infinity,
+  "setup_time": 0.0026874542236328125,
+  "dataflow_time": 0.47264981269836426,
+  "optimizer_time": 23.21437931060791
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 19320,
+  "variables": 10248,
+  "status": "infeasible",
+  "result": Infinity,
+  "setup_time": 0.0027947425842285156,
+  "dataflow_time": 0.7095599174499512,
+  "optimizer_time": 26.20832896232605
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 36120,
+  "variables": 18648,
+  "status": "optimal",
+  "result": 77193.53803829149,
+  "setup_time": 0.002856731414794922,
+  "dataflow_time": 0.8385493755340576,
+  "optimizer_time": 42.407597064971924
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 36120,
+  "variables": 18648,
+  "status": "optimal",
+  "result": 77193.53803829149,
+  "setup_time": 0.0022797584533691406,
+  "dataflow_time": 0.9931280612945557,
+  "optimizer_time": 39.92788577079773
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 170520,
+  "variables": 85848,
+  "status": "optimal",
+  "result": 455969.0752518643,
+  "setup_time": 0.010028362274169922,
+  "dataflow_time": 3.590169668197632,
+  "optimizer_time": 399.67271971702576
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 170520,
+  "variables": 85848,
+  "status": "optimal",
+  "result": 455969.0752518643,
+  "setup_time": 0.03838014602661133,
+  "dataflow_time": 5.773729562759399,
+  "optimizer_time": 385.5458405017853
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 431.73952668754873,
+  "setup_time": 0.0007283687591552734,
+  "dataflow_time": 0.20292115211486816,
+  "optimizer_time": 4.017414569854736
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3360,
+  "variables": 2016,
+  "status": "optimal",
+  "result": 431.73952668754873,
+  "setup_time": 0.0005414485931396484,
+  "dataflow_time": 0.26903724670410156,
+  "optimizer_time": 4.05812668800354
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 21482.033810654044,
+  "setup_time": 0.001306772232055664,
+  "dataflow_time": 0.6911506652832031,
+  "optimizer_time": 12.218499422073364
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 11040,
+  "variables": 5856,
+  "status": "optimal",
+  "result": 21482.033810654044,
+  "setup_time": 0.0017549991607666016,
+  "dataflow_time": 0.9576423168182373,
+  "optimizer_time": 13.254399299621582
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 20640,
+  "variables": 10656,
+  "status": "optimal",
+  "result": 48440.47987811321,
+  "setup_time": 0.0022089481353759766,
+  "dataflow_time": 1.3413057327270508,
+  "optimizer_time": 21.19834804534912
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 20640,
+  "variables": 10656,
+  "status": "optimal",
+  "result": 48440.47987811321,
+  "setup_time": 0.002439260482788086,
+  "dataflow_time": 3.659571409225464,
+  "optimizer_time": 20.8672616481781
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 97440,
+  "variables": 49056,
+  "status": "optimal",
+  "result": 264527.3897409764,
+  "setup_time": 0.01916790008544922,
+  "dataflow_time": 8.025950908660889,
+  "optimizer_time": 158.85185194015503
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 97440,
+  "variables": 49056,
+  "status": "optimal",
+  "result": 264527.3897409764,
+  "setup_time": 0.013085603713989258,
+  "dataflow_time": 12.16634726524353,
+  "optimizer_time": 159.7922341823578
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 6720,
+  "variables": 4032,
+  "status": "optimal",
+  "result": 4059.560489055937,
+  "setup_time": 0.0004405975341796875,
+  "dataflow_time": 0.14981389045715332,
+  "optimizer_time": 8.226585626602173
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 6720,
+  "variables": 4032,
+  "status": "optimal",
+  "result": 4059.560489055937,
+  "setup_time": 0.0005726814270019531,
+  "dataflow_time": 0.2945213317871094,
+  "optimizer_time": 7.939653158187866
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 22080,
+  "variables": 11712,
+  "status": "optimal",
+  "result": 47096.81448909285,
+  "setup_time": 0.0015244483947753906,
+  "dataflow_time": 1.9801652431488037,
+  "optimizer_time": 22.959014415740967
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 22080,
+  "variables": 11712,
+  "status": "optimal",
+  "result": 47096.81448909285,
+  "setup_time": 0.0019099712371826172,
+  "dataflow_time": 1.0583014488220215,
+  "optimizer_time": 24.703799962997437
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 41280,
+  "variables": 21312,
+  "status": "optimal",
+  "result": 101601.05066486227,
+  "setup_time": 0.004893302917480469,
+  "dataflow_time": 1.333956241607666,
+  "optimizer_time": 48.23923182487488
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 41280,
+  "variables": 21312,
+  "status": "optimal",
+  "result": 101601.05066486227,
+  "setup_time": 0.00495600700378418,
+  "dataflow_time": 2.1002612113952637,
+  "optimizer_time": 45.96629571914673
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 194880,
+  "variables": 98112,
+  "status": "optimal",
+  "result": 541717.122873734,
+  "setup_time": 0.014644384384155273,
+  "dataflow_time": 7.8865320682525635,
+  "optimizer_time": 505.52916741371155
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 194880,
+  "variables": 98112,
+  "status": "optimal",
+  "result": 541717.122873734,
+  "setup_time": 0.01134943962097168,
+  "dataflow_time": 11.0350923538208,
+  "optimizer_time": 481.77654933929443
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 13440,
+  "variables": 8064,
+  "status": "optimal",
+  "result": 14272.767587770204,
+  "setup_time": 0.0007464885711669922,
+  "dataflow_time": 0.4085536003112793,
+  "optimizer_time": 16.9129421710968
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 13440,
+  "variables": 8064,
+  "status": "optimal",
+  "result": 14272.767587770204,
+  "setup_time": 0.0005624294281005859,
+  "dataflow_time": 0.2509133815765381,
+  "optimizer_time": 17.274739265441895
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 44160,
+  "variables": 23424,
+  "status": "optimal",
+  "result": 101730.25384602917,
+  "setup_time": 0.001219034194946289,
+  "dataflow_time": 0.647907018661499,
+  "optimizer_time": 52.49381422996521
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 44160,
+  "variables": 23424,
+  "status": "optimal",
+  "result": 101730.25384602917,
+  "setup_time": 0.0014126300811767578,
+  "dataflow_time": 1.0756804943084717,
+  "optimizer_time": 51.029815673828125
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 82560,
+  "variables": 42624,
+  "status": "optimal",
+  "result": 211750.43988684198,
+  "setup_time": 0.002821683883666992,
+  "dataflow_time": 1.3150033950805664,
+  "optimizer_time": 128.34372758865356
+}
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 82560,
+  "variables": 42624,
+  "status": "optimal",
+  "result": 211750.43988684198,
+  "setup_time": 0.003885030746459961,
+  "dataflow_time": 2.263059616088867,
+  "optimizer_time": 137.72424626350403
+}

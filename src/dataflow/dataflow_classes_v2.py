@@ -40,7 +40,7 @@ class DataflowTask:
             task.run()
             input_dfs.update(task.get_results())
 
-        print(f"{self.name} task is running...")
+        # print(f"{self.name} task is running...")
         self.process(input_dfs)
         self._results = input_dfs
 

@@ -21,11 +21,13 @@ class Dataflow:
             return self.tasks[name]
     
     def execute(self) -> None:
-        print(f"Executing dataflow: {self.name}")
+        # print(f"Executing dataflow: {self.name}")
         final_task = self.get_final_task()
         if final_task is not None:
             final_task.run()
             self.results = final_task.get_results()
+        # else:
+        #     raise ValueError("No final task found in the dataflow. Please ensure that a task is marked as final.")
 
     # overload [] operator
     def __getitem__(self, name: str) -> DataflowTask:

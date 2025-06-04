@@ -6,22 +6,10 @@ from src.optimization.base_domain import Node
 
 # singleton class
 class DataflowManager:
-    __instance = None
+    def __init__(self):
+        self.dataflows = {}
 
-    @staticmethod
-    def getInstance() -> DataflowManager:
-        if DataflowManager.__instance == None:
-            DataflowManager()
-        return DataflowManager.__instance
-
-    def __init__(self) -> None:
-        if DataflowManager.__instance != None:
-            raise Exception("This class is a singleton!")
-        else:
-            DataflowManager.__instance = self
-            self.dataflows = {}
-    
-    def new_dataflow(self, object, dataflow = None) -> Dataflow:
+    def new_dataflow(self, object, dataflow=None) -> Dataflow:
         if object is None:
             raise Exception("Object cannot be None")
         if not isinstance(object, Node):
@@ -62,3 +50,11 @@ class DataflowManager:
     # overload [] operator 
     def __getitem__(self, key):
         return self.new_dataflow(key)
+    
+    def reset(self):
+        """
+        Reset the dataflow manager, clearing all dataflows.
+        This is useful for testing or when you want to start fresh.
+        """
+        self.dataflows.clear()
+        # DataflowManager.__instance = None

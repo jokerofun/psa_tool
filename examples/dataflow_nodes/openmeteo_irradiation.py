@@ -2,10 +2,11 @@ import pandas as pd
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+import numpy as np
 
 from dataflow_manager.clients import openmeteo_client
 
-def get_irradiation_data(dataframe = None, parameters: dict = {"latitude": 0, "longitude": 0}):
+def get_irradiation_data(dataframe = {}, parameters: dict = {"latitude": 0, "longitude": 0, "T": 24, "l": 1}):
     """
     Get irradiation data forecast for 24 hours with 1 hour intervals.
     
@@ -21,6 +22,8 @@ def get_irradiation_data(dataframe = None, parameters: dict = {"latitude": 0, "l
     pd.DataFrame
         Dataframe with irradiation data.
     """
+    parameters = {**{"latitude": 0, "longitude": 0, "T": 24, "l" : 1}, **parameters}
+    
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
         "latitude": parameters["latitude"],
@@ -30,6 +33,8 @@ def get_irradiation_data(dataframe = None, parameters: dict = {"latitude": 0, "l
     responses = openmeteo_client.get_openmeteo_client().weather_api(url, params=params)
     response = responses[0]
     hourly = response.Hourly()
+    if hourly is None:
+        raise ValueError("No hourly data found in the response. Please check the parameters or the API response.")
     hourly_irradiation = hourly.Variables(0).ValuesAsNumpy()
 
     # Make a writable copy to allow modification
@@ -43,10 +48,29 @@ def get_irradiation_data(dataframe = None, parameters: dict = {"latitude": 0, "l
         freq = pd.Timedelta(seconds = hourly.Interval()),
         inclusive = "left"
     )}
-
-    hourly_data["direct_irradiation"] = hourly_irradiation
-
-    hourly_dataframe = pd.DataFrame(data = hourly_data)
+    if parameters["l"] == 1:
+        hourly_data["direct_irradiation"] = hourly_irradiation
+        hourly_dataframe = pd.DataFrame(data = hourly_data)
+    elif parameters["l"] == 4:
+        # interpolate the data to 15 minute intervals, with weighed average
+        hourly_data_interp = pd.DataFrame()
+        hourly_data_interp["date"] = hourly_data["date"]
+        
+        # Create a temporary hourly dataframe
+        temp_hourly_df = pd.DataFrame({
+            "date": pd.date_range(
+                start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
+                periods=len(hourly_irradiation),
+                freq="H"
+            ),
+            "direct_irradiation": hourly_irradiation
+        })
+        
+        # Resample to 15-minute intervals with linear interpolation
+        resampled = temp_hourly_df.set_index("date").resample('15min').interpolate(method='linear')
+        
+        # Add to hourly_data
+        hourly_dataframe = resampled.reset_index()
     
     dataframe["get_solar_data"] = hourly_dataframe
 
@@ -54,6 +78,18 @@ def get_irradiation_data(dataframe = None, parameters: dict = {"latitude": 0, "l
 
 ## example usage
 if __name__ == "__main__":
-    parameters = {"latitude": 57.0488, "longitude": 9.9217}  # Aalborg, Denmark
-    irradiation_data = get_irradiation_data(parameters=parameters)
-    print(irradiation_data)
+    parameters = {"latitude": 57.0488, "longitude": 9.9217, "l" : 4}  # Aalborg, Denmark
+    irradiation_data = get_irradiation_data(parameters=parameters)["get_solar_data"]
+    
+    print(irradiation_data.columns)
+    print(irradiation_data.head())
+    
+    # plot the data
+    import matplotlib.pyplot as plt
+    plt.plot(irradiation_data["date"], irradiation_data["direct_irradiation"])
+    plt.xlabel("Date")
+    plt.ylabel("Direct Irradiation (W/m^2)")
+    plt.title("Direct Irradiation Data")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()

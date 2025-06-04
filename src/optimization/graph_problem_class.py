@@ -1,8 +1,9 @@
+import time
 import cvxpy as cp
 from src.dataflow.dataflow_manager_v2 import DataflowManager
 from .selector import Selector
 # from persistence.db_manager import DBManager
-
+import src.dataflow.dataflow_factory as dataflow_factory
 class GraphProblemClass():
     def __init__(self, name, time_length=24):
         self.name = name
@@ -10,7 +11,7 @@ class GraphProblemClass():
         self._nodes = []
         self._objective = ""
         self._selector = None
-        self._dataflow_manager = DataflowManager.getInstance()
+        self._dataflow_manager = dataflow_factory.get_dataflow_manager()
 
     def __repr__(self):
         return f"GraphProblemClass(name={self.name},nodes={self._nodes},objective={self._objective})"
@@ -58,6 +59,7 @@ class GraphProblemClass():
         # fetch dataflows from nodes and execute them
         self.fetch_dataflows()
         self._dataflow_manager.execute()
+        self.dataflow_time = time.time()
         # assign result values from dataflows to parameters in nodes 
         for node in self._nodes:
             node.assign(self.time_length)
@@ -82,10 +84,11 @@ class GraphProblemClass():
         
         # build and solve the optimization problem
         problem = cp.Problem(objective, constraints)
-        problem.solve(solver=solver, verbose=True)
+        # problem.solve( verbose=True, solver_path=[('OSQP', {'max_iter':1000000})])
+        problem.solve(solver=solver, verbose=False)
 
-        if problem.status == cp.OPTIMAL:
-            print(f"Result: {problem.value}")
+        # if problem.status == cp.OPTIMAL:
+        #     print(f"Result: {problem.value}")
 
         # print values of decision variables of the nodes in the GraphProblemClass
         # print("-" * 50)
@@ -106,3 +109,12 @@ class GraphProblemClass():
             variables.append(node.variables)
             
         return variables
+    
+    def reset(self):
+        """
+        Reset the problem class, clearing nodes and dataflows.
+        """
+        self._dataflow_manager.reset()
+        self._selector = None
+        self._nodes.clear()
+        

@@ -85,7 +85,7 @@ def train_consumer_model(dataframe=None, model_name="consumer_model"):
     df['month'] = df.index.month
 
     # Initialize PyCaret setup with gpu support
-    setup(data=df, target='active_energy_kWh', session_id=123, use_gpu=True)
+    setup(data=df, target='active_energy_kWh', session_id=123, use_gpu=False,n_jobs=2,verbose=True)
 
     # Find best model with turbo mode enabled
     best_model = compare_models(turbo=True)

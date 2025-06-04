@@ -1,4 +1,5 @@
 class MicrogridSetup:
+    l = 4
     T = 24 # time segments
     no_homes = 50
     no_solar_panels = 50

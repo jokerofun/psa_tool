@@ -1,0 +1,4 @@
+Requirement already satisfied: osqp in ./venv/lib/python3.10/site-packages (0.6.7.post3)
+Requirement already satisfied: numpy>=1.7 in ./venv/lib/python3.10/site-packages (from osqp) (1.26.4)
+Requirement already satisfied: scipy>=0.13.2 in ./venv/lib/python3.10/site-packages (from osqp) (1.11.4)
+Requirement already satisfied: qdldl in ./venv/lib/python3.10/site-packages (from osqp) (0.1.7.post4)
