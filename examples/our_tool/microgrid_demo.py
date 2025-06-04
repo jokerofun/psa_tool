@@ -16,9 +16,11 @@ from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbin
 from examples.helpers.microgrid_setup import MicrogridSetup
 from examples.helpers.file_writer import write
 
-from examples.helpers.plot_microgrid_solution import plot_microgrid_solution
+import time
+# from examples.helpers.plot_microgrid_solution import plot_microgrid_solution
 
 def solve_microgrid(setup: MicrogridSetup):
+    start_time = time.time()
     problemClass = GraphProblemClass("microgrid_problem", time_length=setup.T)
 
     metering_point = MeteringPoint("grid1")
@@ -51,8 +53,10 @@ def solve_microgrid(setup: MicrogridSetup):
     microgrid_balance.connect_nodes([*homes, *solar_panels_homes, *batteries, school, 
                            solar_panel_school, wind_turbine, metering_point])
 
+    setup_time = time.time()
     result = problemClass.solve(solver=cp.CBC, objective="minimize", value="cost")
-
+    end_time = time.time()
+    dataflow_time = problemClass.dataflow_time
     # FROM HERE - DON'T COUNT THESE CHARACTERS FOR PRODUCTIVITY EXPERIMENTS
     stats = {
         "implementation": "our microgrid demo",
@@ -61,7 +65,12 @@ def solve_microgrid(setup: MicrogridSetup):
         "constraints": len(result.constraints),
         "variables": sum(v.size for v in result.variables()),
         "status": result.status,
-        "result": result.value
+        "result": result.value,
+        "T": setup.T,
+        "no_homes": setup.no_homes,
+        "setup_time": setup_time - start_time,
+        "dataflow_time": dataflow_time - setup_time,
+        "optimizer_time": end_time - dataflow_time
     }
     write(setup.output_path, stats)
     
@@ -80,5 +89,5 @@ def solve_microgrid(setup: MicrogridSetup):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 24
+    setup.T = 24*30
     solve_microgrid(setup=setup)

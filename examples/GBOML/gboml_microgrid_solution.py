@@ -14,13 +14,17 @@ from examples.helpers.microgrid_setup import MicrogridSetup
 import examples.helpers.gboml_build_domain as gboml_domain
 from examples.helpers.file_writer import write
 
+import time
+
 def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"):
+    start_time = time.time()
     gboml_setup = MicrogridSetup()
     gboml_setup = setup
     gboml_setup.T = setup.T + 1
     gboml_domain.build_microgrid(setup=gboml_setup, file_path=microgrid_file_path)
     
     home_demands = []
+    setup_time = time.time()
     for _ in range(gboml_setup.no_homes):
         home_demand_dict = predict_consumer_data(dataframe={}, parameters={"hours": gboml_setup.T, "model_name":"consumer_model", "factor": 1})
         home_demand = home_demand_dict["gen_consumption"]["consumption_kWh"]
@@ -35,17 +39,18 @@ def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"
     wind_prod = wind_prod_dict["gen_wind_data"]["energy_generated"]
     np.savetxt("data/gboml_data/gen_wind.csv", wind_prod[:gboml_setup.T])
     
+    solar_data_dict = get_irradiation_data({}, parameters={"latitude": 57.0488, "longitude": 9.9217})
+    solar_prod_school_dict = generate_solar_panel_data(solar_data_dict, parameters={"rated_power": gboml_setup.solar_capacity_school})
+    solar_prod_school = solar_prod_school_dict["gen_solar_data"]["energy_generated"]
+    np.savetxt("data/gboml_data/gen_big_solar.csv", solar_prod_school[:gboml_setup.T])
+
     solar_prod = {}
     for i in range(1, gboml_setup.no_solar_panels + 1):
         solar_data_dict = get_irradiation_data(dataframe={}, parameters={"latitude": 57.0488, "longitude": 9.9217})
         solar_prod_dict = generate_solar_panel_data(solar_data_dict, parameters={"rated_power": gboml_setup.solar_capacity_home,})
         solar_prod = solar_prod_dict["gen_solar_data"]["energy_generated"]
         np.savetxt(f"data/gboml_data/gen_solar_{i}.csv", solar_prod[:gboml_setup.T])
-
-    solar_data_dict = get_irradiation_data({}, parameters={"latitude": 57.0488, "longitude": 9.9217})
-    solar_prod_school_dict = generate_solar_panel_data(solar_data_dict, parameters={"rated_power": gboml_setup.solar_capacity_school})
-    solar_prod_school = solar_prod_school_dict["gen_solar_data"]["energy_generated"]
-    np.savetxt("data/gboml_data/gen_big_solar.csv", solar_prod_school[:gboml_setup.T])
+    dataflow_time = time.time()
 
     gboml_model = GbomlGraph(gboml_setup.T)
     nodes, edges, global_params = gboml_model.import_all_nodes_and_edges(microgrid_file_path)
@@ -55,11 +60,12 @@ def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"
 
     # solution = gboml_model.solve_cbc(opt_file=microgrid_file_path)
     solution = gboml_model.solve_clp()
-    details = gboml_model.turn_solution_to_dictionary(
-        solver_data=solution[3], status=solution[2], 
-        solution=solution[0], objective=solution[1])
-
+    end_time = time.time()
+    
     # FROM HERE - DON'T COUNT THESE CHARACTERS FOR PRODUCTIVITY EXPERIMENTS
+    # details = gboml_model.turn_solution_to_dictionary(
+    #     solver_data=solution[3], status=solution[2], 
+    #     solution=solution[0], objective=solution[1])
     total_parameters = len(global_params)
     total_variables = 0
     total_constraints = 0
@@ -79,7 +85,12 @@ def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"
         "constraints": total_constraints,
         "variables": total_variables,
         "status": solution[2],
-        "result": solution[1]
+        "result": solution[1],
+        "T": setup.T,
+        "no_homes": gboml_setup.no_homes,
+        "setup_time": setup_time - start_time,
+        "dataflow_time": dataflow_time - setup_time,
+        "optimizer_time": end_time - dataflow_time
     }
     write(gboml_setup.output_path, stats)
     # return (solution, details)

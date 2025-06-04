@@ -3,6 +3,8 @@ from src.dataflow.dataflow_manager_v2 import DataflowManager
 from .selector import Selector
 # from persistence.db_manager import DBManager
 
+import time
+
 class GraphProblemClass():
     def __init__(self, name, time_length):
         self.name = name
@@ -65,6 +67,7 @@ class GraphProblemClass():
         # fetch dataflows from nodes and execute them
         self.fetch_dataflows()
         self._dataflow_manager.execute()
+        self.dataflow_time = time.time()
         # assign result values from dataflows to parameters in nodes 
         for node in self._nodes:
             node.assign(self.time_length)
@@ -92,8 +95,8 @@ class GraphProblemClass():
         problem = cp.Problem(objective, constraints)
         problem.solve(solver=solver, verbose=False)
 
-        if problem.status == cp.OPTIMAL:
-            print(f"Result: {problem.value}")
+        # if problem.status == cp.OPTIMAL:
+        #     print(f"Result: {problem.value}")
 
         # print values of decision variables of the nodes in the GraphProblemClass
         # print("-" * 50)

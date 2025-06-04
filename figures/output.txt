@@ -268,3 +268,17 @@
   "status": "optimal",
   "result": 849.2653520474511
 }
+{
+  "implementation": "our microgrid demo",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 849.265352047451,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0010309219360351562,
+  "dataflow_time": 5.6106791496276855,
+  "optimizer_time": 1.0892984867095947
+}

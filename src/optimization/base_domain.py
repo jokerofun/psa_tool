@@ -1,4 +1,3 @@
-import abc
 from src.dataflow.dataflow_v2 import Dataflow
 
 class Node():
@@ -27,7 +26,6 @@ class Node():
             if not isinstance(value, Node):
                 primitive_attributes_only[key] = value
             else:
-                # primitive_attributes_only[key] = value.__class__.__name__
                 primitive_attributes_only[key] = None
 
         return primitive_attributes_only
