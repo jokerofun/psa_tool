@@ -1,190 +1,196 @@
 {
-  "execution_time_T25Homes50": {
-    "demo": 7.0,
-    "GBOML": 5.84,
-    "CVXPY": 6.88,
-    "Pyomo": 5.7
-  }
-}
-{
-  "memory_usage_T26Homes50": {
-    "demo": 289.99,
-    "GBOML": 296.39,
-    "CVXPY": 294.83,
-    "Pyomo": 296.06
-  }
-}
-{
-  "execution_time_T49Homes50": {
-    "demo": 7.67,
-    "GBOML": 6.43,
-    "CVXPY": 7.43,
-    "Pyomo": 6.05
-  }
-}
-{
-  "memory_usage_T50Homes50": {
-    "demo": 312.4,
-    "GBOML": 322.7,
-    "CVXPY": 323.37,
-    "Pyomo": 322.78
-  }
-}
-{
-  "execution_time_T73Homes50": {
-    "demo": 8.45,
-    "GBOML": 6.19,
-    "CVXPY": 8.28,
-    "Pyomo": 6.08
-  }
-}
-{
-  "memory_usage_T74Homes50": {
-    "demo": 346.04,
-    "GBOML": 348.72,
-    "CVXPY": 356.82,
-    "Pyomo": 348.95
-  }
-}
-{
-  "execution_time_T121Homes50": {
-    "demo": 10.3,
-    "GBOML": 6.23,
-    "CVXPY": 10.83,
-    "Pyomo": 6.25
-  }
-}
-{
-  "memory_usage_T122Homes50": {
-    "demo": 393.18,
-    "GBOML": 374.87,
-    "CVXPY": 405.38,
-    "Pyomo": 374.16
-  }
-}
-{
   "execution_time_T24Homes50": {
-    "demo": 6.84,
+    "GPO-D": 6.84,
     "CVXPY": 6.52,
     "Pyomo": 5.78
   }
 }
 {
   "memory_usage_T24Homes50": {
-    "demo": 292.24,
+    "GPO-D": 292.24,
     "CVXPY": 294.57,
     "Pyomo": 297.05
   }
 }
 {
   "execution_time_T48Homes50": {
-    "demo": 7.43,
+    "GPO-D": 7.43,
     "CVXPY": 7.5,
     "Pyomo": 5.83
   }
 }
 {
   "memory_usage_T48Homes50": {
-    "demo": 316.07,
+    "GPO-D": 316.07,
     "CVXPY": 324.1,
     "Pyomo": 325.29
   }
 }
 {
   "execution_time_T72Homes50": {
-    "demo": 8.24,
+    "GPO-D": 8.24,
     "CVXPY": 8.25,
     "Pyomo": 5.84
   }
 }
 {
   "memory_usage_T72Homes50": {
-    "demo": 347.29,
+    "GPO-D": 347.29,
     "CVXPY": 354.52,
     "Pyomo": 348.48
   }
 }
 {
   "execution_time_T120Homes50": {
-    "demo": 10.15,
+    "GPO-D": 10.15,
     "CVXPY": 10.0,
     "Pyomo": 6.03
   }
 }
 {
   "memory_usage_T120Homes50": {
-    "demo": 393.45,
+    "GPO-D": 393.45,
     "CVXPY": 401.39,
     "Pyomo": 366.43
   }
 }
 {
   "execution_time_T24Homes50": {
-    "demo": 6.64,
+    "GPO-D": 6.64,
     "CVXPY": 6.48,
     "Pyomo": 5.74
   }
 }
 {
   "memory_usage_T24Homes50": {
-    "demo": 355.43,
+    "GPO-D": 355.43,
     "CVXPY": 353.21,
     "Pyomo": 351.45
   }
 }
 {
   "execution_time_T24Homes100": {
-    "demo": 12.94,
+    "GPO-D": 12.94,
     "CVXPY": 12.67,
     "Pyomo": 11.3
   }
 }
 {
   "memory_usage_T24Homes100": {
-    "demo": 351.54,
+    "GPO-D": 351.54,
     "CVXPY": 350.17,
     "Pyomo": 348.68
   }
 }
 {
   "execution_time_T24Homes200": {
-    "demo": 25.91,
+    "GPO-D": 25.91,
     "CVXPY": 25.64,
     "Pyomo": 22.79
   }
 }
 {
   "memory_usage_T24Homes200": {
-    "demo": 366.04,
+    "GPO-D": 366.04,
     "CVXPY": 368.57,
     "Pyomo": 366.37
   }
 }
 {
   "execution_time_T24Homes500": {
-    "demo": 65.94,
+    "GPO-D": 65.94,
     "CVXPY": 63.84,
     "Pyomo": 57.25
   }
 }
 {
   "memory_usage_T24Homes500": {
-    "demo": 398.66,
+    "GPO-D": 398.66,
     "CVXPY": 410.23,
     "Pyomo": 386.31
   }
 }
 {
   "execution_time_T24Homes1000": {
-    "demo": 141.02,
+    "GPO-D": 141.02,
     "CVXPY": 131.51,
     "Pyomo": 117.98
   }
 }
 {
   "memory_usage_T24Homes1000": {
-    "demo": 462.78,
+    "GPO-D": 462.78,
     "CVXPY": 469.37,
     "Pyomo": 412.99
+  }
+}
+{
+  "execution_time_T24Homes50": {
+    "GBOML": 6.82
+  }
+}
+{
+  "memory_usage_T24Homes50": {
+    "GBOML": 260.25
+  }
+}
+{
+  "execution_time_T48Homes50": {
+    "GBOML": 6.72
+  }
+}
+{
+  "memory_usage_T48Homes50": {
+    "GBOML": 261.19
+  }
+}
+{
+  "execution_time_T72Homes50": {
+    "GBOML": 6.73
+  }
+}
+{
+  "memory_usage_T72Homes50": {
+    "GBOML": 264.15
+  }
+}
+{
+  "execution_time_T120Homes50": {
+    "GBOML": 6.78
+  }
+}
+{
+  "memory_usage_T120Homes50": {
+    "GBOML": 267.21
+  }
+}
+{
+  "execution_time_T24Homes50": {
+    "GBOML": 6.88
+  }
+}
+{
+  "memory_usage_T24Homes50": {
+    "GBOML": 266.67
+  }
+}
+{
+  "execution_time_T24Homes100": {
+    "GBOML": 13.7
+  }
+}
+{
+  "memory_usage_T24Homes100": {
+    "GBOML": 269.05
+  }
+}
+{
+  "execution_time_T24Homes200": {
+    "GBOML": 27.53
+  }
+}
+{
+  "memory_usage_T24Homes200": {
+    "GBOML": 278.44
   }
 }

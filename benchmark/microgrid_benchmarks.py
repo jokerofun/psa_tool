@@ -2,7 +2,7 @@
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import examples.our_tool.microgrid_demo as microgrid_demo
+import examples.GPOD.gpod_microgrid_solution as gpod_microgrid_demo
 from examples.helpers.microgrid_setup import MicrogridSetup
 import examples.CVXPY.native_cvxpy_microgrid_solution as cvxpy_microgrid_demo
 import examples.Pyomo.native_pyomo_microgrid_solution as pyomo_microgrid_demo
@@ -18,13 +18,13 @@ from plot_results import plot_comparisons
 def measure_execution_time(setup:MicrogridSetup, microgrid_file_path):
     benchmark = Benchmark()
     empty(setup.output_path)
-    demo_result = benchmark.run(microgrid_demo.solve_microgrid, setup, runs=1)
+    demo_result = benchmark.run(gpod_microgrid_demo.solve_microgrid_gpod, setup, runs=1)
     cvxpy_result = benchmark.run(cvxpy_microgrid_demo.solve_microgrid_cvxpy, setup, runs=1)
     pyomo_result = benchmark.run(pyomo_microgrid_demo.solve_microgrid_pyomo, setup, runs=1)
-    gboml_result = benchmark.run(gboml_microgrid_demo.run, setup, microgrid_file_path, runs=1)
+    gboml_result = benchmark.run(gboml_microgrid_demo.solve_microgrid_gboml, setup, microgrid_file_path, runs=1)
 
     return {
-            "demo": demo_result["average_time"], 
+            "GPO-D": demo_result["average_time"], 
             "GBOML": gboml_result["average_time"],
             "CVXPY": cvxpy_result["average_time"],
             "Pyomo": pyomo_result["average_time"]

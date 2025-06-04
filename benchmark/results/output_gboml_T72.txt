@@ -1,0 +1,28 @@
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 4637.503270675203,
+  "T": 72,
+  "no_homes": 50,
+  "setup_time": 0.0010006427764892578,
+  "dataflow_time": 6.446094036102295,
+  "optimizer_time": 0.28333258628845215
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 4637.503270675203,
+  "T": 72,
+  "no_homes": 50,
+  "setup_time": 0.0009860992431640625,
+  "dataflow_time": 6.575316905975342,
+  "optimizer_time": 0.16813135147094727
+}

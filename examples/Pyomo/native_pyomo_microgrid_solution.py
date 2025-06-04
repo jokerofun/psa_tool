@@ -133,7 +133,7 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
 if __name__ == "__main__":
     setup = MicrogridSetup()
     setup.T = 24
-    n = 500
+    n = 50
     setup.no_homes = n
     setup.no_solar_panels = n
     solve_microgrid_pyomo(setup=setup)

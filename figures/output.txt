@@ -1,0 +1,14 @@
+{
+  "implementation": "Pyomo",
+  "solver": "cbc",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 855.8223210000001,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0,
+  "dataflow_time": 6.234741926193237,
+  "optimizer_time": 0.15521574020385742
+}

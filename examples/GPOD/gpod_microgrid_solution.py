@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')
 from src.optimization.energy_domain import ConnectingNode
 from src.optimization.graph_problem_class import GraphProblemClass
 from src.optimization.energy_domain import ConnectingNode
-from examples.our_tool.microgrid_domain import Consumer, MeteringPoint, SolarPanel, Battery, WindTurbine
+from examples.GPOD.microgrid_domain import Consumer, MeteringPoint, SolarPanel, Battery, WindTurbine
 from src.dataflow.dataflow_classes_v2 import DataProcessingTask
 from src.dataflow.default_tasks import *
 from examples.dataflow_nodes.consumer_data_pred import predict_consumer_data
@@ -19,7 +19,7 @@ from examples.helpers.file_writer import write
 import time
 # from examples.helpers.plot_microgrid_solution import plot_microgrid_solution
 
-def solve_microgrid(setup: MicrogridSetup):
+def solve_microgrid_gpod(setup: MicrogridSetup):
     start_time = time.time()
     problemClass = GraphProblemClass("microgrid_problem", time_length=setup.T)
 
@@ -59,7 +59,7 @@ def solve_microgrid(setup: MicrogridSetup):
     dataflow_time = problemClass.dataflow_time
     # FROM HERE - DON'T COUNT THESE CHARACTERS FOR PRODUCTIVITY EXPERIMENTS
     stats = {
-        "implementation": "our microgrid demo",
+        "implementation": "GPO-D",
         "solver": result.solver_stats.solver_name,
         "parameters": sum(p.size for p in result.parameters()),
         "constraints": len(result.constraints),
@@ -93,4 +93,4 @@ if __name__ == "__main__":
     n = 50
     setup.no_homes = n
     setup.no_solar_panels = n
-    solve_microgrid(setup=setup)
+    solve_microgrid_gpod(setup=setup)

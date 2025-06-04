@@ -1,5 +1,5 @@
 {
-  "implementation": "our microgrid demo",
+  "implementation": "GPO-D",
   "solver": "CBC",
   "parameters": 0,
   "constraints": 2739,

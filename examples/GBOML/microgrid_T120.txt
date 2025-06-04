@@ -1,6 +1,6 @@
 
 #TIMEHORIZON
-T = 122;
+T = 120+1;
 
 
 #NODE DEMAND

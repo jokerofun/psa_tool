@@ -16,7 +16,7 @@ from examples.helpers.file_writer import write
 
 import time
 
-def run(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"):
+def solve_microgrid_gboml(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"):
     start_time = time.time()
     gboml_domain.build_microgrid(setup=setup, file_path=microgrid_file_path)
     
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     setup.no_homes = n
     setup.no_solar_panels = n
     
-    run(setup=setup)
+    solve_microgrid_gboml(setup=setup)
     # (result, details) = run(setup=setup)
     # print(result)
 

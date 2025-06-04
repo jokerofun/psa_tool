@@ -1,6 +1,6 @@
 
 #TIMEHORIZON
-T = 26;
+T = 24+1;
 
 
 #NODE DEMAND
@@ -1402,8 +1402,6 @@ energy[0] == SoC;
 
 
 #NODE METERING_POINT
-//#PARAMETERS
-//electricity_price = 0.05;
 #VARIABLES
 external: power_import[T];
 #CONSTRAINTS
