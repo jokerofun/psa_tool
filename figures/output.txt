@@ -40,3 +40,176 @@
   "dataflow_time": 5.308838844299316,
   "optimizer_time": 1.2933743000030518
 }
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 1755.836767079678,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0045166015625,
+  "dataflow_time": 5.84877610206604,
+  "optimizer_time": 1.194777488708496
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 3003,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 1650.6159785402576,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.008390665054321289,
+  "dataflow_time": 5.926167249679565,
+  "optimizer_time": 6.151237964630127
+}
+{
+  "implementation": "Pyomo",
+  "solver": "cbc",
+  "parameters": 0,
+  "constraints": 3003,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 1755.8367614,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0,
+  "dataflow_time": 5.553081035614014,
+  "optimizer_time": 0.7662758827209473
+}
+{
+  "implementation": "Pyomo",
+  "solver": "cbc",
+  "parameters": 0,
+  "constraints": 6003,
+  "variables": 2931,
+  "status": "optimal",
+  "result": 3791.7650693999985,
+  "T": 48,
+  "no_homes": 50,
+  "setup_time": 0.0,
+  "dataflow_time": 5.712322950363159,
+  "optimizer_time": 0.2290201187133789
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 6003,
+  "variables": 2931,
+  "status": "optimal",
+  "result": 3765.332970449009,
+  "T": 48,
+  "no_homes": 50,
+  "setup_time": 0.0,
+  "dataflow_time": 5.320405006408691,
+  "optimizer_time": 3.1406431198120117
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 5403,
+  "variables": 2667,
+  "status": "optimal",
+  "result": 2181.591549730526,
+  "T": 24,
+  "no_homes": 100,
+  "setup_time": 0.0,
+  "dataflow_time": 10.531988382339478,
+  "optimizer_time": 3.032731533050537
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "total_constraints": 5403,
+  "variables": 111,
+  "total_variables": 2667,
+  "status": "optimal",
+  "result": 2181.591549730526,
+  "T": 24,
+  "no_homes": 100,
+  "setup_time": 0.003846406936645508,
+  "dataflow_time": 10.495065927505493,
+  "optimizer_time": 2.7856481075286865
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "total_constraints": 10203,
+  "variables": 211,
+  "total_variables": 5067,
+  "status": "optimal",
+  "result": 3245.823092829612,
+  "T": 24,
+  "no_homes": 200,
+  "setup_time": 0.007819890975952148,
+  "dataflow_time": 23.723560094833374,
+  "optimizer_time": 5.251275062561035
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "total_constraints": 24603,
+  "variables": 511,
+  "total_variables": 12267,
+  "status": "optimal",
+  "result": 6454.778030199237,
+  "T": 24,
+  "no_homes": 500,
+  "setup_time": 0.008069753646850586,
+  "dataflow_time": 83.41302800178528,
+  "optimizer_time": 14.014436960220337
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "total_constraints": 48603,
+  "variables": 1011,
+  "total_variables": 24267,
+  "status": "optimal",
+  "result": 12195.887952101946,
+  "T": 24,
+  "no_homes": 1000,
+  "setup_time": 0.015610456466674805,
+  "dataflow_time": 147.91135215759277,
+  "optimizer_time": 26.308579921722412
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "total_constraints": 3003,
+  "variables": 61,
+  "total_variables": 1467,
+  "status": "optimal",
+  "result": 1650.6159785402576,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0,
+  "dataflow_time": 5.075723886489868,
+  "optimizer_time": 1.4632515907287598
+}
+{
+  "implementation": "GBOML",
+  "solver": "clp",
+  "parameters": 68,
+  "constraints": 233,
+  "variables": 114,
+  "status": "optimal",
+  "result": 1650.6159785402576,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0010128021240234375,
+  "dataflow_time": 5.200559139251709,
+  "optimizer_time": 0.27463412284851074
+}
