@@ -46,15 +46,22 @@ class Resource(Node):
     def setConnectingNode(self, connecting_node):
         self.connecting_node = connecting_node
     
-    def __sub__(self, other: Node): 
-        if self.connecting_node is None and other.getConnectingNode() is None:
-            self.connecting_node = ConnectingNode()
-            other.setConnectingNode(self.connecting_node)
-            self.connecting_node.connect(self)
-            self.connecting_node.connect(other)
-        elif self.connecting_node is None:
-            self.connecting_node = other.getConnectingNode()
-            self.connecting_node.connect(self)
-        elif other.connecting_node is None:
-            other.setConnectingNode(self.connecting_node)
-            self.connecting_node.connect(other)  
+    def connect_to(self, other):
+        if isinstance(other, (list, tuple)):
+            nodes = other
+        else:
+            nodes = [other]
+
+        for node in nodes:
+            if self.connecting_node is None and node.getConnectingNode() is None:
+                self.connecting_node = ConnectingNode("balance")
+                node.setConnectingNode(self.connecting_node)
+                self.connecting_node.connect(self)
+                self.connecting_node.connect(node)
+            elif self.connecting_node is None:
+                self.connecting_node = node.getConnectingNode()
+                self.connecting_node.connect(self)
+            elif node.getConnectingNode() is None:
+                node.setConnectingNode(self.connecting_node)
+                self.connecting_node.connect(node)
+        return self  

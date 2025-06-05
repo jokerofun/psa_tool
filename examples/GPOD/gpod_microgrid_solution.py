@@ -29,7 +29,6 @@ def solve_microgrid_gpod(setup: MicrogridSetup):
     solar_panels_homes = [SolarPanel(f"solar_panel_{i+1}") for i in range(setup.no_homes)]
     solar_panel_school = SolarPanel("solar_panel_school")
     wind_turbine = WindTurbine("wind_turbine")
-    microgrid_balance = ConnectingNode("balance")
     batteries = [Battery(f"battery_{i+1}", setup.battery_power, setup.battery_power, setup.battery_capacity, setup.battery_efficiency) for i in range(setup.no_batteries)]
     
     for home in homes:
@@ -45,13 +44,14 @@ def solve_microgrid_gpod(setup: MicrogridSetup):
     wind_task1 = wind_turbine.dataflow.task("get_wind_data", DataProcessingTask, process_func=get_wind_data, parameters={"latitude": 57.0488, "longitude": 9.9217})
     wind_task2 = wind_turbine.dataflow.task("gen_wind_data", DataProcessingTask, process_func=generate_wind_turbine_data, parameters={"rated_power": setup.wind_capacity, "cut_in_speed": 3.5, "rated_speed": 14, "cut_out_speed": 25}, final=True)
     wind_task1 >> wind_task2
-
+    
     problemClass.add_nodes([*homes, *solar_panels_homes, *batteries, 
                             school, solar_panel_school, wind_turbine, 
-                            metering_point, microgrid_balance])
+                            metering_point])
+    
+    metering_point.connect_to([*homes, *solar_panels_homes, *batteries, school, 
+                                  solar_panel_school, wind_turbine])
 
-    microgrid_balance.connect_nodes([*homes, *solar_panels_homes, *batteries, school, 
-                           solar_panel_school, wind_turbine, metering_point])
 
     setup_time = time.time()
     result = problemClass.solve(solver=cp.CBC, objective="minimize", value="cost")
