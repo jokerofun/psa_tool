@@ -1,0 +1,31 @@
+GPOD
+char = 2395 (2769)
+loc = 32
+
+GPOD (domain)
+char = 2448 (3231)
+loc = 104
+
+GPOD (all)
+char = 4843 (6000)
+loc = 136
+
+CVXPY
+char = 3125 (3721)
+loc = 61
+
+PYOMO
+char = 3957 (4630)
+loc = 78
+
+GBOML
+char = 2128 (2430)
+loc = 38
+
+GBOML (txt file)
+char = 15137 (17739)
+loc = 765
+
+GBOML (including txt file)
+char = 17265 (20169)
+loc = 803
