@@ -71,6 +71,9 @@ class GraphProblemClass():
         # assign result values from dataflows to parameters in nodes 
         for node in self._nodes:
             node.assign(self.time_length)
+
+        # add connecting nodes to the problem class
+        self.add_connecting_nodes()
         
         # set time length for all nodes (which basically initializes the decision variables for nodes)
         self.set_time_length()
@@ -105,6 +108,20 @@ class GraphProblemClass():
         # print("END")
 
         return problem
+
+    def add_connecting_nodes(self):
+        """
+        Checks each node for a connecting_node attribute and adds it to self._nodes if not already present.
+        Ensures each connecting node is added only once.
+        """
+        existing_node_ids = set(id(node) for node in self._nodes)
+        new_connecting_nodes = []
+        for node in self._nodes:
+            connecting_node = getattr(node, "connecting_node", None)
+            if connecting_node is not None and id(connecting_node) not in existing_node_ids:
+                new_connecting_nodes.append(connecting_node)
+                existing_node_ids.add(id(connecting_node))
+        self._nodes.extend(new_connecting_nodes)
 
     def print_results(self):
         for node in self._nodes:
