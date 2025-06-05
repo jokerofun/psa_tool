@@ -18,7 +18,7 @@ import time
 
 def solve_microgrid_gboml(setup:MicrogridSetup, microgrid_file_path="examples/GBOML/microgrid.txt"):
     start_time = time.time()
-    setup.T += 1
+    # setup.T += 1
     gboml_domain.build_microgrid(setup=setup, file_path=microgrid_file_path)
     
     home_demands = []
@@ -58,7 +58,7 @@ def solve_microgrid_gboml(setup:MicrogridSetup, microgrid_file_path="examples/GB
 
     # solution = gboml_model.solve_cbc(opt_file=microgrid_file_path)
     solution = gboml_model.solve_clp()
-    setup.T -= 1
+    # setup.T -= 1
     end_time = time.time()
     
     # FROM HERE - DON'T COUNT THESE CHARACTERS FOR PRODUCTIVITY EXPERIMENTS

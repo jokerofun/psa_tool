@@ -29,13 +29,13 @@ class SolarPanel(Producer):
         super().__init__(name)
 
     def set_time_length(self, t):
-        self.c = cp.Variable(t, nonneg=True)
+        self.c = cp.Variable(t, nonneg=False)
 
     def powerflow(self, t):
         return self.c[t] * self.max_power_output_kW[t]
     
     def constraints(self, t):
-        return [self.c[t] <= 1]
+        return [self.c[t] >= 0, self.c[t] <= 1]
     
     @property
     def variables(self):
@@ -67,15 +67,18 @@ class Battery(Resource):
         self.efficiency = efficiency
 
     def set_time_length(self, t):
-        self.charge = cp.Variable(t, nonneg=True)
-        self.discharge = cp.Variable(t, nonneg=True)
-        self.SoC = cp.Variable(shape = (t+1), nonneg=True)
+        self.charge = cp.Variable(t, nonneg=False)
+        self.discharge = cp.Variable(t, nonneg=False)
+        self.SoC = cp.Variable(shape = (t+1), nonneg=False)
 
     def const_constraints(self):
         return [self.SoC[0] == 0]
     
     def constraints(self, t):
         constraints = [
+            self.charge[t] >= 0,
+            self.discharge[t] >= 0,
+            self.SoC[t] >= 0,
             self.SoC[t+1] <= self.capacity_kWh,
             self.charge[t] <= self.charging_power_kW,
             self.discharge[t] <= self.discharging_power_kW,
@@ -97,8 +100,11 @@ class MeteringPoint(Resource):
         # self.connect_nodes([self])
 
     def set_time_length(self, t):
-        self.energy_import = cp.Variable(t, nonneg=True)
+        self.energy_import = cp.Variable(t, nonneg=False)
 
+    def constraints(self, t):
+        return [self.energy_import[t] >= 0]
+    
     def powerflow(self, t):
         return self.energy_import[t]
     

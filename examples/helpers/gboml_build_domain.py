@@ -72,14 +72,14 @@ capacity_kWh = {capacity};
 efficiency = {efficiency};
 SoC = {soc};
 #VARIABLES
-internal: energy[T];
+internal: energy[T+1];
 external: charge[T];
 external: discharge[T];
 #CONSTRAINTS
 energy[t] >= 0;
 charge[t] >= 0;
 discharge[t] >= 0;
-energy[t] <= capacity_kWh;
+energy[t+1] <= capacity_kWh;
 charge[t] <= charging_power_kW;
 discharge[t] <= discharging_power_kW;
 energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;

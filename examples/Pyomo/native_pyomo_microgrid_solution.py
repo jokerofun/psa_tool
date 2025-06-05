@@ -49,12 +49,19 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     model.H = pyo.RangeSet(0, setup.no_homes-1)
     model.S = pyo.RangeSet(0, setup.no_big_solar_panels-1)
 
-    model.grid_import = pyo.Var(model.T, domain=pyo.NonNegativeReals)
-    model.battery_charge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
-    model.battery_discharge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
-    model.battery_soc = pyo.Var(model.B, range(setup.T+1), domain=pyo.NonNegativeReals)
-    model.c_home = pyo.Var(model.H, model.T, domain=pyo.NonNegativeReals)
-    model.c_school = pyo.Var(model.T, domain=pyo.NonNegativeReals)
+    # model.grid_import = pyo.Var(model.T, domain=pyo.NonNegativeReals)
+    # model.battery_charge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
+    # model.battery_discharge = pyo.Var(model.B, model.T, domain=pyo.NonNegativeReals)
+    # model.battery_soc = pyo.Var(model.B, range(setup.T+1), domain=pyo.NonNegativeReals)
+    # model.c_home = pyo.Var(model.H, model.T, domain=pyo.NonNegativeReals)
+    # model.c_school = pyo.Var(model.T, domain=pyo.NonNegativeReals)    
+    
+    model.grid_import = pyo.Var(model.T)
+    model.battery_charge = pyo.Var(model.B, model.T)
+    model.battery_discharge = pyo.Var(model.B, model.T)
+    model.battery_soc = pyo.Var(model.B, range(setup.T+1))
+    model.c_home = pyo.Var(model.H, model.T)
+    model.c_school = pyo.Var(model.T)
 
     def soc_init_rule(m, b):
         return m.battery_soc[b,0] == 0
@@ -69,6 +76,10 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
                 total_hourly_battery_charge + total_demand[t])
     model.power_balance = pyo.Constraint(model.T, rule=power_balance_rule)
 
+    def min_grid_import_rule(m, t):
+        return m.grid_import[t] >= 0
+    model.min_grid_import = pyo.Constraint(model.T, rule=min_grid_import_rule)
+
     def battery_charge_limit_rule(m, b, t):
         return m.battery_charge[b, t] <= setup.battery_power
     model.battery_charge_limit = pyo.Constraint(model.B, model.T, rule=battery_charge_limit_rule)
@@ -76,6 +87,14 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     def battery_discharge_limit_rule(m, b, t):
         return m.battery_discharge[b, t] <= setup.battery_power
     model.battery_discharge_limit = pyo.Constraint(model.B, model.T, rule=battery_discharge_limit_rule)
+
+    def battery_charge_min_rule(m, b, t):
+        return m.battery_charge[b, t] >= 0
+    model.battery_charge_min = pyo.Constraint(model.B, model.T, rule=battery_charge_min_rule)
+
+    def battery_discharge_min_rule(m, b, t):
+        return m.battery_discharge[b, t] >= 0
+    model.battery_discharge_min = pyo.Constraint(model.B, model.T, rule=battery_discharge_min_rule)
 
     def soc_update_rule(m, b, t):
         return m.battery_soc[b, t+1] == m.battery_soc[b, t] + m.battery_charge[b, t] * setup.battery_efficiency - m.battery_discharge[b, t] / setup.battery_efficiency
@@ -85,6 +104,10 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
         return m.battery_soc[b, t+1] <= setup.battery_capacity
     model.soc_max = pyo.Constraint(model.B, range(setup.T), rule=soc_max_rule)
 
+    def soc_min_rule(m, b, t):
+        return m.battery_soc[b, t+1] >= 0
+    model.soc_min = pyo.Constraint(model.B, range(setup.T), rule=soc_min_rule)
+
     def c_home_max_rule(m, h, t):
         return m.c_home[h, t] <= 1
     model.c_home_max = pyo.Constraint(model.H, range(setup.T), rule=c_home_max_rule)
@@ -92,6 +115,14 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
     def c_school_max_rule(m, t):
         return m.c_school[t] <= 1
     model.c_school_max = pyo.Constraint(range(setup.T), rule=c_school_max_rule)
+
+    def c_home_min_rule(m, h, t):
+        return m.c_home[h, t] >= 0
+    model.c_home_min = pyo.Constraint(model.H, range(setup.T), rule=c_home_min_rule)
+
+    def c_school_min_rule(m, t):
+        return m.c_school[t] >= 0
+    model.c_school_min = pyo.Constraint(range(setup.T), rule=c_school_min_rule)
 
     model.obj = pyo.Objective(expr=sum(model.grid_import[t] for t in model.T), sense=pyo.minimize)
 
@@ -132,7 +163,7 @@ def solve_microgrid_pyomo(setup:MicrogridSetup):
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
-    setup.T = 24
+    setup.T = 48
     n = 50
     setup.no_homes = n
     setup.no_solar_panels = n
