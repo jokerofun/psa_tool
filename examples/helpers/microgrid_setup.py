@@ -5,8 +5,8 @@ class MicrogridSetup:
     solar_capacity_home = 5 # kW
     solar_capacity_school = 25 # kW
     wind_capacity = 1000 # kW
-    no_batteries = 3
-    battery_capacity = 500 # kWh
+    no_batteries = 1
+    battery_capacity = 250 # kWh
     battery_power = 500 # kW
     battery_efficiency = 0.9 # in %
     battery_SoC = 0

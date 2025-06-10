@@ -1,7 +1,12 @@
+from datetime import datetime, timedelta
 import cvxpy as cp
 import sys, os
 
+import pandas as pd
+
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from examples.dataflow_nodes.spot_prices_data import fetch_spot_prices
 from src.optimization.energy_domain import ConnectingNode
 from src.optimization.graph_problem_class import GraphProblemClass
 from src.optimization.energy_domain import ConnectingNode
@@ -15,6 +20,7 @@ from examples.dataflow_nodes.solar_panel_generation import generate_solar_panel_
 from examples.dataflow_nodes.wind_turbine_generation import generate_wind_turbine_data
 from examples.helpers.microgrid_setup import MicrogridSetup
 from examples.helpers.file_writer import write
+from examples.helpers.plot_microgrid_solution import plot_microgrid_solution
 
 import time
 # from examples.helpers.plot_microgrid_solution import plot_microgrid_solution
@@ -31,6 +37,11 @@ def solve_microgrid_gpod(setup: MicrogridSetup):
     wind_turbine = WindTurbine("wind_turbine")
     batteries = [Battery(f"battery_{i+1}", setup.battery_power, setup.battery_power, setup.battery_capacity, setup.battery_efficiency) for i in range(setup.no_batteries)]
     
+    start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    end = start + timedelta(hours=setup.T)
+
+    metering_point.dataflow.task("get_spot_prices", DataProcessingTask, process_func=fetch_spot_prices, parameters={"start_date": start, "end_date": end}, final=True)
+
     for home in homes:
         home.dataflow.task("gen_consumption", DataProcessingTask, process_func=predict_consumer_data, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 1}, final=True)
     school.dataflow.task("gen_consumption", DataProcessingTask, process_func=predict_consumer_data, parameters={"hours": setup.T, "model_name":"consumer_model", "factor": 100}, final=True)
@@ -80,13 +91,22 @@ def solve_microgrid_gpod(setup: MicrogridSetup):
 
     # print("Total grid import:", sum(metering_point.energy_import.value))
     
-    # plot_microgrid_solution(
-    #     setup.T,
-    #     total_consumption=total_consumption,
-    #     wind_production=wind_turbine.max_power_output_kW,
-    #     solar_production=solar_production,
-    #     batteries=batteries
-    # )
+    plot_microgrid_solution(
+        setup=setup,
+        solution=result,
+        grid_import=metering_point.energy_import.value,
+        total_demand=[
+            sum(home.consumption_kWh[t] for home in homes) + school.consumption_kWh[t]
+            for t in range(setup.T)
+        ],
+        solar_prod=[
+            sum(solar_panel.max_power_output_kW[t] for solar_panel in solar_panels_homes) + solar_panel_school.max_power_output_kW[t]
+            for t in range(setup.T)
+        ],
+        wind_prod=[wind_turbine.max_power_output_kW[t] for t in range(setup.T)],
+        soc_values=[battery.SoC for battery in batteries],
+        prices = metering_point.prices if hasattr(metering_point, 'prices') else None
+    )
 
 if __name__ == "__main__":
     setup = MicrogridSetup()
