@@ -110,8 +110,13 @@ class MeteringPoint(Resource):
     
     @property
     def cost(self):
+        if hasattr(self, 'prices'):
+            return cp.sum(self.energy_import * self.prices)
         return cp.sum(self.energy_import)
     
     @property
     def variables(self):
         return {self.name : {"powerFlow" : self.energy_import.value}}
+
+    def assign(self, t):
+        self.prices = self.dataflow.results["spot_prices"]["SpotPriceEUR"][:t]
