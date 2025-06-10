@@ -1,10 +1,12 @@
 GPOD
 char = 2395 (2769)
 loc = 32
+eloc = 28
 
 GPOD (domain)
 char = 2448 (3231)
 loc = 104
+eloc = 78
 
 GPOD (all)
 char = 4843 (6000)
@@ -13,14 +15,17 @@ loc = 136
 CVXPY
 char = 3125 (3721)
 loc = 61
+eloc = 51
 
 PYOMO
 char = 3957 (4630)
 loc = 78
+eloc = 64
 
 GBOML
 char = 2128 (2430)
 loc = 38
+eloc = 33
 
 GBOML (txt file)
 char = 15137 (17739)

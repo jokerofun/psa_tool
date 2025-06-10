@@ -40,3 +40,409 @@
   "dataflow_time": 5.308838844299316,
   "optimizer_time": 1.2933743000030518
 }
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 2042.9681366829936,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.002017498016357422,
+  "dataflow_time": 7.654526710510254,
+  "optimizer_time": 1.966029167175293
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 2042.9681366829936,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.002006053924560547,
+  "dataflow_time": 7.705573081970215,
+  "optimizer_time": 3.223844289779663
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1515,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 0.0,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0021791458129882812,
+  "dataflow_time": 7.333137512207031,
+  "optimizer_time": 1.1909997463226318
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1515,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 0.0,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0017309188842773438,
+  "dataflow_time": 7.750048398971558,
+  "optimizer_time": 1.196786642074585
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 2042.9681366829936,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0012102127075195312,
+  "dataflow_time": 6.577009439468384,
+  "optimizer_time": 2.8423328399658203
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "infeasible",
+  "result": Infinity,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.013869047164916992,
+  "dataflow_time": 14.821593761444092,
+  "optimizer_time": 36.35087180137634
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "infeasible",
+  "result": Infinity,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0014150142669677734,
+  "dataflow_time": 6.692235708236694,
+  "optimizer_time": 2.368013858795166
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "infeasible",
+  "result": Infinity,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0025992393493652344,
+  "dataflow_time": 8.737174034118652,
+  "optimizer_time": 3.8093860149383545
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -358.25803300205524,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0014100074768066406,
+  "dataflow_time": 6.893402099609375,
+  "optimizer_time": 2.3970632553100586
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -358.25803300205524,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0016078948974609375,
+  "dataflow_time": 6.66025185585022,
+  "optimizer_time": 2.207850456237793
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 2218,
+  "variables": 1978,
+  "status": "optimal",
+  "result": -31.761380726050927,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.002963542938232422,
+  "dataflow_time": 7.209585428237915,
+  "optimizer_time": 3.2852680683135986
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0022416114807128906,
+  "dataflow_time": 7.3505871295928955,
+  "optimizer_time": 3.054018020629883
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.006716012954711914,
+  "dataflow_time": 10.54498815536499,
+  "optimizer_time": 17.916595697402954
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0067980289459228516,
+  "dataflow_time": 14.559395551681519,
+  "optimizer_time": 6.559772729873657
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.001374959945678711,
+  "dataflow_time": 6.722386360168457,
+  "optimizer_time": 2.238441228866577
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0021126270294189453,
+  "dataflow_time": 7.457226753234863,
+  "optimizer_time": 2.3267760276794434
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.002282857894897461,
+  "dataflow_time": 7.175152778625488,
+  "optimizer_time": 2.3705294132232666
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0075914859771728516,
+  "dataflow_time": 7.571704387664795,
+  "optimizer_time": 2.3520429134368896
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.002512693405151367,
+  "dataflow_time": 7.942859411239624,
+  "optimizer_time": 2.576831102371216
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": -2.29639024815215,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.002103567123413086,
+  "dataflow_time": 7.639031887054443,
+  "optimizer_time": 2.9892711639404297
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 85.89037459844025,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0016422271728515625,
+  "dataflow_time": 7.987358570098877,
+  "optimizer_time": 3.557802677154541
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1539,
+  "variables": 1467,
+  "status": "optimal",
+  "result": 109.86466999276087,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0025153160095214844,
+  "dataflow_time": 8.275137901306152,
+  "optimizer_time": 2.387838125228882
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1345,
+  "variables": 1321,
+  "status": "optimal",
+  "result": 133.13137592912452,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.00127410888671875,
+  "dataflow_time": 8.02663803100586,
+  "optimizer_time": 2.181332588195801
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1345,
+  "variables": 1321,
+  "status": "optimal",
+  "result": 133.13137592912452,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.002161741256713867,
+  "dataflow_time": 8.198283195495605,
+  "optimizer_time": 2.4671030044555664
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1345,
+  "variables": 1321,
+  "status": "optimal",
+  "result": 133.13137592912452,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.012561798095703125,
+  "dataflow_time": 9.864091873168945,
+  "optimizer_time": 6.1237993240356445
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1345,
+  "variables": 1321,
+  "status": "optimal",
+  "result": 133.13137592912452,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0067365169525146484,
+  "dataflow_time": 10.853468418121338,
+  "optimizer_time": 5.947376728057861
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1345,
+  "variables": 1321,
+  "status": "optimal",
+  "result": 133.13137592912452,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.002605915069580078,
+  "dataflow_time": 7.8078248500823975,
+  "optimizer_time": 2.1287169456481934
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1345,
+  "variables": 1321,
+  "status": "optimal",
+  "result": 133.13137592912452,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0014338493347167969,
+  "dataflow_time": 8.510765075683594,
+  "optimizer_time": 2.081664800643921
+}
+{
+  "implementation": "GPO-D",
+  "solver": "CBC",
+  "parameters": 0,
+  "constraints": 1345,
+  "variables": 1321,
+  "status": "optimal",
+  "result": 133.13137592912452,
+  "T": 24,
+  "no_homes": 50,
+  "setup_time": 0.0016214847564697266,
+  "dataflow_time": 7.982136011123657,
+  "optimizer_time": 2.085446357727051
+}

@@ -1,0 +1,765 @@
+
+#TIMEHORIZON
+T = 24+1;
+
+
+#NODE DEMAND
+#PARAMETERS
+total_demand = import "../../data/gboml_data/demand.csv";
+#VARIABLES
+external: consumption[T];
+#CONSTRAINTS
+consumption[t] == total_demand[t];
+
+
+#NODE SOLAR_PV_1
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_1.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_2
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_2.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_3
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_3.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_4
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_4.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_5
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_5.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_6
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_6.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_7
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_7.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_8
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_8.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_9
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_9.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_10
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_10.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_11
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_11.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_12
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_12.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_13
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_13.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_14
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_14.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_15
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_15.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_16
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_16.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_17
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_17.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_18
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_18.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_19
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_19.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_20
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_20.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_21
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_21.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_22
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_22.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_23
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_23.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_24
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_24.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_25
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_25.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_26
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_26.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_27
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_27.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_28
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_28.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_29
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_29.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_30
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_30.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_31
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_31.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_32
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_32.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_33
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_33.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_34
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_34.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_35
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_35.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_36
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_36.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_37
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_37.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_38
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_38.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_39
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_39.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_40
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_40.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_41
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_41.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_42
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_42.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_43
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_43.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_44
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_44.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_45
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_45.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_46
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_46.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_47
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_47.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_48
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_48.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_49
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_49.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE SOLAR_PV_50
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_solar_50.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE BIG_SOLAR_PV_1
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_big_solar.csv";
+#VARIABLES
+internal: c[T];
+external: electricity[T];
+#CONSTRAINTS
+c[t] >= 0;
+c[t] <= 1;
+electricity[t] >= 0;
+electricity[t] == c[t] * max_power_output_kW[t];
+
+
+#NODE WIND_TURBINE_1
+#PARAMETERS
+max_power_output_kW = import "../../data/gboml_data/gen_wind.csv";
+#VARIABLES
+external: electricity[T];
+#CONSTRAINTS
+electricity[t] >= 0;
+electricity[t] == max_power_output_kW[t];
+
+
+#NODE BATTERY_1
+#PARAMETERS
+charging_power_kW = 500;
+discharging_power_kW = 500;
+capacity_kWh = 500;
+efficiency = 0.9;
+SoC = 0;
+#VARIABLES
+internal: energy[T];
+external: charge[T];
+external: discharge[T];
+#CONSTRAINTS
+energy[t] >= 0;
+charge[t] >= 0;
+discharge[t] >= 0;
+energy[t] <= capacity_kWh;
+charge[t] <= charging_power_kW;
+discharge[t] <= discharging_power_kW;
+energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;
+energy[0] == SoC;
+
+
+#NODE BATTERY_2
+#PARAMETERS
+charging_power_kW = 500;
+discharging_power_kW = 500;
+capacity_kWh = 500;
+efficiency = 0.9;
+SoC = 0;
+#VARIABLES
+internal: energy[T];
+external: charge[T];
+external: discharge[T];
+#CONSTRAINTS
+energy[t] >= 0;
+charge[t] >= 0;
+discharge[t] >= 0;
+energy[t] <= capacity_kWh;
+charge[t] <= charging_power_kW;
+discharge[t] <= discharging_power_kW;
+energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;
+energy[0] == SoC;
+
+
+#NODE BATTERY_3
+#PARAMETERS
+charging_power_kW = 500;
+discharging_power_kW = 500;
+capacity_kWh = 500;
+efficiency = 0.9;
+SoC = 0;
+#VARIABLES
+internal: energy[T];
+external: charge[T];
+external: discharge[T];
+#CONSTRAINTS
+energy[t] >= 0;
+charge[t] >= 0;
+discharge[t] >= 0;
+energy[t] <= capacity_kWh;
+charge[t] <= charging_power_kW;
+discharge[t] <= discharging_power_kW;
+energy[t+1] == energy[t] + efficiency * charge[t] - discharge[t] / efficiency;
+energy[0] == SoC;
+
+
+#NODE METERING_POINT
+#VARIABLES
+external: power_import[T];
+#CONSTRAINTS
+power_import[t] >= 0;
+#OBJECTIVES
+min: power_import[t];
+
+
+#HYPEREDGE POWER_BALANCE
+#CONSTRAINTS
+METERING_POINT.power_import[t] + SOLAR_PV_1.electricity[t] + SOLAR_PV_2.electricity[t] + SOLAR_PV_3.electricity[t] + SOLAR_PV_4.electricity[t] + SOLAR_PV_5.electricity[t] + SOLAR_PV_6.electricity[t] + SOLAR_PV_7.electricity[t] + SOLAR_PV_8.electricity[t] + SOLAR_PV_9.electricity[t] + SOLAR_PV_10.electricity[t] + SOLAR_PV_11.electricity[t] + SOLAR_PV_12.electricity[t] + SOLAR_PV_13.electricity[t] + SOLAR_PV_14.electricity[t] + SOLAR_PV_15.electricity[t] + SOLAR_PV_16.electricity[t] + SOLAR_PV_17.electricity[t] + SOLAR_PV_18.electricity[t] + SOLAR_PV_19.electricity[t] + SOLAR_PV_20.electricity[t] + SOLAR_PV_21.electricity[t] + SOLAR_PV_22.electricity[t] + SOLAR_PV_23.electricity[t] + SOLAR_PV_24.electricity[t] + SOLAR_PV_25.electricity[t] + SOLAR_PV_26.electricity[t] + SOLAR_PV_27.electricity[t] + SOLAR_PV_28.electricity[t] + SOLAR_PV_29.electricity[t] + SOLAR_PV_30.electricity[t] + SOLAR_PV_31.electricity[t] + SOLAR_PV_32.electricity[t] + SOLAR_PV_33.electricity[t] + SOLAR_PV_34.electricity[t] + SOLAR_PV_35.electricity[t] + SOLAR_PV_36.electricity[t] + SOLAR_PV_37.electricity[t] + SOLAR_PV_38.electricity[t] + SOLAR_PV_39.electricity[t] + SOLAR_PV_40.electricity[t] + SOLAR_PV_41.electricity[t] + SOLAR_PV_42.electricity[t] + SOLAR_PV_43.electricity[t] + SOLAR_PV_44.electricity[t] + SOLAR_PV_45.electricity[t] + SOLAR_PV_46.electricity[t] + SOLAR_PV_47.electricity[t] + SOLAR_PV_48.electricity[t] + SOLAR_PV_49.electricity[t] + SOLAR_PV_50.electricity[t] + BIG_SOLAR_PV_1.electricity[t] + WIND_TURBINE_1.electricity[t] + BATTERY_1.discharge[t] + BATTERY_2.discharge[t] + BATTERY_3.discharge[t] == DEMAND.consumption[t] + BATTERY_1.charge[t] + BATTERY_2.charge[t] + BATTERY_3.charge[t];
