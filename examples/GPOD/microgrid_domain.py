@@ -103,7 +103,7 @@ class MeteringPoint(Resource):
         self.energy_import = cp.Variable(t, nonneg=False)
 
     def constraints(self, t):
-        return [self.energy_import[t] >= 0]
+        return []
     
     def powerflow(self, t):
         return self.energy_import[t]

@@ -15,8 +15,8 @@ def fetch_spot_prices(dfs, parameters):
     df = pd.DataFrame(data)
     df['HourDK'] = pd.to_datetime(df['HourDK'])
 
-    df["SpotPriceDKK"] = df["SpotPriceDKK"] / 1000  # Convert to DKK/kWh
-    df["SpotPriceEUR"] = df["SpotPriceEUR"] / 1000  # Convert to EUR/kWh
+    # df["SpotPriceDKK"] = df["SpotPriceDKK"] / 1000  # Convert to DKK/kWh
+    # df["SpotPriceEUR"] = df["SpotPriceEUR"] / 1000  # Convert to EUR/kWh
 
     dfs["spot_prices"] = df
 
