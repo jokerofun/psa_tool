@@ -100,7 +100,7 @@ class MeteringPoint(Resource):
         # self.connect_nodes([self])
 
     def set_time_length(self, t):
-        self.energy_import = cp.Variable(t, nonneg=False)
+        self.energy_import = cp.Variable(t, nonneg=True)
 
     def constraints(self, t):
         return [self.energy_import[t] >= 0]
